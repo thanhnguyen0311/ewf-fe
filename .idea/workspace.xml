@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="36eb5dc2-1698-4c04-8261-c8c55b604c9b" name="Changes" comment="Remove entire React front-end application setup.&#10;&#10;This commit removes all files related to the React front-end, including source code, configurations, dependencies, and build assets. The deleted files encompass project setup files, React components, styles, routing, and package manager configurations such as `package.json` and `package-lock.json`. This indicates a complete decommissioning or transition away from this front-end stack.">
+      <change beforePath="$PROJECT_DIR$/public/images/logo/logo-dark.svg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/logo/logo-dark.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/logo/logo.svg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/logo/logo.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ecommerce/RecentOrders.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ecommerce/RecentOrders.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/header/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/header/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/header/UserDropdown.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/header/UserDropdown.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/AppHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppHeader.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Blank.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Blank.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;thanhnguyen0311&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/thanhnguyen0311/ewf-fe&quot;,
+    &quot;accountId&quot;: &quot;788e786d-f597-4229-b327-f7b8bfc318c3&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2t0La79uQu1Yuj6WePWWo3RAxsU" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;thanh-ewf&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Accou/Downloads/free-react-tailwind-admin-dashboard-main/free-react-tailwind-admin-dashboard-main/src&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.build.executor&quot;: &quot;Run&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.editor&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\ewf-app\\ewf-fe\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.build" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-WS-243.23654.157" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="36eb5dc2-1698-4c04-8261-c8c55b604c9b" name="Changes" comment="" />
+      <created>1739484106591</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1739484106591</updated>
+      <workItem from="1739484108769" duration="62292000" />
+      <workItem from="1740080596499" duration="36000" />
+      <workItem from="1740080649424" duration="1752000" />
+    </task>
+    <task id="LOCAL-00001" summary="Add initial React app setup using Create React App&#10;&#10;This commit includes the boilerplate code for a React application created with Create React App. It adds default scripts, dependencies, configurations, and the project structure (including `.gitignore`, `.idea` settings, and basic components). The setup is ready for development and further customization.">
+      <option name="closed" value="true" />
+      <created>1739484230187</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1739484230187</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Add product search feature with route setup and API integration&#10;&#10;Implemented a new Products page with SKU-based search functionality using `axios` for API calls. Integrated `react-router-dom` for routing and added `react-helmet` for dynamic page titles. Updated dependencies and organized project structure by adding services, routes, and configuration files.">
+      <option name="closed" value="true" />
+      <created>1739573826838</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1739573826839</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Remove entire React front-end application setup.&#10;&#10;This commit removes all files related to the React front-end, including source code, configurations, dependencies, and build assets. The deleted files encompass project setup files, React components, styles, routing, and package manager configurations such as `package.json` and `package-lock.json`. This indicates a complete decommissioning or transition away from this front-end stack.">
+      <option name="closed" value="true" />
+      <created>1739904081685</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1739904081685</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Add initial React app setup using Create React App&#10;&#10;This commit includes the boilerplate code for a React application created with Create React App. It adds default scripts, dependencies, configurations, and the project structure (including `.gitignore`, `.idea` settings, and basic components). The setup is ready for development and further customization." />
+    <MESSAGE value="Add product search feature with route setup and API integration&#10;&#10;Implemented a new Products page with SKU-based search functionality using `axios` for API calls. Integrated `react-router-dom` for routing and added `react-helmet` for dynamic page titles. Updated dependencies and organized project structure by adding services, routes, and configuration files." />
+    <MESSAGE value="Remove entire React front-end application setup.&#10;&#10;This commit removes all files related to the React front-end, including source code, configurations, dependencies, and build assets. The deleted files encompass project setup files, React components, styles, routing, and package manager configurations such as `package.json` and `package-lock.json`. This indicates a complete decommissioning or transition away from this front-end stack." />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove entire React front-end application setup.&#10;&#10;This commit removes all files related to the React front-end, including source code, configurations, dependencies, and build assets. The deleted files encompass project setup files, React components, styles, routing, and package manager configurations such as `package.json` and `package-lock.json`. This indicates a complete decommissioning or transition away from this front-end stack." />
+  </component>
+</project>

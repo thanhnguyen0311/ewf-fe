@@ -25,24 +25,25 @@ export default function App() {
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
             <Route index path="/" element={<Ecommerce />} />
-            {/* Others Page */}
-            <Route path="/profile" element={<UserProfiles />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/blank" element={<Blank />} />
+            <Route path="/products" element={<UserProfiles />} />
+            {/*/!* Others Page *!/*/}
+            {/*<Route path="/profile" element={<UserProfiles />} />*/}
+            {/*<Route path="/calendar" element={<Calendar />} />*/}
+            {/*<Route path="/blank" element={<Blank />} />*/}
 
-            {/* Forms */}
-            <Route path="/form-elements" element={<FormElements />} />
+            {/*/!* Forms *!/*/}
+            {/*<Route path="/form-elements" element={<FormElements />} />*/}
 
-            {/* Tables */}
-            <Route path="/basic-tables" element={<BasicTables />} />
+            {/*/!* Tables *!/*/}
+            {/*<Route path="/basic-tables" element={<BasicTables />} />*/}
 
-            {/* Ui Elements */}
-            <Route path="/alerts" element={<Alerts />} />
-            <Route path="/avatars" element={<Avatars />} />
-            <Route path="/badges" element={<Badges />} />
-            <Route path="/buttons" element={<Buttons />} />
-            <Route path="/images" element={<Images />} />
-            <Route path="/videos" element={<Videos />} />
+            {/*/!* Ui Elements *!/*/}
+            {/*<Route path="/alerts" element={<Alerts />} />*/}
+            {/*<Route path="/avatars" element={<Avatars />} />*/}
+            {/*<Route path="/badges" element={<Badges />} />*/}
+            {/*<Route path="/buttons" element={<Buttons />} />*/}
+            {/*<Route path="/images" element={<Images />} />*/}
+            {/*<Route path="/videos" element={<Videos />} />*/}
           </Route>
 
           {/* Auth Layout */}

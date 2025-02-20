@@ -23,48 +23,48 @@ interface Product {
 const tableData: Product[] = [
   {
     id: 1,
-    name: "MacBook Pro 13”",
-    variants: "2 Variants",
-    category: "Laptop",
-    price: "$2399.00",
+    name: "CAAB5-MAH-72",
+    variants: "3 Variants",
+    category: "Dining Room Set",
+    price: "$129.00",
     status: "Delivered",
-    image: "/images/product/product-01.jpg", // Replace with actual image URL
+    image: "https://cdn.eastwestfurniture.net/DNS/CAAB5-MAH-72.jpg", // Replace with actual image URL
   },
   {
     id: 2,
-    name: "Apple Watch Ultra",
-    variants: "1 Variant",
-    category: "Watch",
-    price: "$879.00",
+    name: "BUVN5-MAH-C",
+    variants: "2 Variants",
+    category: "Dining Room Set",
+    price: "$799.00",
     status: "Pending",
-    image: "/images/product/product-02.jpg", // Replace with actual image URL
+    image: "https://cdn.eastwestfurniture.net/DNS/BUVN5-MAH-C.jpg", // Replace with actual image URL
   },
   {
     id: 3,
-    name: "iPhone 15 Pro Max",
-    variants: "2 Variants",
-    category: "SmartPhone",
-    price: "$1869.00",
+    name: "CAAD5-LWH-LC",
+    variants: "1 Variant",
+    category: "Dining Room Set",
+    price: "$499.00",
     status: "Delivered",
-    image: "/images/product/product-03.jpg", // Replace with actual image URL
+    image: "https://cdn.eastwestfurniture.net/DNS/CAAD5-LWH-LC.jpg", // Replace with actual image URL
   },
   {
     id: 4,
-    name: "iPad Pro 3rd Gen",
+    name: "YAX23-AWA-28",
     variants: "2 Variants",
-    category: "Electronics",
-    price: "$1699.00",
+    category: "Dining Room Set",
+    price: "$899.00",
     status: "Canceled",
-    image: "/images/product/product-04.jpg", // Replace with actual image URL
+    image: "https://cdn.eastwestfurniture.net/DNS/YAX23-AWA-28.jpg", // Replace with actual image URL
   },
   {
     id: 5,
-    name: "AirPods Pro 2nd Gen",
+    name: "CAAN5-OAK-W",
     variants: "1 Variant",
-    category: "Accessories",
-    price: "$240.00",
+    category: "Dining Room Set",
+    price: "$649.00",
     status: "Delivered",
-    image: "/images/product/product-05.jpg", // Replace with actual image URL
+    image: "https://cdn.eastwestfurniture.net/DNS/CAAN5-OAK-W.jpg", // Replace with actual image URL
   },
 ];
 
@@ -179,10 +179,10 @@ export default function RecentOrders() {
                   </div>
                 </TableCell>
                 <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {product.price}
+                  {product.category}
                 </TableCell>
                 <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {product.category}
+                  {product.price}
                 </TableCell>
                 <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                   <Badge

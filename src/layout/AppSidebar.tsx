@@ -4,17 +4,11 @@ import { Link, useLocation } from "react-router";
 // Assume these icons are imported from an icon library
 import { useSidebar } from "../context/SidebarContext";
 import {
-  BoxCubeIcon,
-  CalenderIcon,
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
-  ListIcon,
-  PageIcon,
-  PieChartIcon,
   PlugInIcon,
   TableIcon,
-  UserCircleIcon,
 } from "../icons";
 import SidebarWidget from "./SidebarWidget";
 
@@ -36,7 +30,6 @@ const navItems: NavItem[] = [
     name: "Product Management",
     icon: <TableIcon />,
     subItems: [
-        { name: "Product Search", path: "/search", pro: false },
         { name: "Product Manage", path: "/manage", pro: false },
     ],
   },
@@ -317,26 +310,26 @@ const AppSidebar: React.FC = () => {
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <img
-                className="dark:hidden"
+                className="dark:hidden w-[100%]"
                 src="/images/logo/logo.svg"
                 alt="Logo"
                 width={150}
                 height={40}
               />
-              <img
-                className="hidden dark:block"
-                src="/images/logo/logo-dark.svg"
-                alt="Logo"
-                width={150}
-                height={40}
-              />
+              {/*<img*/}
+              {/*  className="hidden dark:block"*/}
+              {/*  src="/images/logo/logo-dark.svg"*/}
+              {/*  alt="Logo"*/}
+              {/*  width={150}*/}
+              {/*  height={40}*/}
+              {/*/>*/}
             </>
           ) : (
             <img
-              src="/images/logo/logo-icon.svg"
+              src="/images/logo/Luxury-icon.png"
               alt="Logo"
-              width={32}
-              height={32}
+              width={60}
+              height={60}
             />
           )}
         </Link>

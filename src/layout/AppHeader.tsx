@@ -6,8 +6,17 @@ import { ThemeToggleButton } from "../components/common/ThemeToggleButton";
 import NotificationDropdown from "../components/header/NotificationDropdown";
 import UserDropdown from "../components/header/UserDropdown";
 
+
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
+
+  const [inputValue, setInputValue] = useState(""); // Store input value
+  const [filteredResults, setFilteredResults] = useState<any[]>([]); // Store filtered results
+  const [products, setProducts] = useState<any[]>([]); // Store product list
+  const [loading, setLoading] = useState(true); // Track loading status
+  const [error, setError] = useState<string | null>(null); // Handle errors
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null); // Ref for debouncing
+  // Ref for debouncing
 
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 
@@ -22,22 +31,55 @@ const AppHeader: React.FC = () => {
   const toggleApplicationMenu = () => {
     setApplicationMenuOpen(!isApplicationMenuOpen);
   };
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
-        event.preventDefault();
-        inputRef.current?.focus();
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/product/all");
+        if (!response.ok) {
+          throw new Error("Failed to fetch product list.");
+        }
+        const data = await response.json();
+        setProducts(data); // Save fetched data
+        setLoading(false);
+      } catch (err: any) {
+        setError(err.message || "Something went wrong.");
+        setLoading(false);
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
+    fetchProducts();
   }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value); // Update input value
+
+    // Implement debouncing
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+
+    debounceTimer.current = setTimeout(() => {
+      filterProducts(value);
+    }, 300); // Debounce for 300ms
+  };
+
+  const filterProducts = (value: string) => {
+    if (value.trim() === "") {
+      setFilteredResults([]); // Reset if input is empty
+      return;
+    }
+
+    const results = products.filter((product) =>
+        product.sku.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredResults(results); // Update filtered results
+  };
+
+  // Display loading or error states
+  if (loading) return <div>Loading products...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <header className="sticky top-0 flex w-full bg-white border-gray-200 z-99999 dark:border-gray-800 dark:bg-gray-900 lg:border-b">
@@ -135,12 +177,52 @@ const AppHeader: React.FC = () => {
                     />
                   </svg>
                 </span>
-                <input
-                  ref={inputRef}
-                  type="text"
-                  placeholder="Search or type command..."
-                  className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[430px]"
-                />
+
+                {/* Search Input */}
+
+                <div className="relative">
+                  <input
+                      type="text"
+                      value={inputValue}
+                      onChange={handleInputChange}
+                      placeholder="Search products..."
+                      className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[430px]"
+                  />
+                  {inputValue && (
+                      <button
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-white/50"
+                          aria-label="Clear search"
+                          onClick={() => {
+                            setInputValue("");
+                            setFilteredResults([]);
+                          }}
+                      >
+                        ✕
+                      </button>
+                  )}
+
+                  {/* Results Dropdown */}
+                  {filteredResults.length > 0 && (
+                      <ul className="absolute z-50 mt-1 w-full max-h-60 overflow-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                        {filteredResults.map((product) => (
+                            <li
+                                key={product.sku}
+                                className="p-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                            >
+                              {product.sku}
+                            </li>
+                        ))}
+                      </ul>
+                  )}
+
+                  {/* Empty State */}
+                  {inputValue && filteredResults.length === 0 && (
+                      <div className="absolute z-50 mt-1 w-full rounded-lg border border-gray-200 bg-white p-2 text-sm text-gray-500 shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                        No matching products found.
+                      </div>
+                  )}
+                </div>
+
 
                 <button className="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-[7px] py-[4.5px] text-xs -tracking-[0.2px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400">
                   <span> ⌘ </span>
