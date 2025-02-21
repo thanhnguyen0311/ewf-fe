@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="36eb5dc2-1698-4c04-8261-c8c55b604c9b" name="Changes" comment="Remove React front-end application and assets.&#10;&#10;This commit eliminates all React-related code and files, including components, configurations, routing, and static assets such as logos and styles. It signifies a full discontinuation of the React-based front-end, likely for migration or restructuring purposes.">
-      <change afterPath="$PROJECT_DIR$/src/pages/Product/ProductDetail.tsx" afterDir="false" />
+    <list default="true" id="36eb5dc2-1698-4c04-8261-c8c55b604c9b" name="Changes" comment="Add product detail page and enhance search functionality.&#10;&#10;This commit introduces a new dynamic Product Detail page with routing, powered by `axios` for API integration. Enhancements to the search functionality include debounced filtering, infinite scroll for results, and improved UI/UX with product images and pricing. Additionally, dependencies have been updated to support these features.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/images/TwoColumnImageGrid.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/images/TwoColumnImageGrid.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/layout/AppHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppHeader.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Dashboard/ECommerce.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Dashboard/ECommerce.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Product/ProductDetail.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Product/ProductDetail.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +101,7 @@
       <updated>1739484106591</updated>
       <workItem from="1739484108769" duration="62292000" />
       <workItem from="1740080596499" duration="36000" />
-      <workItem from="1740080649424" duration="9455000" />
+      <workItem from="1740080649424" duration="10668000" />
     </task>
     <task id="LOCAL-00001" summary="Add initial React app setup using Create React App&#10;&#10;This commit includes the boilerplate code for a React application created with Create React App. It adds default scripts, dependencies, configurations, and the project structure (including `.gitignore`, `.idea` settings, and basic components). The setup is ready for development and further customization.">
       <option name="closed" value="true" />
@@ -139,7 +135,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740087457116</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Add product detail page and enhance search functionality.&#10;&#10;This commit introduces a new dynamic Product Detail page with routing, powered by `axios` for API integration. Enhancements to the search functionality include debounced filtering, infinite scroll for results, and improved UI/UX with product images and pricing. Additionally, dependencies have been updated to support these features.">
+      <option name="closed" value="true" />
+      <created>1740105082260</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1740105082260</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -150,6 +154,7 @@
     <MESSAGE value="Add product search feature with route setup and API integration&#10;&#10;Implemented a new Products page with SKU-based search functionality using `axios` for API calls. Integrated `react-router-dom` for routing and added `react-helmet` for dynamic page titles. Updated dependencies and organized project structure by adding services, routes, and configuration files." />
     <MESSAGE value="Remove entire React front-end application setup.&#10;&#10;This commit removes all files related to the React front-end, including source code, configurations, dependencies, and build assets. The deleted files encompass project setup files, React components, styles, routing, and package manager configurations such as `package.json` and `package-lock.json`. This indicates a complete decommissioning or transition away from this front-end stack." />
     <MESSAGE value="Remove React front-end application and assets.&#10;&#10;This commit eliminates all React-related code and files, including components, configurations, routing, and static assets such as logos and styles. It signifies a full discontinuation of the React-based front-end, likely for migration or restructuring purposes." />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove React front-end application and assets.&#10;&#10;This commit eliminates all React-related code and files, including components, configurations, routing, and static assets such as logos and styles. It signifies a full discontinuation of the React-based front-end, likely for migration or restructuring purposes." />
+    <MESSAGE value="Add product detail page and enhance search functionality.&#10;&#10;This commit introduces a new dynamic Product Detail page with routing, powered by `axios` for API integration. Enhancements to the search functionality include debounced filtering, infinite scroll for results, and improved UI/UX with product images and pricing. Additionally, dependencies have been updated to support these features." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add product detail page and enhance search functionality.&#10;&#10;This commit introduces a new dynamic Product Detail page with routing, powered by `axios` for API integration. Enhancements to the search functionality include debounced filtering, infinite scroll for results, and improved UI/UX with product images and pricing. Additionally, dependencies have been updated to support these features." />
   </component>
 </project>

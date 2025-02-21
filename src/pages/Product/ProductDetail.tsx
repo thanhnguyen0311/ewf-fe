@@ -25,7 +25,7 @@ export default function ProductDetail() {
     useEffect(() => {
         async function fetchProduct() {
             try {
-                const response = await axios.get<ProductDetail>(`http://192.168.10.27:8080/api/product/search/${id}`);
+                const response = await axios.get<ProductDetail>(`http://localhost:8080/api/product/search/${id}`);
                 const fetchedProduct = response.data;
 
                 // Parse `images` in case it's a JSON string

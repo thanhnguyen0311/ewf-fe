@@ -41,7 +41,7 @@ const AppHeader: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://192.168.10.27:8080/api/product/search/all");
+        const response = await fetch("http://localhost:8080/api/product/search/all");
         if (!response.ok) {
           throw new Error("Failed to fetch product list.");
         }
