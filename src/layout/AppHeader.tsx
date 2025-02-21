@@ -15,7 +15,6 @@ const AppHeader: React.FC = () => {
   const [filteredResults, setFilteredResults] = useState<any[]>([]); // Store filtered results
   const [products, setProducts] = useState<any[]>([]); // Store product list
   const [loading, setLoading] = useState(true); // Track loading status
-  const [error, setError] = useState<string | null>(null); // Handle errors
   const debounceTimer = useRef<NodeJS.Timeout | null>(null); // Ref for debouncing
   const [visibleProducts, setVisibleProducts] = useState<any[]>([]); // State for visible products
   const [page, setPage] = useState(0); // Current page or batch index
@@ -41,7 +40,7 @@ const AppHeader: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/product/search/all");
+        const response = await fetch("http://104.236.97.50:8080/api/product/search/all");
         if (!response.ok) {
           throw new Error("Failed to fetch product list.");
         }
@@ -49,7 +48,6 @@ const AppHeader: React.FC = () => {
         setProducts(data); // Save fetched data
         setLoading(false);
       } catch (err: any) {
-        setError(err.message || "Something went wrong.");
         setLoading(false);
       }
     };
@@ -113,15 +111,9 @@ const AppHeader: React.FC = () => {
     }
   };
 
-  // Display loading or error states
-  if (loading) return <div>Loading products...</div>;
-  if (error) return <div>Error: {error}</div>;
-
-
-
-
   return (
     <header className="sticky top-0 flex w-full bg-white border-gray-200 z-99999 dark:border-gray-800 dark:bg-gray-900 lg:border-b">
+
       <div className="flex flex-col items-center justify-between flex-grow lg:flex-row lg:px-6">
         <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 dark:border-gray-800 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4">
           <button
@@ -195,7 +187,7 @@ const AppHeader: React.FC = () => {
               />
             </svg>
           </button>
-
+          {!loading &&
           <div className="hidden lg:block">
             <form>
               <div className="relative">
@@ -291,7 +283,7 @@ const AppHeader: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
+          </div>}
         </div>
         <div
           className={`${

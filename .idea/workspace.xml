@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="36eb5dc2-1698-4c04-8261-c8c55b604c9b" name="Changes" comment="Add product detail page and enhance search functionality.&#10;&#10;This commit introduces a new dynamic Product Detail page with routing, powered by `axios` for API integration. Enhancements to the search functionality include debounced filtering, infinite scroll for results, and improved UI/UX with product images and pricing. Additionally, dependencies have been updated to support these features.">
+    <list default="true" id="36eb5dc2-1698-4c04-8261-c8c55b604c9b" name="Changes" comment="Add product detail page and enhance search functionality&#10;&#10;Introduced a dynamic Product Detail page with routing and API integration using `axios`. Improved search functionality with debounced filtering, infinite scroll, and enhanced UI/UX, including product images and pricing. Updated API endpoints to use `localhost` and adjusted dependencies to support the changes.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/layout/AppHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppHeader.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Product/ProductDetail.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Product/ProductDetail.tsx" afterDir="false" />
@@ -50,23 +50,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;thanh-ewf&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Accou/Downloads/free-react-tailwind-admin-dashboard-main/free-react-tailwind-admin-dashboard-main/src&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;npm.build.executor&quot;: &quot;Run&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.editor&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;D:\\ewf-app\\ewf-fe\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "WebServerToolWindowPanel.toolwindow.highlight.mappings": "true",
+    "WebServerToolWindowPanel.toolwindow.highlight.symlinks": "true",
+    "WebServerToolWindowPanel.toolwindow.show.date": "false",
+    "WebServerToolWindowPanel.toolwindow.show.permissions": "false",
+    "WebServerToolWindowPanel.toolwindow.show.size": "false",
+    "git-widget-placeholder": "thanh-ewf",
+    "last_opened_file_path": "C:/Users/Accou/Downloads/free-react-tailwind-admin-dashboard-main/free-react-tailwind-admin-dashboard-main/src",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "npm.build.executor": "Run",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "D:\\ewf-app\\ewf-fe\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
@@ -101,7 +106,9 @@
       <updated>1739484106591</updated>
       <workItem from="1739484108769" duration="62292000" />
       <workItem from="1740080596499" duration="36000" />
-      <workItem from="1740080649424" duration="10668000" />
+      <workItem from="1740080649424" duration="16459000" />
+      <workItem from="1740170161776" duration="1101000" />
+      <workItem from="1740171724291" duration="4971000" />
     </task>
     <task id="LOCAL-00001" summary="Add initial React app setup using Create React App&#10;&#10;This commit includes the boilerplate code for a React application created with Create React App. It adds default scripts, dependencies, configurations, and the project structure (including `.gitignore`, `.idea` settings, and basic components). The setup is ready for development and further customization.">
       <option name="closed" value="true" />
@@ -143,7 +150,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740105082260</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Add product detail page and enhance search functionality&#10;&#10;Introduced a dynamic Product Detail page with routing and API integration using `axios`. Improved search functionality with debounced filtering, infinite scroll, and enhanced UI/UX, including product images and pricing. Updated API endpoints to use `localhost` and adjusted dependencies to support the changes.">
+      <option name="closed" value="true" />
+      <created>1740118041099</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1740118041099</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -155,6 +170,7 @@
     <MESSAGE value="Remove entire React front-end application setup.&#10;&#10;This commit removes all files related to the React front-end, including source code, configurations, dependencies, and build assets. The deleted files encompass project setup files, React components, styles, routing, and package manager configurations such as `package.json` and `package-lock.json`. This indicates a complete decommissioning or transition away from this front-end stack." />
     <MESSAGE value="Remove React front-end application and assets.&#10;&#10;This commit eliminates all React-related code and files, including components, configurations, routing, and static assets such as logos and styles. It signifies a full discontinuation of the React-based front-end, likely for migration or restructuring purposes." />
     <MESSAGE value="Add product detail page and enhance search functionality.&#10;&#10;This commit introduces a new dynamic Product Detail page with routing, powered by `axios` for API integration. Enhancements to the search functionality include debounced filtering, infinite scroll for results, and improved UI/UX with product images and pricing. Additionally, dependencies have been updated to support these features." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add product detail page and enhance search functionality.&#10;&#10;This commit introduces a new dynamic Product Detail page with routing, powered by `axios` for API integration. Enhancements to the search functionality include debounced filtering, infinite scroll for results, and improved UI/UX with product images and pricing. Additionally, dependencies have been updated to support these features." />
+    <MESSAGE value="Add product detail page and enhance search functionality&#10;&#10;Introduced a dynamic Product Detail page with routing and API integration using `axios`. Improved search functionality with debounced filtering, infinite scroll, and enhanced UI/UX, including product images and pricing. Updated API endpoints to use `localhost` and adjusted dependencies to support the changes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add product detail page and enhance search functionality&#10;&#10;Introduced a dynamic Product Detail page with routing and API integration using `axios`. Improved search functionality with debounced filtering, infinite scroll, and enhanced UI/UX, including product images and pricing. Updated API endpoints to use `localhost` and adjusted dependencies to support the changes." />
   </component>
 </project>
