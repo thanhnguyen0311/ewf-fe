@@ -11,15 +11,20 @@ const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
 
   const [inputValue, setInputValue] = useState(""); // Store input value
+  const [isSearchActive, setIsSearchActive] = useState(false);
   const [filteredResults, setFilteredResults] = useState<any[]>([]); // Store filtered results
   const [products, setProducts] = useState<any[]>([]); // Store product list
   const [loading, setLoading] = useState(true); // Track loading status
   const [error, setError] = useState<string | null>(null); // Handle errors
   const debounceTimer = useRef<NodeJS.Timeout | null>(null); // Ref for debouncing
-  // Ref for debouncing
+  const [visibleProducts, setVisibleProducts] = useState<any[]>([]); // State for visible products
+  const [page, setPage] = useState(0); // Current page or batch index
+  const productsPerPage = 10; // Products to load per scroll
 
+  // Ref for debouncing
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 
+  // Sidebar toggle logic
   const handleToggle = () => {
     if (window.innerWidth >= 991) {
       toggleSidebar();
@@ -32,10 +37,11 @@ const AppHeader: React.FC = () => {
     setApplicationMenuOpen(!isApplicationMenuOpen);
   };
 
+  // Fetch product data
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/product/all");
+        const response = await fetch("http://192.168.10.27:8080/api/product/search/all");
         if (!response.ok) {
           throw new Error("Failed to fetch product list.");
         }
@@ -51,11 +57,13 @@ const AppHeader: React.FC = () => {
     fetchProducts();
   }, []);
 
+  // Filter products based on input
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value); // Update input value
+    setIsSearchActive(true);
 
-    // Implement debouncing
+    // Debouncing input
     if (debounceTimer.current) {
       clearTimeout(debounceTimer.current);
     }
@@ -68,18 +76,49 @@ const AppHeader: React.FC = () => {
   const filterProducts = (value: string) => {
     if (value.trim() === "") {
       setFilteredResults([]); // Reset if input is empty
+      setVisibleProducts([]); // Clear visible products
+      setPage(0); // Reset page
       return;
     }
 
     const results = products.filter((product) =>
-        product.sku.toLowerCase().includes(value.toLowerCase())
+        product.sku.toLowerCase().includes(value.toLowerCase()) ||
+        product.finish?.toLowerCase().includes(value.toLowerCase())
     );
+
     setFilteredResults(results); // Update filtered results
+    setVisibleProducts(results.slice(0, productsPerPage)); // Display the first batch
+    setPage(0); // Reset page index for scrolling
+  };
+
+  // Load more products for infinite scroll
+  const loadMoreProducts = () => {
+    const nextPage = page + 1;
+    const nextProducts = filteredResults.slice(
+        0,
+        (nextPage + 1) * productsPerPage
+    );
+
+    setVisibleProducts(nextProducts); // Append next batch of products
+    setPage(nextPage); // Update page
+  };
+
+  // Handle scroll event
+  const handleScroll = (e: React.UIEvent<HTMLUListElement>) => {
+    const bottom =
+        e.currentTarget.scrollHeight - e.currentTarget.scrollTop <=
+        e.currentTarget.clientHeight;
+    if (bottom) {
+      loadMoreProducts(); // Load more when scrolling to the bottom
+    }
   };
 
   // Display loading or error states
   if (loading) return <div>Loading products...</div>;
   if (error) return <div>Error: {error}</div>;
+
+
+
 
   return (
     <header className="sticky top-0 flex w-full bg-white border-gray-200 z-99999 dark:border-gray-800 dark:bg-gray-900 lg:border-b">
@@ -124,15 +163,15 @@ const AppHeader: React.FC = () => {
             {/* Cross Icon */}
           </button>
 
-          <Link to="/" className="lg:hidden">
+          <Link to="/" className="lg:hidden max-w-[50px]" >
             <img
               className="dark:hidden"
-              src="./images/logo/logo.svg"
+              src="./images/logo/Luxury-icon.png"
               alt="Logo"
             />
             <img
               className="hidden dark:block"
-              src="./images/logo/logo-dark.svg"
+              src="./images/logo/Luxury-icon.png"
               alt="Logo"
             />
           </Link>
@@ -202,21 +241,43 @@ const AppHeader: React.FC = () => {
                   )}
 
                   {/* Results Dropdown */}
-                  {filteredResults.length > 0 && (
-                      <ul className="absolute z-50 mt-1 w-full max-h-60 overflow-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
-                        {filteredResults.map((product) => (
-                            <li
+                  {isSearchActive && filteredResults.length > 0 && (
+                      <ul
+                          className="absolute z-50 mt-1 w-full max-h-60 overflow-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800"
+                          onScroll={handleScroll} // Bind scroll event for infinite scroll
+                      >
+                        {visibleProducts.map((product) => (
+                            <Link to={`/product/${product.id}`}>
+                              <li
                                 key={product.sku}
-                                className="p-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                                onClick={() => {
+                                  setIsSearchActive(false); // Close the dropdown
+                                  setFilteredResults([]);  // Optional: Clear the filtered results
+                                }}
+                                className="flex items-center gap-4 p-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
                             >
-                              {product.sku}
-                            </li>
+                                {/* Product Details */}
+                                  <img
+                                      src={product.image}
+                                      alt={product.sku}
+                                      className="w-12 h-12 object-cover rounded-md" // Resized to 12x12 pixels
+                                      loading="lazy"
+                                  />
+                                  <p className="font-medium">{product.sku}</p>
+                                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                                    {product.finish || ""}
+                                  </p>
+                                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                                    Price: ${product.price?.toFixed(2) || "0.00"}
+                                  </p>
+                              </li>
+                            </Link>
                         ))}
                       </ul>
                   )}
 
                   {/* Empty State */}
-                  {inputValue && filteredResults.length === 0 && (
+                  {isSearchActive && inputValue && filteredResults.length === 0 && (
                       <div className="absolute z-50 mt-1 w-full rounded-lg border border-gray-200 bg-white p-2 text-sm text-gray-500 shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                         No matching products found.
                       </div>

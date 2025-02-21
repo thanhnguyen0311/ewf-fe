@@ -16,6 +16,7 @@ import Buttons from "./pages/UiElements/Buttons";
 import Images from "./pages/UiElements/Images";
 import Videos from "./pages/UiElements/Videos";
 import UserProfiles from "./pages/UserProfiles";
+import ProductDetail from "./pages/Product/ProductDetail";
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
           <Route element={<AppLayout />}>
             <Route index path="/" element={<Ecommerce />} />
             <Route path="/products" element={<UserProfiles />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
             {/*/!* Others Page *!/*/}
             {/*<Route path="/profile" element={<UserProfiles />} />*/}
             {/*<Route path="/calendar" element={<Calendar />} />*/}
