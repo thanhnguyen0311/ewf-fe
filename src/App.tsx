@@ -3,20 +3,12 @@ import AppLayout from "./layout/AppLayout";
 import AuthLayout from "./layout/AuthLayout";
 import SignIn from "./pages/AuthPages/SignIn";
 import SignUp from "./pages/AuthPages/SignUp";
-import Blank from "./pages/Blank";
-import Calendar from "./pages/Calendar";
 import Ecommerce from "./pages/Dashboard/ECommerce";
-import FormElements from "./pages/Forms/FormElements";
 import NotFound from "./pages/OtherPage/NotFound";
-import BasicTables from "./pages/Tables/BasicTables";
-import Alerts from "./pages/UiElements/Alerts";
-import Avatars from "./pages/UiElements/Avatars";
-import Badges from "./pages/UiElements/Badges";
-import Buttons from "./pages/UiElements/Buttons";
-import Images from "./pages/UiElements/Images";
-import Videos from "./pages/UiElements/Videos";
 import UserProfiles from "./pages/UserProfiles";
 import ProductDetail from "./pages/Product/ProductDetail";
+import Orders from "./pages/Order/Orders";
+import NewOrder from "./pages/Order/NewOrder";
 
 export default function App() {
   return (
@@ -28,6 +20,9 @@ export default function App() {
             <Route index path="/" element={<Ecommerce />} />
             <Route path="/products" element={<UserProfiles />} />
             <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/order" element={<Orders />} />
+            <Route path="/order/new" element={<NewOrder />} />
+
             {/*/!* Others Page *!/*/}
             {/*<Route path="/profile" element={<UserProfiles />} />*/}
             {/*<Route path="/calendar" element={<Calendar />} />*/}

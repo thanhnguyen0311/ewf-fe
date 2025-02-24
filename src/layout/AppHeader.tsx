@@ -40,7 +40,7 @@ const AppHeader: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://104.236.97.50:8080/api/product/search/all");
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/product/search/all`);
         if (!response.ok) {
           throw new Error("Failed to fetch product list.");
         }
@@ -55,20 +55,18 @@ const AppHeader: React.FC = () => {
     fetchProducts();
   }, []);
 
-  // Filter products based on input
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value); // Update input value
     setIsSearchActive(true);
 
-    // Debouncing input
     if (debounceTimer.current) {
       clearTimeout(debounceTimer.current);
     }
 
     debounceTimer.current = setTimeout(() => {
       filterProducts(value);
-    }, 300); // Debounce for 300ms
+    }, 300);
   };
 
   const filterProducts = (value: string) => {
@@ -188,7 +186,7 @@ const AppHeader: React.FC = () => {
             </svg>
           </button>
           {!loading &&
-          <div className="hidden lg:block">
+          <div className="lg:block">
             <form>
               <div className="relative">
                 <span className="absolute -translate-y-1/2 pointer-events-none left-4 top-1/2">

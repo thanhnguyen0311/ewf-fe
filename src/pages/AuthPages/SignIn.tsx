@@ -162,11 +162,13 @@ export default function SignIn() {
           <GridShape />
           <div className="flex flex-col items-center max-w-xs">
             <Link to="/" className="block mb-4">
-              <img src="./images/logo/auth-logo.svg" alt="Logo" />
+              <img src="./images/logo/Luxury-icon.png" alt="Logo" />
             </Link>
-            <p className="text-center text-gray-400 dark:text-white/60">
-              Free and Open-Source Tailwind CSS Admin Dashboard Template
+            <p className="text-center font-bold text-gray-400 dark:text-white/60">
+              EAST WEST FURNITURE, LLC
             </p>
+            <p className="text-center text-gray-400 dark:text-white/60">
+              by Thanh Nguyen</p>
           </div>
         </div>
       </div>

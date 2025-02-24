@@ -51,6 +51,9 @@ const TableRow: React.FC<TableRowProps> = ({ children, className }) => {
   return <tr className={className}>{children}</tr>;
 };
 
+const TableFooter: React.FC<TableHeaderProps> = ({ children, className }) => {
+  return <thead className={className}>{children}</thead>;
+};
 // TableCell Component
 const TableCell: React.FC<TableCellProps> = ({
   children,
@@ -61,4 +64,4 @@ const TableCell: React.FC<TableCellProps> = ({
   return <CellTag className={` ${className}`}>{children}</CellTag>;
 };
 
-export { Table, TableHeader, TableBody, TableRow, TableCell };
+export { Table, TableHeader, TableBody, TableRow, TableCell, TableFooter };
