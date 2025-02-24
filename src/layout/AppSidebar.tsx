@@ -4,7 +4,9 @@ import { Link, useLocation } from "react-router";
 // Assume these icons are imported from an icon library
 import { useSidebar } from "../context/SidebarContext";
 import {
-  ChevronDownIcon,
+  BoxCubeIcon,
+  BoxIconLine,
+  ChevronDownIcon, DollarLineIcon, EnvelopeIcon, FileIcon, FolderIcon,
   GridIcon,
   HorizontaLDots,
   PlugInIcon,
@@ -27,15 +29,24 @@ const navItems: NavItem[] = [
     // subItems: [{ name: "Ecommerce", path: "/", pro: false }],
   },
   {
-    name: "Product Management",
-    icon: <TableIcon />,
+    name: "Orders",
+    icon: <FileIcon />,
     subItems: [
-        { name: "Product Manage", path: "/manage", pro: false },
+      { name: "New Order", path: "/order/new", pro: false },
+      { name: "Orders", path: "/order", pro: false },
+    ],
+  },
+  {
+    name: "Products",
+    icon: <BoxIconLine />,
+    subItems: [
+        { name: "Add Product", path: "/product/new", pro: false },
+        { name: "Products", path: "/products", pro: false },
     ],
   },
   {
     name: "Inventory",
-    icon: <TableIcon />,
+    icon: <FolderIcon />,
     subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
   },
   // {

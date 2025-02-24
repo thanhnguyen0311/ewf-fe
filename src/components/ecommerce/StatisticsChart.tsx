@@ -10,7 +10,7 @@ export default function StatisticsChart() {
       position: "top",
       horizontalAlign: "left",
     },
-    colors: ["#465FFF", "#9CB9FF"], // Define line colors
+    colors: ["#fb923f", "#ca9b75"], // Define line colors
     chart: {
       fontFamily: "Outfit, sans-serif",
       height: 310,
@@ -90,7 +90,7 @@ export default function StatisticsChart() {
       labels: {
         style: {
           fontSize: "12px", // Adjust font size for y-axis labels
-          colors: ["#6B7280"], // Color of the labels
+          colors: ["#fb923f"], // Color of the labels
         },
       },
       title: {
