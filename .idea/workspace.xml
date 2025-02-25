@@ -5,26 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/config/customerType.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/config/tableColumns.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Order/Orders.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Order/Orders.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/error/404.svg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/error/404.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ecommerce/MonthlySalesChart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ecommerce/MonthlySalesChart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ecommerce/MonthlyTarget.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ecommerce/MonthlyTarget.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ecommerce/StatisticsChart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ecommerce/StatisticsChart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/table/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/table/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/AppHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppHeader.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/AuthPages/SignIn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/AuthPages/SignIn.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Dashboard/ECommerce.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Dashboard/ECommerce.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/OtherPage/NotFound.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/OtherPage/NotFound.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Product/ProductDetail.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Product/ProductDetail.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +21,9 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -47,26 +32,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowPanel.toolwindow.highlight.mappings&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowPanel.toolwindow.highlight.symlinks&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowPanel.toolwindow.show.date&quot;: &quot;false&quot;,
-    &quot;WebServerToolWindowPanel.toolwindow.show.permissions&quot;: &quot;false&quot;,
-    &quot;WebServerToolWindowPanel.toolwindow.show.size&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;thanh-desktop&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Thanh/Desktop/work/ewf-fe&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Thanh\\Desktop\\work\\ewf-fe\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "WebServerToolWindowPanel.toolwindow.highlight.mappings": "true",
+    "WebServerToolWindowPanel.toolwindow.highlight.symlinks": "true",
+    "WebServerToolWindowPanel.toolwindow.show.date": "false",
+    "WebServerToolWindowPanel.toolwindow.show.permissions": "false",
+    "WebServerToolWindowPanel.toolwindow.show.size": "false",
+    "git-widget-placeholder": "thanh-ewf",
+    "last_opened_file_path": "C:/Users/Thanh/Desktop/work/ewf-fe",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Users\\acer\\WebstormProjects\\ewf-fe\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -86,6 +73,10 @@
       <workItem from="1740204928457" duration="11391000" />
       <workItem from="1740297068060" duration="12871000" />
       <workItem from="1740352624306" duration="19178000" />
+      <workItem from="1740441366246" duration="717000" />
+      <workItem from="1740442283999" duration="264000" />
+      <workItem from="1740442714077" duration="135000" />
+      <workItem from="1740442855446" duration="3351000" />
     </task>
     <servers />
   </component>
