@@ -6,5 +6,6 @@ export const ordersTableColumns = [
     'Order Date',
     'Ship Date',
     'Status',
+    'Payment',
     'Action'
 ];

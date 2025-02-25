@@ -146,6 +146,22 @@ export default function Orders() {
                                                         </Badge>
                                                     </TableCell>
 
+                                                    <TableCell
+                                                        className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                                        <Badge
+                                                            size="sm"
+                                                            color={
+                                                                order.paymentStatus === "success"
+                                                                    ? "success"
+                                                                    : order.paymentStatus === "pending"
+                                                                        ? "warning"
+                                                                        : "error"
+                                                            }
+                                                        >
+                                                            {order.paymentStatus}
+                                                        </Badge>
+                                                    </TableCell>
+
                                                 </TableRow>
                                             ))}
                                         </TableBody>
