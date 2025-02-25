@@ -4,27 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/config/customerType.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/config/tableColumns.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Order/Orders.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Order/Orders.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Update API endpoints and refine product search logic&#10;&#10;Changed API calls to use the production server instead of localhost. Removed unused error state handling and improved conditional UI rendering in the search logic. These updates streamline the product search functionality and ensure compatibility with the production environment.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/error/404.svg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/error/404.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ecommerce/MonthlySalesChart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ecommerce/MonthlySalesChart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ecommerce/MonthlyTarget.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ecommerce/MonthlyTarget.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ecommerce/StatisticsChart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ecommerce/StatisticsChart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/table/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/table/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/AppHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppHeader.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/AuthPages/SignIn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/AuthPages/SignIn.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Dashboard/ECommerce.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Dashboard/ECommerce.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/OtherPage/NotFound.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/OtherPage/NotFound.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Product/ProductDetail.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Product/ProductDetail.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,26 +29,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowPanel.toolwindow.highlight.mappings&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowPanel.toolwindow.highlight.symlinks&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowPanel.toolwindow.show.date&quot;: &quot;false&quot;,
-    &quot;WebServerToolWindowPanel.toolwindow.show.permissions&quot;: &quot;false&quot;,
-    &quot;WebServerToolWindowPanel.toolwindow.show.size&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;thanh-desktop&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Thanh/Desktop/work/ewf-fe&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Thanh\\Desktop\\work\\ewf-fe\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "WebServerToolWindowPanel.toolwindow.highlight.mappings": "true",
+    "WebServerToolWindowPanel.toolwindow.highlight.symlinks": "true",
+    "WebServerToolWindowPanel.toolwindow.show.date": "false",
+    "WebServerToolWindowPanel.toolwindow.show.permissions": "false",
+    "WebServerToolWindowPanel.toolwindow.show.size": "false",
+    "git-widget-placeholder": "thanh-ewf",
+    "last_opened_file_path": "C:/Users/Thanh/Desktop/work/ewf-fe",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "D:\\ewf-app\\ewf-fe\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -102,5 +84,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Update API endpoints and refine product search logic&#10;&#10;Changed API calls to use the production server instead of localhost. Removed unused error state handling and improved conditional UI rendering in the search logic. These updates streamline the product search functionality and ensure compatibility with the production environment." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update API endpoints and refine product search logic&#10;&#10;Changed API calls to use the production server instead of localhost. Removed unused error state handling and improved conditional UI rendering in the search logic. These updates streamline the product search functionality and ensure compatibility with the production environment." />
   </component>
 </project>

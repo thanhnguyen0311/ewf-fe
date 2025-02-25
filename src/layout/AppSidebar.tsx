@@ -4,13 +4,11 @@ import { Link, useLocation } from "react-router";
 // Assume these icons are imported from an icon library
 import { useSidebar } from "../context/SidebarContext";
 import {
-  BoxCubeIcon,
   BoxIconLine,
-  ChevronDownIcon, DollarLineIcon, EnvelopeIcon, FileIcon, FolderIcon,
+  ChevronDownIcon, PieChartIcon, FileIcon, FolderIcon,
   GridIcon,
   HorizontaLDots,
   PlugInIcon,
-  TableIcon,
 } from "../icons";
 import SidebarWidget from "./SidebarWidget";
 
@@ -49,11 +47,15 @@ const navItems: NavItem[] = [
     icon: <FolderIcon />,
     subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
   },
-  // {
-  //   icon: <CalenderIcon />,
-  //   name: "Calendar",
-  //   path: "/calendar",
-  // },
+  {
+    name: "Customer",
+    icon: <FolderIcon />,
+  },
+  {
+    icon: <PieChartIcon />,
+    name: "Analytics",
+    path: "/reports",
+  },
   // {
   //   icon: <UserCircleIcon />,
   //   name: "User Profile",
