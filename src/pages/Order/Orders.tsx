@@ -7,6 +7,7 @@ import Badge from "../../components/ui/badge/Badge";
 import {ordersTableColumns} from "../../config/tableColumns";
 import {CustomerType} from "../../config/customerType";
 import './Orders.css';
+import Loader from "../UiElements/Loader";
 
 
 export default function Orders() {
@@ -44,15 +45,7 @@ export default function Orders() {
                 description=""
             />
             <PageBreadcrumb pageTitle="Orders"/>
-            <div className="space-y-6 relative">
-                {/* Loader Overlay */}
-                {loading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-70 z-10">
-                        <div className="loader border-t-4 border-orange-500 rounded-full w-12 h-12 animate-spin"></div>
-                    </div>
-                )}
-                {/* Component Content (Blurred when loading) */}
-                <div className={`${loading ? "filter blur-sm" : ""}`}>
+            <Loader isLoading={loading}>
 
                     <ComponentCard title="">
                         <div
@@ -123,7 +116,7 @@ export default function Orders() {
                                                     </TableCell>
 
                                                     <TableCell
-                                                        className="px-4 py-3 font-bold text-gray-500 text-theme-sm dark:text-gray-400">
+                                                        className="px-4 py-3 font-bold text-amber-700 text-theme-sm dark:text-gray-400">
                                                         {order.price}
                                                     </TableCell>
 
@@ -214,8 +207,7 @@ export default function Orders() {
                             </div>
                         </div>
                     </ComponentCard>
-                </div>
-            </div>
+            </Loader>
         </>
     );
 }

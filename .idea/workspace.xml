@@ -4,27 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/config/customerType.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/config/tableColumns.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Order/Orders.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Order/Orders.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency.">
+      <change afterPath="$PROJECT_DIR$/src/pages/UiElements/Loader.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/error/404.svg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/error/404.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ecommerce/MonthlySalesChart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ecommerce/MonthlySalesChart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ecommerce/MonthlyTarget.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ecommerce/MonthlyTarget.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ecommerce/StatisticsChart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ecommerce/StatisticsChart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/table/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/table/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/AppHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppHeader.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/AuthPages/SignIn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/AuthPages/SignIn.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Dashboard/ECommerce.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Dashboard/ECommerce.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/OtherPage/NotFound.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/OtherPage/NotFound.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Product/ProductDetail.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Product/ProductDetail.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Order/Orders.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Order/Orders.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +23,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;thanhnguyen0311&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/thanhnguyen0311/ewf-fe&quot;,
+    &quot;accountId&quot;: &quot;bab25f28-5903-458b-bd7f-6d2070ebd4b5&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -85,8 +81,19 @@
       <workItem from="1740198500762" duration="2696000" />
       <workItem from="1740204928457" duration="11391000" />
       <workItem from="1740297068060" duration="12871000" />
-      <workItem from="1740352624306" duration="19178000" />
+      <workItem from="1740352624306" duration="19817000" />
+      <workItem from="1740453384899" duration="1045000" />
+      <workItem from="1740458055079" duration="4558000" />
     </task>
+    <task id="LOCAL-00001" summary="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency.">
+      <option name="closed" value="true" />
+      <created>1740380729320</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1740380729320</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -102,5 +109,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency." />
   </component>
 </project>

@@ -17,8 +17,11 @@ import PhoneInput from "../../components/form/group-input/PhoneInput";
 import ComponentCard from "../../components/common/ComponentCard";
 import React, {useState} from "react";
 import Select from "../../components/form/Select";
+import Form from "../../components/form/Form";
+import Loader from "../UiElements/Loader";
 
 export default function NewOrder() {
+    const [isLoading, setIsLoading] = useState(false);
     const countries = [
         {code: "US", label: "+1"},
         {code: "GB", label: "+44"},
@@ -37,97 +40,102 @@ export default function NewOrder() {
         console.log("Selected value:", value);
     };
 
+    const handleSubmit = () => {
+        console.log("Submitted");
+    };
+
     const handlePhoneNumberChange = (phoneNumber: string) => {
         console.log("Updated phone number:", phoneNumber);
     };
     return (
-        <div>
+        <Loader isLoading={isLoading}>
             <PageMeta
                 title="New Order | East West Furniture"
                 description=""
             />
             <PageBreadcrumb pageTitle="New Order"/>
-            <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-                <div className="space-y-6">
+            <Form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+                    <div className="space-y-6">
 
-                    <ComponentCard title="Order Info">
-                        <div className="space-y-6">
-                            <div>
-                                <Label>Input</Label>
-                                <Input type="text"/>
-                            </div>
-                            <div>
-                                <Label>Input with Placeholder</Label>
-                                <Input type="text" placeholder="info@gmail.com"/>
-                            </div>
-                            <div>
-                                <Label>Select Input</Label>
-                                <Select
-                                    options={options}
-                                    placeholder="Select an option"
-                                    onChange={handleSelectChange}
-                                    className="dark:bg-dark-900"
-                                />
-                            </div>
-                            <div>
-                                <Label>Password Input</Label>
-                                <div className="relative">
-                                    <Input
-                                        type={showPassword ? "text" : "password"}
-                                        placeholder="Enter your password"
-                                    />
-                                    <button
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-                                    >
-                                        {showPassword ? (
-                                            <EyeIcon className="fill-gray-500 dark:fill-gray-400"/>
-                                        ) : (
-                                            <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400"/>
-                                        )}
-                                    </button>
+                        <ComponentCard title="Order Info">
+                            <div className="space-y-6">
+                                <div>
+                                    <Label>Input</Label>
+                                    <Input type="text"/>
                                 </div>
-                            </div>
-                            <div>
-                                <Label htmlFor="datePicker">Date Picker Input</Label>
-                                <div className="relative">
-                                    <Input
-                                        type="date"
-                                        id="datePicker"
-                                        name="datePicker"
-                                        onChange={(e) => console.log(e.target.value)}
+                                <div>
+                                    <Label>Input with Placeholder</Label>
+                                    <Input type="text" placeholder="info@gmail.com"/>
+                                </div>
+                                <div>
+                                    <Label>Select Input</Label>
+                                    <Select
+                                        options={options}
+                                        placeholder="Select an option"
+                                        onChange={handleSelectChange}
+                                        className="dark:bg-dark-900"
                                     />
-                                    <span
-                                        className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+                                </div>
+                                <div>
+                                    <Label>Password Input</Label>
+                                    <div className="relative">
+                                        <Input
+                                            type={showPassword ? "text" : "password"}
+                                            placeholder="Enter your password"
+                                        />
+                                        <button
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
+                                        >
+                                            {showPassword ? (
+                                                <EyeIcon className="fill-gray-500 dark:fill-gray-400"/>
+                                            ) : (
+                                                <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400"/>
+                                            )}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <Label htmlFor="datePicker">Date Picker Input</Label>
+                                    <div className="relative">
+                                        <Input
+                                            type="date"
+                                            id="datePicker"
+                                            name="datePicker"
+                                            onChange={(e) => console.log(e.target.value)}
+                                        />
+                                        <span
+                                            className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
               <CalenderIcon/>
             </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <Label htmlFor="tm">Date Picker Input</Label>
-                                <div className="relative">
-                                    <Input
-                                        type="time"
-                                        id="tm"
-                                        name="tm"
-                                        onChange={(e) => console.log(e.target.value)}
-                                    />
-                                    <span
-                                        className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+                                <div>
+                                    <Label htmlFor="tm">Date Picker Input</Label>
+                                    <div className="relative">
+                                        <Input
+                                            type="time"
+                                            id="tm"
+                                            name="tm"
+                                            onChange={(e) => console.log(e.target.value)}
+                                        />
+                                        <span
+                                            className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
               <TimeIcon/>
             </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <Label htmlFor="tm">Input with Payment</Label>
-                                <div className="relative">
-                                    <Input
-                                        type="text"
-                                        placeholder="Card number"
-                                        className="pl-[62px]"
-                                    />
-                                    <span
-                                        className="absolute left-0 top-1/2 flex h-11 w-[46px] -translate-y-1/2 items-center justify-center border-r border-gray-200 dark:border-gray-800">
+                                <div>
+                                    <Label htmlFor="tm">Input with Payment</Label>
+                                    <div className="relative">
+                                        <Input
+                                            type="text"
+                                            placeholder="Card number"
+                                            className="pl-[62px]"
+                                        />
+                                        <span
+                                            className="absolute left-0 top-1/2 flex h-11 w-[46px] -translate-y-1/2 items-center justify-center border-r border-gray-200 dark:border-gray-800">
               <svg
                   width="20"
                   height="20"
@@ -143,64 +151,65 @@ export default function NewOrder() {
                 />
               </svg>
             </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </ComponentCard>
+                        </ComponentCard>
 
-                    {/*<SelectInputs />*/}
-                    {/*<TextAreaInput />*/}
-                    {/*<InputStates />*/}
-                </div>
-                <div className="space-y-6">
+                        {/*<SelectInputs />*/}
+                        {/*<TextAreaInput />*/}
+                        {/*<InputStates />*/}
+                    </div>
+                    <div className="space-y-6">
 
 
-                    <ComponentCard title="Customer">
-                        <div className="space-y-6">
-                            <div>
-                                <Label>Email</Label>
-                                <div className="relative">
-                                    <Input
-                                        placeholder="info@gmail.com"
-                                        type="text"
-                                        className="pl-[62px]"
-                                    />
-                                    <span
-                                        className="absolute left-0 top-1/2 -translate-y-1/2 border-r border-gray-200 px-3.5 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                        <ComponentCard title="Customer">
+                            <div className="space-y-6">
+                                <div>
+                                    <Label>Email</Label>
+                                    <div className="relative">
+                                        <Input
+                                            placeholder="info@gmail.com"
+                                            type="text"
+                                            className="pl-[62px]"
+                                        />
+                                        <span
+                                            className="absolute left-0 top-1/2 -translate-y-1/2 border-r border-gray-200 px-3.5 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
                                       <EnvelopeIcon/>
                                     </span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <Label>Phone</Label>
+                                    <PhoneInput
+                                        selectPosition="start"
+                                        countries={countries}
+                                        placeholder="+1 (555) 000-0000"
+                                        onChange={handlePhoneNumberChange}
+                                    />
+                                </div>
+                                {" "}
+                                <div>
+                                    <Label>Phone</Label>
+                                    <PhoneInput
+                                        selectPosition="end"
+                                        countries={countries}
+                                        placeholder="+1 (555) 000-0000"
+                                        onChange={handlePhoneNumberChange}
+                                    />
                                 </div>
                             </div>
-                            <div>
-                                <Label>Phone</Label>
-                                <PhoneInput
-                                    selectPosition="start"
-                                    countries={countries}
-                                    placeholder="+1 (555) 000-0000"
-                                    onChange={handlePhoneNumberChange}
-                                />
-                            </div>
-                            {" "}
-                            <div>
-                                <Label>Phone</Label>
-                                <PhoneInput
-                                    selectPosition="end"
-                                    countries={countries}
-                                    placeholder="+1 (555) 000-0000"
-                                    onChange={handlePhoneNumberChange}
-                                />
-                            </div>
-                        </div>
-                    </ComponentCard>
+                        </ComponentCard>
 
-
-                    {/*<FileInputExample />*/}
-                    {/*<CheckboxComponents />*/}
-                    {/*<RadioButtons />*/}
-                    {/*<ToggleSwitch />*/}
-                    {/*<DropzoneComponent />*/}
+                        {/*<FileInputExample />*/}
+                        {/*<CheckboxComponents />*/}
+                        {/*<RadioButtons />*/}
+                        {/*<ToggleSwitch />*/}
+                        {/*<DropzoneComponent />*/}
+                    </div>
                 </div>
-            </div>
-        </div>
+            </Form>
+        </Loader>
+
     );
 }
