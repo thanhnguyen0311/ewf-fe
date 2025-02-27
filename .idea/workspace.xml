@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency.">
-      <change afterPath="$PROJECT_DIR$/src/pages/UiElements/Loader.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Order/Orders.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Order/Orders.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Refactor loaders and order pages for improved reusability.&#10;&#10;Replaced inline loading components with a reusable Loader component. Refactored Orders and NewOrder pages to utilize the new Loader and improved their structure for better maintainability. Added a Form wrapper in NewOrder for cleaner form handling." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -83,7 +78,7 @@
       <workItem from="1740297068060" duration="12871000" />
       <workItem from="1740352624306" duration="19817000" />
       <workItem from="1740453384899" duration="1045000" />
-      <workItem from="1740458055079" duration="4558000" />
+      <workItem from="1740458055079" duration="4713000" />
     </task>
     <task id="LOCAL-00001" summary="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency.">
       <option name="closed" value="true" />
@@ -93,7 +88,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740380729320</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Refactor loaders and order pages for improved reusability.&#10;&#10;Replaced inline loading components with a reusable Loader component. Refactored Orders and NewOrder pages to utilize the new Loader and improved their structure for better maintainability. Added a Form wrapper in NewOrder for cleaner form handling.">
+      <option name="closed" value="true" />
+      <created>1740488525609</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1740488525609</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -112,6 +115,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency." />
+    <MESSAGE value="Refactor loaders and order pages for improved reusability.&#10;&#10;Replaced inline loading components with a reusable Loader component. Refactored Orders and NewOrder pages to utilize the new Loader and improved their structure for better maintainability. Added a Form wrapper in NewOrder for cleaner form handling." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor loaders and order pages for improved reusability.&#10;&#10;Replaced inline loading components with a reusable Loader component. Refactored Orders and NewOrder pages to utilize the new Loader and improved their structure for better maintainability. Added a Form wrapper in NewOrder for cleaner form handling." />
   </component>
 </project>
