@@ -5,9 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency.">
+      <change afterPath="$PROJECT_DIR$/src/pages/Inventory/Components/CInventory.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Inventory/Product/PInventory.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/UiElements/Loader.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/tables/BasicTableOne.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/table/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/table/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/config/tableColumns.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/tableColumns.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Dashboard/ECommerce.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Dashboard/ECommerce.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Order/Orders.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Order/Orders.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Tables/BasicTables.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Tables/BasicTables.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/UiElements/Loader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/UiElements/Loader.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,12 +39,12 @@
     &quot;assignee&quot;: &quot;thanhnguyen0311&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/thanhnguyen0311/ewf-fe&quot;,
-    &quot;accountId&quot;: &quot;bab25f28-5903-458b-bd7f-6d2070ebd4b5&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/thanhnguyen0311/ewf-fe",
+    "accountId": "788e786d-f597-4229-b327-f7b8bfc318c3"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -52,7 +63,7 @@
     "WebServerToolWindowPanel.toolwindow.show.permissions": "false",
     "WebServerToolWindowPanel.toolwindow.show.size": "false",
     "git-widget-placeholder": "thanh-ewf",
-    "last_opened_file_path": "C:/Users/Thanh/Desktop/work/ewf-fe",
+    "last_opened_file_path": "D:/ewf-app/ewf-fe/src/pages/Inventory/Components",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -62,10 +73,18 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\ewf-app\ewf-fe\src\pages\Inventory\Components" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\ewf-app\ewf-fe\src\pages\Inventory\Product" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-WS-243.24978.60" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-WS-243.23654.157" />
       </set>
     </attachedChunks>
   </component>
@@ -83,6 +102,7 @@
       <workItem from="1740352624306" duration="19817000" />
       <workItem from="1740453384899" duration="1045000" />
       <workItem from="1740458055079" duration="4558000" />
+      <workItem from="1740583793015" duration="13843000" />
     </task>
     <task id="LOCAL-00001" summary="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency.">
       <option name="closed" value="true" />

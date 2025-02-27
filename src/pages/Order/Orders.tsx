@@ -6,7 +6,6 @@ import {Table, TableBody, TableCell, TableHeader, TableRow} from "../../componen
 import Badge from "../../components/ui/badge/Badge";
 import {ordersTableColumns} from "../../config/tableColumns";
 import {CustomerType} from "../../config/customerType";
-import './Orders.css';
 import Loader from "../UiElements/Loader";
 
 
@@ -45,32 +44,22 @@ export default function Orders() {
                 description=""
             />
             <PageBreadcrumb pageTitle="Orders"/>
-            <Loader isLoading={loading}>
 
                     <ComponentCard title="">
                         <div
                             className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
                             <div className="max-w-full overflow-x-auto">
                                 <div className="min-w-[1102px]">
+
+                                    <Loader isLoading={loading}>
                                     <Table>
                                         {/* Table Header */}
-                                        <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
-                                            <TableRow>
-                                                {ordersTableColumns.map((column, index) => (
-                                                    <TableCell
-                                                        isHeader
-                                                        className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                                                    >
-                                                        {column}
-                                                    </TableCell>
-                                                ))}
-                                            </TableRow>
-                                        </TableHeader>
+                                        <TableHeader columns={ordersTableColumns}/>
 
                                         {/* Table Body */}
                                         <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                                             {orders.map((order) => (
-                                                <TableRow key={order.id}>
+                                                <TableRow key={order.id} hover={true}>
                                                     <TableCell className="px-5 py-4 sm:px-6 text-start">
                                                         <div className="flex items-center gap-3">
                                                             <div>
@@ -161,11 +150,16 @@ export default function Orders() {
                                                             {order.paymentStatus}
                                                         </Badge>
                                                     </TableCell>
+                                                    <TableCell
+                                                        className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
 
+                                                    </TableCell>
                                                 </TableRow>
                                             ))}
                                         </TableBody>
                                     </Table>
+
+                                    </Loader>
 
                                     <div
                                         className="flex items-center justify-between px-4 py-3 border-t border-gray-200 bg-white dark:bg-gray-800">
@@ -223,7 +217,6 @@ export default function Orders() {
                             </div>
                         </div>
                     </ComponentCard>
-            </Loader>
         </>
     );
 }

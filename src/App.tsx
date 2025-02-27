@@ -9,6 +9,8 @@ import UserProfiles from "./pages/UserProfiles";
 import ProductDetail from "./pages/Product/ProductDetail";
 import Orders from "./pages/Order/Orders";
 import NewOrder from "./pages/Order/NewOrder";
+import PInventory from "./pages/Inventory/Product/PInventory";
+import CInventory from "./pages/Inventory/Components/CInventory";
 
 export default function App() {
   return (
@@ -22,6 +24,8 @@ export default function App() {
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/order" element={<Orders />} />
             <Route path="/order/new" element={<NewOrder />} />
+            <Route path="/inventory/products" element={<PInventory />} />
+            <Route path="/inventory/components" element={<CInventory />} />
 
             {/*/!* Others Page *!/*/}
             {/*<Route path="/profile" element={<UserProfiles />} />*/}

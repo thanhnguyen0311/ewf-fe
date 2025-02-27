@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import {productsInventoryTableColumns} from "../../../config/tableColumns";
 
 // Props for Table
 interface TableProps {
@@ -8,8 +9,9 @@ interface TableProps {
 
 // Props for TableHeader
 interface TableHeaderProps {
-  children: ReactNode; // Header row(s)
+  children?: ReactNode; // Header row(s)
   className?: string; // Optional className for styling
+  columns?: string[]
 }
 
 // Props for TableBody
@@ -22,6 +24,7 @@ interface TableBodyProps {
 interface TableRowProps {
   children: ReactNode; // Cells (th or td)
   className?: string; // Optional className for styling
+  hover?: boolean
 }
 
 // Props for TableCell
@@ -37,8 +40,21 @@ const Table: React.FC<TableProps> = ({ children, className }) => {
 };
 
 // TableHeader Component
-const TableHeader: React.FC<TableHeaderProps> = ({ children, className }) => {
-  return <thead className={className}>{children}</thead>;
+const TableHeader: React.FC<TableHeaderProps> = ({className, columns }) => {
+  return (
+      <thead className={`${className} border-b border-gray-100 dark:border-white/[0.05]`}>
+        <TableRow hover={false}>
+          {columns?.map((column, index) => (
+              <TableCell
+                  isHeader
+                  className="px-5 py-3 font-bold text-gray-500 text-start text-theme-xs dark:text-gray-400"
+              >
+                {column}
+              </TableCell>
+          ))}
+        </TableRow>
+      </thead>
+  );
 };
 
 // TableBody Component
@@ -47,13 +63,21 @@ const TableBody: React.FC<TableBodyProps> = ({ children, className }) => {
 };
 
 // TableRow Component
-const TableRow: React.FC<TableRowProps> = ({ children, className }) => {
-  return <tr className={className}>{children}</tr>;
+const TableRow: React.FC<TableRowProps> = ({ children, className, hover }) => {
+  return (
+      <tr
+          className={`${className} ${hover ? 'hover:bg-gray-100 dark:hover:bg-gray-dark' : ''}`}
+      >
+        {children}
+      </tr>
+
+  );
 };
 
 const TableFooter: React.FC<TableHeaderProps> = ({ children, className }) => {
   return <thead className={className}>{children}</thead>;
 };
+
 // TableCell Component
 const TableCell: React.FC<TableCellProps> = ({
   children,
@@ -63,5 +87,6 @@ const TableCell: React.FC<TableCellProps> = ({
   const CellTag = isHeader ? "th" : "td";
   return <CellTag className={` ${className}`}>{children}</CellTag>;
 };
+
 
 export { Table, TableHeader, TableBody, TableRow, TableCell, TableFooter };
