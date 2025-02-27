@@ -1,154 +1,79 @@
-# TailAdmin - React.js
+East West Furniture Management System
 
-A free, open-source admin dashboard template built with React and Tailwind CSS.
+Overview
 
-![TailAdmin React.js Dashboard Preview](./banner.png)
+East West Furniture Management System is a web application built with React.js and Tailwind CSS for the frontend and Java Spring Boot for the backend. This system is designed to efficiently manage company operations, including employee records, inventory, sales, and reporting.
 
-## Overview
+Features
 
-TailAdmin provides essential UI components and layouts for building feature-rich, data-driven admin dashboards and control panels. It's built on:
+Employee management (add, update, delete employees)
 
-- React 18 (create-react-app)
-- TypeScript
-- Tailwind CSS
+Inventory tracking and management
 
-### Quick Links
-- [✨ Visit Website](https://tailadmin.com)
-- [📄 Documentation](https://tailadmin.com/docs)
-- [⬇️ Download](https://tailadmin.com/download)
-- [🖌️ Figma Design File (Community Edition)](https://www.figma.com/community/file/1214477970819985778)
-- [⚡ Get PRO Version](https://tailadmin.com/pricing)
+Order and sales processing
 
-### Demos
-- [Free Version](https://free-react-demo.tailadmin.com/)
-- [Pro Version](https://react-demo.tailadmin.com)
+User authentication and role-based access
 
-### Other Versions
-- [HTML Version](https://github.com/TailAdmin/tailadmin-free-tailwind-dashboard-template)
-- [Next.js Version](https://github.com/TailAdmin/free-nextjs-admin-dashboard)
-- [Vue.js Version](https://github.com/TailAdmin/vue-tailwind-admin-dashboard)
+Dashboard with analytics and reports
 
+Tech Stack
 
-## Installation
+Frontend:
 
-### Prerequisites
-To get started with TailAdmin, ensure you have the following prerequisites installed and set up:
+React.js
 
-- Node.js 18.x or later (recommended to use Node.js 20.x or later)
+Tailwind CSS
 
-### Cloning the Repository
-Clone the repository using the following command:
+HTML
 
-```bash
-git clone https://github.com/TailAdmin/free-react-tailwind-admin-dashboard.git
-```
+Axios (for API calls)
 
-> Windows Users: place the repository near the root of your drive if you face issues while cloning.
+React Router
 
-1. Install dependencies:
-    ```bash
-    npm install
-    # or
-    yarn install
-    ```
-    > On `npm` some included packages can cause peer-deps issue with React 18 while installing.
-    >
-    > Use the `--legacy-peer-deps` flag, at the end of the installation command, as a workaround for that.
+Backend:
 
-2. Start the development server:
-    ```bash
-    npm run dev
-    # or
-    yarn dev
-    ```
+Java Spring Boot
 
-## Components
+Spring Security (for authentication)
 
-TailAdmin is a pre-designed starting point for building a web-based dashboard using React.js and Tailwind CSS. The template includes:
+PostgreSQL/MySQL (Database)
 
-- Sophisticated and accessible sidebar
-- Data visualization components
-- Prebuilt profile management and 404 page
-- Tables and Charts(Line and Bar)
-- Authentication forms and input elements
-- Alerts, Dropdowns, Modals, Buttons and more
-- Can't forget Dark Mode 🕶️
+Hibernate (ORM)
 
-All components are built with React and styled using Tailwind CSS for easy customization.
+RESTful API
 
-## Feature Comparison
+Installation
 
-### Free Version
-- 1 Unique Dashboard
-- 30+ dashboard components
-- 50+ UI elements
-- Basic Figma design files
-- Community support
-
-### Pro Version
-- 5 Unique Dashboards: Analytics, Ecommerce, Marketing, CRM, Stocks (more coming soon)
-- 400+ dashboard components and UI elements
-- Complete Figma design file
-- Email support
-
-To learn more about pro version features and pricing, visit our [pricing page](https://tailadmin.com/pricing).
-
-## Changelog
-
-### Version 2.0.0 - [February 2025]
-A major update with comprehensive redesign and modern React patterns implementation.
-
-#### Major Improvements
-- Complete UI redesign with modern React patterns
-- New features: collapsible sidebar, chat, and calendar
-- Improved performance and accessibility
-- Updated data visualization using ApexCharts
-
-#### Key Features
-- Redesigned dashboards (Ecommerce, Analytics, Marketing, CRM)
-- Enhanced navigation with React Router integration
-- Advanced tables with sorting and filtering
-- Calendar with drag-and-drop support
-- New UI components and improved existing ones
-
-#### Breaking Changes
-- Updated sidebar component API
-- Migrated charts to ApexCharts
-- Revised authentication system
-
-[Read more](https://tailadmin.com/docs/update-logs/react) on this release.
-
-### Version 1.3.7 - [June 20, 2024]
-
-#### Enhancements
-
-1. Remove Repetition of DefaultLayout in every Pages
-2. Add ClickOutside Component for reduce repeated functionality in Header Message, Notification and User Dropdowns.
-
-### Version 1.3.6 - [Jan 31, 2024]
-
-#### Enhancements
-
-1. Integrate flatpickr in [Date Picker/Form Elements]
-2. Change color after select an option [Select Element/Form Elements].
-3. Make it functional [Multiselect Dropdown/Form Elements].
-4. Make best value editable [Pricing Table One/Pricing Table].
-5. Rearrange Folder structure.
-
-### Version 1.2.0 - [Apr 28, 2023]
-
-- Add Typescript in TailAdmin React.
-
-### Version 1.0.0 - Initial Release - [Mar 13, 2023]
-
-- Initial release of TailAdmin React.
+Prerequisites
 
 
+Usage
 
-## License
+Open the frontend at http://localhost:3000.
 
-TailAdmin React.js Free Version is released under the MIT License.
+Log in with valid credentials.
 
-## Support
+Manage employees, inventory, and orders using the dashboard.
 
-If you find this project helpful, please consider giving it a star on GitHub. Your support helps us continue developing and maintaining this template.
+Deployment
+
+For production deployment:
+
+Use Docker or Kubernetes for containerization.
+
+Deploy the frontend on Vercel, Netlify, or an Nginx server.
+
+Deploy the backend on AWS, Heroku, or a dedicated server.
+
+Contribution
+
+Contributions are welcome! Please submit a pull request or open an issue for improvements.
+
+License
+
+This project is licensed under the MIT License.
+
+Contact
+
+For any inquiries, contact me at [nct031194@icloud.com].
+
