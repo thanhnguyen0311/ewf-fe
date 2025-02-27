@@ -4,21 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency.">
-      <change afterPath="$PROJECT_DIR$/src/pages/Inventory/Components/CInventory.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Inventory/Product/PInventory.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/UiElements/Loader.css" afterDir="false" />
+    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Refactor inventory and orders tables; remove unused components.&#10;&#10;Revised inventory and orders table components for improved reusability, including new configuration-driven headers and hover effects. Removed unused `BasicTableOne` and refactored sidebar for new inventory sections. Added pages for product and component inventory, refined loading UI, and updated configurations for consistency.">
+      <change afterPath="$PROJECT_DIR$/src/components/ui/paging/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/tables/BasicTableOne.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/ComponentCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/ComponentCard.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ui/table/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/table/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config/tableColumns.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/tableColumns.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Dashboard/ECommerce.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Dashboard/ECommerce.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/AppHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppHeader.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Inventory/Product/PInventory.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Inventory/Product/PInventory.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Order/Orders.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Order/Orders.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Tables/BasicTables.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Tables/BasicTables.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/UiElements/Loader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/UiElements/Loader.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/UiElements/Loader.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/UiElements/Loader/Loader.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/UiElements/Loader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/UiElements/Loader/Loader.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,12 +36,12 @@
     &quot;assignee&quot;: &quot;thanhnguyen0311&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/thanhnguyen0311/ewf-fe",
-    "accountId": "788e786d-f597-4229-b327-f7b8bfc318c3"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/thanhnguyen0311/ewf-fe&quot;,
+    &quot;accountId&quot;: &quot;788e786d-f597-4229-b327-f7b8bfc318c3&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -63,7 +60,7 @@
     "WebServerToolWindowPanel.toolwindow.show.permissions": "false",
     "WebServerToolWindowPanel.toolwindow.show.size": "false",
     "git-widget-placeholder": "thanh-ewf",
-    "last_opened_file_path": "D:/ewf-app/ewf-fe/src/pages/Inventory/Components",
+    "last_opened_file_path": "C:/Users/Accou/Downloads/free-react-tailwind-admin-dashboard-main/free-react-tailwind-admin-dashboard-main",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -78,6 +75,7 @@
       <recent name="D:\ewf-app\ewf-fe\src\pages\Inventory\Components" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\ewf-app\ewf-fe\src\pages\UiElements\Loader" />
       <recent name="D:\ewf-app\ewf-fe\src\pages\Inventory\Product" />
     </key>
   </component>
@@ -102,7 +100,8 @@
       <workItem from="1740352624306" duration="19817000" />
       <workItem from="1740453384899" duration="1045000" />
       <workItem from="1740458055079" duration="4558000" />
-      <workItem from="1740583793015" duration="13843000" />
+      <workItem from="1740583793015" duration="14030000" />
+      <workItem from="1740682513838" duration="12946000" />
     </task>
     <task id="LOCAL-00001" summary="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency.">
       <option name="closed" value="true" />
@@ -112,7 +111,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740380729320</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Refactor inventory and orders tables; remove unused components.&#10;&#10;Revised inventory and orders table components for improved reusability, including new configuration-driven headers and hover effects. Removed unused `BasicTableOne` and refactored sidebar for new inventory sections. Added pages for product and component inventory, refined loading UI, and updated configurations for consistency.">
+      <option name="closed" value="true" />
+      <created>1740630620900</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1740630620900</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -131,6 +138,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency." />
+    <MESSAGE value="Refactor inventory and orders tables; remove unused components.&#10;&#10;Revised inventory and orders table components for improved reusability, including new configuration-driven headers and hover effects. Removed unused `BasicTableOne` and refactored sidebar for new inventory sections. Added pages for product and component inventory, refined loading UI, and updated configurations for consistency." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor inventory and orders tables; remove unused components.&#10;&#10;Revised inventory and orders table components for improved reusability, including new configuration-driven headers and hover effects. Removed unused `BasicTableOne` and refactored sidebar for new inventory sections. Added pages for product and component inventory, refined loading UI, and updated configurations for consistency." />
   </component>
 </project>

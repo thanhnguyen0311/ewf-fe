@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import {productsInventoryTableColumns} from "../../../config/tableColumns";
 
 // Props for Table
 interface TableProps {
