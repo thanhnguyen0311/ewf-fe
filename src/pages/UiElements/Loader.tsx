@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import './Loader.css';
 
 interface LoaderProps {
     isLoading: boolean;
