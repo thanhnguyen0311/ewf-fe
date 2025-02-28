@@ -8,7 +8,7 @@ import ComponentCard from "../../components/common/ComponentCard";
 import React, {useState} from "react";
 import Select from "../../components/form/Select";
 import Form from "../../components/form/Form";
-import Loader from "../UiElements/Loader";
+import Loader from "../UiElements/Loader/Loader";
 
 export default function NewOrder() {
     const [isLoading, setIsLoading] = useState(false);

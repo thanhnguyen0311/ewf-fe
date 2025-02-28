@@ -6,7 +6,8 @@ import {Table, TableBody, TableCell, TableHeader, TableRow} from "../../componen
 import Badge from "../../components/ui/badge/Badge";
 import {ordersTableColumns} from "../../config/tableColumns";
 import {CustomerType} from "../../config/customerType";
-import Loader from "../UiElements/Loader";
+import Loader from "../UiElements/Loader/Loader";
+import {Paging} from "../../components/ui/paging";
 
 
 export default function Orders() {
@@ -160,59 +161,7 @@ export default function Orders() {
                                     </Table>
 
                                     </Loader>
-
-                                    <div
-                                        className="flex items-center justify-between px-4 py-3 border-t border-gray-200 bg-white dark:bg-gray-800">
-                                        {/* Page Info */}
-                                        <div className="text-sm text-gray-600 dark:text-gray-300">
-                                            Page {currentPage} of {allPages}
-                                        </div>
-
-                                        {/* Pagination Buttons */}
-                                        <div className="flex gap-2">
-                                            {/* Previous Button */}
-                                            <button
-                                                className={`px-4 py-2 text-sm font-medium border rounded-lg ${
-                                                    currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-gray-200 hover:bg-gray-300'
-                                                }`}
-                                                disabled={currentPage === 1}
-                                                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                                            >
-                                                Previous
-                                            </button>
-
-                                            {/* Page Buttons */}
-                                            {Array.from({length: 5})
-                                                .map((_, index) => currentPage - 2 + index) // Create an array centered around currentPage
-                                                .filter((page) => page > 0 && page <= allPages) // Ensure valid page numbers
-                                                .map((page) => (
-                                                    <button
-                                                        key={page}
-                                                        onClick={() => setCurrentPage(page)}
-                                                        className={`px-3 py-1 text-sm font-medium border rounded ${
-                                                            currentPage === page
-                                                                ? 'bg-orange-400 text-white border-orange-500'
-                                                                : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-                                                        }`}
-                                                    >
-                                                        {page}
-                                                    </button>
-                                                ))}
-
-                                            {/* Next Button */}
-                                            <button
-                                                className={`px-4 py-2 text-sm font-medium border rounded-lg ${
-                                                    currentPage === allPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-gray-200 hover:bg-gray-300'
-                                                }`}
-                                                disabled={currentPage === allPages}
-                                                onClick={() => setCurrentPage((prev) => Math.min(allPages, prev + 1))}
-                                            >
-                                                Next
-                                            </button>
-                                        </div>
-                                        <div></div>
-                                    </div>
-
+                                    <Paging allPages={allPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
                                 </div>
                             </div>
                         </div>
