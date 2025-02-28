@@ -18,17 +18,9 @@ export default function PInventory() {
 
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setLoading(true)
         const value = e.target.value;
-        setInputValue(value); // Update the input value
-
-        // Debounce the filtering action
-        if (debounceTimer.current) {
-            clearTimeout(debounceTimer.current);
-        }
-        debounceTimer.current = setTimeout(() => {
-            setLoading(false)
-        }, 1000);
+        setInputValue(value);
+        console.log(inputValue)
     };
 
 
@@ -37,7 +29,19 @@ export default function PInventory() {
         const fetchProducts = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/inventory/products?page=${currentPage}`);
+                const requestBody = {
+                    page: currentPage,
+                    sku: inputValue.trim()
+                };
+
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/inventory/products/search`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json", // Specify JSON content
+                    },
+                    body: JSON.stringify(requestBody), // Stringify the request body
+                });
+
                 if (!response.ok) {
                     throw new Error("Failed to fetch orders list.");
                 }
@@ -52,7 +56,7 @@ export default function PInventory() {
         };
 
         fetchProducts();
-    }, [currentPage]);
+    }, [currentPage, inputValue]);
     return (
         <>
             <PageMeta
