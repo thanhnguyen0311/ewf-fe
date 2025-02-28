@@ -14,49 +14,59 @@ export default function PInventory() {
     const [currentPage, setCurrentPage] = useState(1);
     const [allPages, setAllPages] = useState(0);
     const [inputValue, setInputValue] = useState("");
+
     const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
+        setLoading(true)
+        setCurrentPage(1)
         setInputValue(value);
-        console.log(inputValue)
+        if (debounceTimer.current) {
+            clearTimeout(debounceTimer.current);
+        }
+        debounceTimer.current = setTimeout(() => {
+            fetchProducts(value); // Trigger API only after typing stops
+        }, 500); // Set debounce delay to 500ms
+    };
+
+    const fetchProducts = async (searchValue: string) => {
+        setLoading(true);
+        try {
+            const requestBody = {
+                page: currentPage,
+                sku: searchValue.trim()
+            };
+
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/inventory/products/search`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(requestBody)
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch products.");
+            }
+
+            const data = await response.json();
+            setAllPages(data.totalPages);
+            setProducts(data.data);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
     };
 
 
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            setLoading(true);
-            try {
-                const requestBody = {
-                    page: currentPage,
-                    sku: inputValue.trim()
-                };
+        fetchProducts(inputValue);
+    }, [currentPage]);
 
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/inventory/products/search`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json", // Specify JSON content
-                    },
-                    body: JSON.stringify(requestBody), // Stringify the request body
-                });
-
-                if (!response.ok) {
-                    throw new Error("Failed to fetch orders list.");
-                }
-                const data = await response.json();
-                setAllPages(data.totalPages);
-                setProducts(data.data); // Save fetched data
-                await new Promise((resolve) => setTimeout(resolve, 1000));
-                setLoading(false);
-            } catch (err: any) {
-                setLoading(false);
-            }
-        };
-
-        fetchProducts();
-    }, [currentPage, inputValue]);
     return (
         <>
             <PageMeta
