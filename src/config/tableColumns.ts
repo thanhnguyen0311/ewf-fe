@@ -6,5 +6,32 @@ export const ordersTableColumns = [
     'Order Date',
     'Ship Date',
     'Status',
+    'Payment',
+    'Action'
+];
+
+
+export const productsInventoryTableColumns = [
+    '',
+    'Product SKU',
+    'Current Stock',
+    'In Production',
+    'In Transit',
+    'Ordered',
+    'Pending Orders',
+    'Predictions',
+    'Status'
+];
+
+
+export const componentsInventoryTableColumns = [
+    'SKU',
+    'Type',
+    'Customer',
+    'Price',
+    'Order Date',
+    'Ship Date',
+    'Status',
+    'Payment',
     'Action'
 ];

@@ -6,7 +6,8 @@ import {Table, TableBody, TableCell, TableHeader, TableRow} from "../../componen
 import Badge from "../../components/ui/badge/Badge";
 import {ordersTableColumns} from "../../config/tableColumns";
 import {CustomerType} from "../../config/customerType";
-import './Orders.css';
+import Loader from "../UiElements/Loader/Loader";
+import {Paging} from "../../components/ui/paging";
 
 
 export default function Orders() {
@@ -44,40 +45,22 @@ export default function Orders() {
                 description=""
             />
             <PageBreadcrumb pageTitle="Orders"/>
-            <div className="space-y-6 relative">
-                {/* Loader Overlay */}
-                {loading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-70 z-10">
-                        <div className="loader border-t-4 border-orange-500 rounded-full w-12 h-12 animate-spin"></div>
-                    </div>
-                )}
-                {/* Component Content (Blurred when loading) */}
-                <div className={`${loading ? "filter blur-sm" : ""}`}>
 
                     <ComponentCard title="">
                         <div
                             className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
                             <div className="max-w-full overflow-x-auto">
                                 <div className="min-w-[1102px]">
+
+                                    <Loader isLoading={loading}>
                                     <Table>
                                         {/* Table Header */}
-                                        <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
-                                            <TableRow>
-                                                {ordersTableColumns.map((column, index) => (
-                                                    <TableCell
-                                                        isHeader
-                                                        className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                                                    >
-                                                        {column}
-                                                    </TableCell>
-                                                ))}
-                                            </TableRow>
-                                        </TableHeader>
+                                        <TableHeader columns={ordersTableColumns}/>
 
                                         {/* Table Body */}
                                         <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                                             {orders.map((order) => (
-                                                <TableRow key={order.id}>
+                                                <TableRow key={order.id} hover={true}>
                                                     <TableCell className="px-5 py-4 sm:px-6 text-start">
                                                         <div className="flex items-center gap-3">
                                                             <div>
@@ -123,7 +106,7 @@ export default function Orders() {
                                                     </TableCell>
 
                                                     <TableCell
-                                                        className="px-4 py-3 font-bold text-gray-500 text-theme-sm dark:text-gray-400">
+                                                        className="px-4 py-3 font-bold text-amber-700 text-theme-sm dark:text-gray-400">
                                                         {order.price}
                                                     </TableCell>
 
@@ -153,69 +136,36 @@ export default function Orders() {
                                                         </Badge>
                                                     </TableCell>
 
+                                                    <TableCell
+                                                        className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                                        <Badge
+                                                            size="sm"
+                                                            color={
+                                                                order.paymentStatus === "success"
+                                                                    ? "success"
+                                                                    : order.paymentStatus === "pending"
+                                                                        ? "warning"
+                                                                        : "error"
+                                                            }
+                                                        >
+                                                            {order.paymentStatus}
+                                                        </Badge>
+                                                    </TableCell>
+                                                    <TableCell
+                                                        className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+
+                                                    </TableCell>
                                                 </TableRow>
                                             ))}
                                         </TableBody>
                                     </Table>
 
-                                    <div
-                                        className="flex items-center justify-between px-4 py-3 border-t border-gray-200 bg-white dark:bg-gray-800">
-                                        {/* Page Info */}
-                                        <div className="text-sm text-gray-600 dark:text-gray-300">
-                                            Page {currentPage} of {allPages}
-                                        </div>
-
-                                        {/* Pagination Buttons */}
-                                        <div className="flex gap-2">
-                                            {/* Previous Button */}
-                                            <button
-                                                className={`px-4 py-2 text-sm font-medium border rounded-lg ${
-                                                    currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-gray-200 hover:bg-gray-300'
-                                                }`}
-                                                disabled={currentPage === 1}
-                                                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                                            >
-                                                Previous
-                                            </button>
-
-                                            {/* Page Buttons */}
-                                            {Array.from({length: 5})
-                                                .map((_, index) => currentPage - 2 + index) // Create an array centered around currentPage
-                                                .filter((page) => page > 0 && page <= allPages) // Ensure valid page numbers
-                                                .map((page) => (
-                                                    <button
-                                                        key={page}
-                                                        onClick={() => setCurrentPage(page)}
-                                                        className={`px-3 py-1 text-sm font-medium border rounded ${
-                                                            currentPage === page
-                                                                ? 'bg-orange-400 text-white border-orange-500'
-                                                                : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-                                                        }`}
-                                                    >
-                                                        {page}
-                                                    </button>
-                                                ))}
-
-                                            {/* Next Button */}
-                                            <button
-                                                className={`px-4 py-2 text-sm font-medium border rounded-lg ${
-                                                    currentPage === allPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-gray-200 hover:bg-gray-300'
-                                                }`}
-                                                disabled={currentPage === allPages}
-                                                onClick={() => setCurrentPage((prev) => Math.min(allPages, prev + 1))}
-                                            >
-                                                Next
-                                            </button>
-                                        </div>
-                                        <div></div>
-                                    </div>
-
+                                    </Loader>
+                                    <Paging allPages={allPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
                                 </div>
                             </div>
                         </div>
                     </ComponentCard>
-                </div>
-            </div>
         </>
     );
 }

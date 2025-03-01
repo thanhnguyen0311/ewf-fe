@@ -21,7 +21,7 @@ module.exports = {
         "title-md": ["36px", "44px"],
         "title-sm": ["30px", "38px"],
         "theme-xl": ["20px", "30px"],
-        "theme-sm": ["14px", "20px"],
+        "theme-sm": ["15px", "21px"],
         "theme-xs": ["12px", "18px"],
       },
       colors: {
