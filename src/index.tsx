@@ -9,6 +9,10 @@ import reportWebVitals from "./reportWebVitals";
 import App from "./App";
 import { ThemeProvider } from "./context/ThemeContext";
 import { AppWrapper } from "./components/common/PageMeta";
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+
+// Register all Community features
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
