@@ -35,3 +35,11 @@ export const componentsInventoryTableColumns = [
     'Payment',
     'Action'
 ];
+
+
+export type ComponentInventoryRowData = {
+    make: string;
+    model: string;
+    price: number;
+    electric: boolean;
+};
