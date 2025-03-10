@@ -10,6 +10,12 @@ export const ordersTableColumns = [
     'Action'
 ];
 
+export const componentsProductContainerTableColumns = [
+    '',
+    'SKU',
+    'Finish',
+    'Inventory'
+]
 
 export const productsInventoryTableColumns = [
     '',

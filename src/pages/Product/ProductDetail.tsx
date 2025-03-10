@@ -8,6 +8,8 @@ import Loader from "../UiElements/Loader/Loader";
 import ImageModal from "../UiElements/Modals";
 import {Link} from "react-router-dom";
 import ComponentCard from "../../components/common/ComponentCard";
+import {Table, TableBody, TableCell, TableHeader, TableRow} from "../../components/ui/table";
+import {componentsProductContainerTableColumns} from "../../config/tableColumns";
 
 type ComponentProps = {
     id: number;
@@ -25,7 +27,6 @@ type ProductProp = {
     id: number;
     sku: string;
     localSku: string;
-    // localPrice: number;
     finish: string;
     category: string;
     inventory: number;
@@ -38,7 +39,7 @@ type ProductProp = {
 };
 
 export default function ProductDetail() {
-    const {id} = useParams(); // Retrieve the dynamic `id` from the URL
+    const {sku} = useParams(); // Retrieve the dynamic `id` from the URL
     const [product, setProduct] = useState<ProductProp | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -47,10 +48,9 @@ export default function ProductDetail() {
         async function fetchProduct() {
             try {
                 setLoading(true);
-                const response = await axios.get<ProductProp>(`${process.env.REACT_APP_API_URL}/api/product/search/${id}`);
+                const response = await axios.get<ProductProp>(`${process.env.REACT_APP_API_URL}/api/product/${sku}`);
                 const fetchedProduct = response.data;
 
-                console.log(fetchedProduct);
                 setProduct(fetchedProduct);
 
             } catch (err) {
@@ -62,10 +62,10 @@ export default function ProductDetail() {
             }
         }
 
-        if (id) {
+        if (sku) {
             fetchProduct();
         }
-    }, [id]);
+    }, [sku]);
 
     if (!product) {
         return <p>No product found.</p>;
@@ -111,12 +111,16 @@ const ProductContainer: FC<ProductContainerProp> = ({ product}) => {
     };
 
     return (<>
-            <Link to={`/product/${product.id}`} className="text-xl  font-bold ">{product.sku}</Link>
-            {/* Inline Content */}
-            <div className="flex flex-wrap md:flex-nowrap items-start mt-2 gap-8 p-6 shadow dark:text-white/90 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                {/* Left Section: Product Images */}
+
+
+            <div style={{ marginBottom: '20px' }}
+                 className="flex flex-wrap md:flex-nowrap items-start gap-8 p-6 shadow  dark:text-white/90 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+
                 <div className="w-full md:w-1/2">
-                    <div className="flex flex-wrap gap-4">
+                    <Link  to={`/product/${product.sku}`}
+                           className="text-gray-500  font-bold text-theme-xl p-2 text-start text-theme-md dark:text-gray-400 hover:text-warning-500">{product.sku}
+                    </Link>
+                    <div className="flex flex-wrap mt-5 gap-4">
                         {product.images?.img?.length > 0 && (
                             <div>
                                 <div className="flex flex-wrap gap-2 mt-2">
@@ -125,7 +129,6 @@ const ProductContainer: FC<ProductContainerProp> = ({ product}) => {
                                             src={product.images.img[0]}
                                             alt="Product image"
                                             className="h-48 w-auto rounded shadow-sm"
-                                            loading="lazy"
                                             onClick={() => toggleZoom(product.images.img[0])}
                                         />
                                     </div>
@@ -133,7 +136,6 @@ const ProductContainer: FC<ProductContainerProp> = ({ product}) => {
                             </div>
                         )}
 
-                        {/* Dimension Images */}
                         {product.images?.dim?.length > 0 && (
                             <div>
                                 <div className="flex flex-wrap gap-2 mt-2">
@@ -142,12 +144,9 @@ const ProductContainer: FC<ProductContainerProp> = ({ product}) => {
                                             src={product.images.dim[0]}
                                             alt="Product image"
                                             className="h-48 w-auto rounded shadow-sm"
-                                            loading="lazy"
                                             onClick={() => toggleZoom(product.images.dim[0])} // Open zoom modal
                                         />
                                     </div>
-
-
                                 </div>
                             </div>
                         )}
@@ -158,17 +157,51 @@ const ProductContainer: FC<ProductContainerProp> = ({ product}) => {
                     <ImageModal image={zoomImage} name={product.sku} toggleZoom={toggleZoom} />
                 )}
 
-
-                {/* Right Section: Product Details */}
-                <div className="w-full md:w-1/2">
-                    <div className="space-y-2 text-sm">
+                <div className="w-full md:w-2/3">
+                    <div className="space-y-2 text-gray-500 text-start text-theme-md dark:text-gray-400">
                         <p><strong>Local SKU:</strong> {product.localSku}</p>
                         <p><strong>Category:</strong> {product.category}</p>
                         <p><strong>Inventory:</strong> {product.inventory}</p>
                         <p><strong>Finish:</strong> {product.finish || "N/A"}</p>
                     </div>
+
+                    {product.components?.length > 0 && (
+                        <Table className={'mt-5 border-2 border-gray-200 dark:border-gray-800'}>
+                            <TableHeader columns={componentsProductContainerTableColumns}/>
+                            <TableBody>
+                                {product.components?.map((component) => (
+                                    <TableRow key={component.id}>
+                                        <TableCell className="px-2 py-2 sm:px-4 text-start">
+                                            <div className="flex items-center gap-3 ">
+                                                <div className="w-15 h-15 rounded-full cursor-pointer" style={{alignContent: "center"}}>
+                                                    {component.images ? <img src={component.images.img[0]} alt={component.sku}
+                                                                             onClick={() => toggleZoom(component.images.img[0])}/> : ""}
+                                                </div>
+                                            </div>
+                                        </TableCell>
+
+                                        <TableCell
+                                            className={`px-4 py-3 font-bold text-start text-theme-xs dark:text-gray-400 text-gray-500`}>
+                                            {component.sku}
+                                        </TableCell>
+
+                                        <TableCell
+                                            className={`px-4 py-3 font-bold text-start text-theme-xs dark:text-gray-400 text-gray-500`}>
+                                            {component.finish}
+                                        </TableCell>
+
+                                        <TableCell
+                                            className={`px-4 py-3 font-bold text-start text-theme-xs dark:text-gray-400 text-gray-500`}>
+                                            {component.inventory}
+                                        </TableCell>
+
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    )}
+
                 </div>
-                {/* COMPONENT TABLE SECTION */}
 
             </div>
         </>

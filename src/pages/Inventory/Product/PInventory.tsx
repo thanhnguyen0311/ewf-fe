@@ -7,6 +7,7 @@ import {Table, TableBody, TableCell, TableHeader, TableRow} from "../../../compo
 import {productsInventoryTableColumns} from "../../../config/tableColumns";
 import Badge from "../../../components/ui/badge/Badge";
 import {Paging} from "../../../components/ui/paging";
+import {Link} from "react-router-dom";
 
 export default function PInventory() {
     const [loading, setLoading] = useState(false);
@@ -122,8 +123,6 @@ export default function PInventory() {
 
                     </div>
 
-
-
                     <div className="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
                         <div
                             className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
@@ -145,7 +144,9 @@ export default function PInventory() {
                                                         </TableCell>
                                                         <TableCell
                                                             className={`px-4 py-3 font-bold text-start text-theme-sm dark:text-gray-400 text-gray-500`}>
-                                                            {product.sku}
+                                                            <Link  to={`/product/${product.sku}`}
+                                                                   className="text-gray-500  font-bold text-theme-md p-2 text-start text-theme-md dark:text-gray-400 hover:text-warning-500">{product.sku}
+                                                            </Link>
                                                         </TableCell>
 
                                                         <TableCell

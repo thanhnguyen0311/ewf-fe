@@ -20,10 +20,8 @@ const AppHeader: React.FC = () => {
   const [page, setPage] = useState(0); // Current page or batch index
   const productsPerPage = 10; // Products to load per scroll
 
-  // Ref for debouncing
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 
-  // Sidebar toggle logic
   const handleToggle = () => {
     if (window.innerWidth >= 991) {
       toggleSidebar();
@@ -237,7 +235,7 @@ const AppHeader: React.FC = () => {
                           onScroll={handleScroll} // Bind scroll event for infinite scroll
                       >
                         {visibleProducts.map((product) => (
-                            <Link to={`/product/${product.id}`}>
+                            <Link to={`/product/${product.sku}`}>
                               <li
                                 key={product.sku}
                                 onClick={() => {
