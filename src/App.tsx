@@ -21,7 +21,7 @@ export default function App() {
           <Route element={<AppLayout />}>
             <Route index path="/" element={<Ecommerce />} />
             <Route path="/products" element={<UserProfiles />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/product/:sku" element={<ProductDetail />} />
             <Route path="/order" element={<Orders />} />
             <Route path="/order/new" element={<NewOrder />} />
             <Route path="/inventory/products" element={<PInventory />} />
