@@ -1,7 +1,24 @@
 /*.ag-cell {*/
-/*    border: 1px solid #d4d4d4; !* Light gray border *!*/
+/*    border: 1px solid #edeff2; !* Light gray border *!*/
 /*    box-sizing: border-box;*/
 /*}*/
 /*.ag-row {*/
 /*    border-collapse: separate;*/
 /*}*/
+
+.ag-header {
+    font-size: 13px;
+    min-height: 80px !important;
+    .ag-floating-filter {
+        padding: 10px;
+        height: 30px !important;
+    }
+}
+
+.ag-header-cell-label {
+    white-space: normal; /* Enable normal wrapping of text */
+    word-wrap: break-word; /* Ensure long words break properly */
+    text-align: center;
+    line-height: 1.2;
+    padding: 2px;
+}

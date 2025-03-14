@@ -8,6 +8,7 @@ import {productsInventoryTableColumns} from "../../../config/tableColumns";
 import Badge from "../../../components/ui/badge/Badge";
 import {Paging} from "../../../components/ui/paging";
 import {Link} from "react-router-dom";
+import {productSearch} from "../../../api/apiService";
 
 export default function PInventory() {
     const [loading, setLoading] = useState(false);
@@ -28,40 +29,17 @@ export default function PInventory() {
             clearTimeout(debounceTimer.current);
         }
         debounceTimer.current = setTimeout(() => {
-            fetchProducts(value); // Trigger API only after typing stops
-        }, 500); // Set debounce delay to 500ms
+            fetchProducts(value);
+        }, 500); 
     };
 
     const fetchProducts = async (searchValue: string) => {
         setLoading(true);
-        try {
-            const requestBody = {
-                page: currentPage,
-                sku: searchValue.trim()
-            };
-
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/inventory/products/search`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(requestBody)
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to fetch products.");
-            }
-
-            const data = await response.json();
-            setAllPages(data.totalPages);
-            setProducts(data.data);
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
+        const data = await productSearch(searchValue.trim(), currentPage)
+        setAllPages(data.totalPages);
+        setProducts(data.data);
+        setLoading(false);
     };
-
 
 
     useEffect(() => {
@@ -137,21 +115,24 @@ export default function PInventory() {
                                                     <TableRow key={product.id} hover={true}>
                                                         <TableCell className="px-2 py-2 sm:px-4 text-start">
                                                             <div className="flex items-center gap-3 ">
-                                                                <div className="w-15 h-15 rounded-full" style={{alignContent: "center"}}>
-                                                                    {product.image ? <img src={product.image} alt={product.sku} /> : ""}
+                                                                <div className="w-15 h-15 rounded-full"
+                                                                     style={{alignContent: "center"}}>
+                                                                    {product.image ? <img src={product.image}
+                                                                                          alt={product.sku}/> : ""}
                                                                 </div>
                                                             </div>
                                                         </TableCell>
                                                         <TableCell
                                                             className={`px-4 py-3 font-bold text-start text-theme-sm dark:text-gray-400 text-gray-500`}>
-                                                            <Link  to={`/product/${product.sku}`}
-                                                                   className="text-gray-500  font-bold text-theme-md p-2 text-start text-theme-md dark:text-gray-400 hover:text-warning-500">{product.sku}
+                                                            <Link to={`/product/${product.sku}`}
+                                                                  className="text-gray-500  font-bold text-theme-md p-2 text-start text-theme-md dark:text-gray-400 hover:text-warning-500">{product.sku}
                                                             </Link>
                                                         </TableCell>
 
                                                         <TableCell
                                                             className="px-4 py-3 text-start max-w-15 overflow-hidden text-theme-sm dark:text-gray-400">
-                                                            <div className={`flex font-bold -space-x-2 ${product.quantity < 1 ? "text-red-500" : product.quantity < 5 ? "text-yellow-500" : "text-green-500"} }`}>
+                                                            <div
+                                                                className={`flex font-bold -space-x-2 ${product.quantity < 1 ? "text-red-500" : product.quantity < 5 ? "text-yellow-500" : "text-green-500"} }`}>
                                                                 {product.quantity <= 0 ? 0 : product.quantity}
                                                             </div>
                                                         </TableCell>
@@ -205,7 +186,8 @@ export default function PInventory() {
                                             </TableBody>
                                         </Table>
                                     </Loader>
-                                    <Paging allPages={allPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                                    <Paging allPages={allPages} currentPage={currentPage}
+                                            setCurrentPage={setCurrentPage}/>
                                 </div>
                             </div>
                         </div>
