@@ -1,5 +1,4 @@
-import React, {FC, useState} from "react";
-import ProductDetail from "../Product/ProductDetail";
+import React, {FC} from "react";
 
 
 interface ImageProp {
