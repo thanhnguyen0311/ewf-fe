@@ -7,10 +7,34 @@ import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../icons";
 import Checkbox from "../../components/form/input/Checkbox";
 import Button from "../../components/ui/button/Button";
 import PageMeta from "../../components/common/PageMeta";
+import {login} from "../../services/authService";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSignIn = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const userData = await login(email, password);
+      if (userData) {
+        window.location.href = "/"
+      } else {
+        setError("Failed to retrieve user data. Please try again.");
+      }
+    } catch (error: any){
+      setError(error.response?.data?.message || "Something went wrong.");
+    } finally {
+      setLoading(false); // Reset loading state
+    }
+  }
+
+
   return (
     <>
       <PageMeta
@@ -97,7 +121,9 @@ export default function SignIn() {
                       <Label>
                         Email <span className="text-error-500">*</span>{" "}
                       </Label>
-                      <Input placeholder="info@gmail.com" />
+                      <Input placeholder="info@gmail.com"
+                             onChange={(e) => setEmail(e.target.value)}
+                      />
                     </div>
                     <div>
                       <Label>
@@ -107,6 +133,7 @@ export default function SignIn() {
                         <Input
                           type={showPassword ? "text" : "password"}
                           placeholder="Enter your password"
+                          onChange={(e) => setPassword(e.target.value)}
                         />
                         <span
                           onClick={() => setShowPassword(!showPassword)}
@@ -135,24 +162,17 @@ export default function SignIn() {
                       </Link>
                     </div>
                     <div>
-                      <Button className="w-full" size="sm">
-                        Sign in
+                      <Button
+                          onClick={handleSignIn}
+                          disabled={loading}
+                          className="w-full py-2"
+                      >
+                        {loading ? "Loading..." : "Sign In"}
                       </Button>
+
                     </div>
                   </div>
                 </form>
-
-                <div className="mt-5">
-                  <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
-                    Don't have an account? {""}
-                    <Link
-                      to="/signup"
-                      className="text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                    >
-                      Sign Up
-                    </Link>
-                  </p>
-                </div>
               </div>
             </div>
           </div>

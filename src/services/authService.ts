@@ -9,7 +9,7 @@ export const login = async (email: any, password: any) => {
 
         localStorage.setItem("authToken", token);
 
-        return token;
+        return true;
     } catch (err) {
         // @ts-ignore
         throw new Error(err.response.data.message || "Failed to log in");
@@ -18,14 +18,11 @@ export const login = async (email: any, password: any) => {
 
 
 
-export const getToken = () => {
-    let token = localStorage.getItem("authToken");
-    if (token) {
-        return token;
-    }
-    return login("demo@eastwestfurniture.net", "123456");
-}
+export const getToken = () => localStorage.getItem("authToken");
+
 
 export const logout = () => {
-    localStorage.removeItem("authToken"); // Clear token
+    localStorage.removeItem("authToken");
+    sessionStorage.clear();
+    window.location.href = "/signin";
 };

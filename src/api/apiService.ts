@@ -1,5 +1,7 @@
 import {ComponentProp, ComponentRequestProp, data_sort} from "../pages/Inventory/Components/CInventory";
 import axiosInstance from "../utils/axiosInstance";
+import {ProductProp} from "../pages/Inventory/Product/PInventory";
+import {ProductDetailProp} from "../pages/Product/ProductSheet";
 
 
 export const updateComponent = async (componentRequest: ComponentRequestProp): Promise<ComponentProp> => {
@@ -17,7 +19,7 @@ export const updateComponent = async (componentRequest: ComponentRequestProp): P
 };
 
 
-export const getComponents = async (): Promise<ComponentProp[]> => {
+export const getComponentsInventory = async (): Promise<ComponentProp[]> => {
     const response = await axiosInstance.get<ComponentProp[]>(
         `/api/inventory/components`,
     );
@@ -37,6 +39,23 @@ export const getComponents = async (): Promise<ComponentProp[]> => {
             return aIndex - bIndex;
         });
 }
+
+export const getProductsInventory = async (): Promise<ProductProp[]> => {
+    const response = await axiosInstance.get<ProductProp[]>(
+        `/api/inventory/products`,
+    );
+
+    return response.data
+}
+
+export const getProductDetails = async (): Promise<ProductDetailProp[]> => {
+    const response = await axiosInstance.get<ProductDetailProp[]>(
+        `/api/inventory/products`,
+    );
+
+    return response.data
+}
+
 
 export const productSearch= async (searchValue: string, currentPage: number) => {
     const requestBody = {

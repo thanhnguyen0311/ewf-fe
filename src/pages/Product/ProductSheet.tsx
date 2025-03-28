@@ -1,30 +1,33 @@
-import PageMeta from "../../../components/common/PageMeta";
-import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import React, {useEffect, useRef, useState} from "react";
-import {getProductsInventory} from "../../../api/apiService";
 import {AgGridReact} from "ag-grid-react";
-import Loader from "../../UiElements/Loader/Loader";
+import PageMeta from "../../components/common/PageMeta";
+import PageBreadcrumb from "../../components/common/PageBreadCrumb";
+import Loader from "../UiElements/Loader/Loader";
+import {getProductDetails} from "../../api/apiService";
 
 import {ColDef} from 'ag-grid-community';
 
 
-export type ProductProp = {
+export type ProductDetailProp = {
     id: number;
     sku: string;
-    quantity: number;
-    asin: string;
-    upc: string;
-    discontinued: boolean;
-    ewfdirect: boolean;
-    amazon: boolean;
-    cymax: boolean;
-    overstock: boolean;
-    wayfair: boolean;
     localSku: string;
+    image: string;
+    upc: string;
+    asin: string;
+    title: string;
+    localTitle: string;
+    description: string;
+    type: string;
+    shippingMethod: string;
+    pieces: string;
+    discontinued: boolean;
+    components: { componentSku: string; quantity: number }[],
+
 };
 
-export default function PInventory() {
-    const [products, setProducts] = useState<ProductProp[]>([]);
+export default function ProductSheet() {
+    const [products, setProducts] = useState<ProductDetailProp[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [forceUpdate, setForceUpdate] = useState(0);
@@ -32,10 +35,18 @@ export default function PInventory() {
     const [isZoomed, setIsZoomed] = useState(false);
     const [zoomImage, setZoomImage] = useState<string | null>(null);
 
+
     const fetchProducts = async () => {
         try {
             setLoading(true);
-            const products = await getProductsInventory();
+            const products = await getProductDetails();
+            for (let i = 0; i < products.length; i++) {
+                if (i === 500) break;
+                products[i].components = [
+                    {componentSku: "COMP123", quantity: 2},
+                    {componentSku: "COMP456", quantity: 5},
+                ];
+            }
             setProducts(products);
             setLoading(false);
         } catch (error) {
@@ -44,7 +55,7 @@ export default function PInventory() {
             setLoading(false);
         }
     }
-    const columnDefs: ColDef<ProductProp>[] = [
+    const columnDefs: ColDef[] = [
         {
             headerName: "",
             width: 25
@@ -82,61 +93,44 @@ export default function PInventory() {
             cellStyle: {fontWeight: "600"}
         },
         {
-            headerName: "Inventory",
-            field: "quantity",
-            width: 120,
-            filter: true,
-            cellStyle: (params: any) => {
-                return {
-                    textAlign: "center",
-                    fontWeight: "500",
-                    fontSize: "18px",
-                    color: params.data.quantity > 30 ? "green" : params.data.quantity > 5 ? "orange" : "red",
-                };
-            }
+            headerName: "Items",
+            field: "components", // Field containing the array of by-products
+            sortable: true,
+            filter: "agTextColumnFilter", // Text filter for filtering by component SKUs or quantities
+            cellRenderer: (params: { value: { componentSku: string; quantity: number; }[]; data: { sku: any; }; }) => {
+                // Check if the value exists, and map it to a readable string with a button
+                return (
+                    <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
+                    <span>
+                        {params.value
+                            ? params.value
+                                .map((item: { componentSku: string; quantity: number }) =>
+                                    `${item.componentSku} (${item.quantity})`
+                                )
+                                .join(" | ")
+                            : ""}
+                    </span>
+                        <button
+                            style={{
+                                backgroundColor: "#007bff",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "4px",
+                                padding: "4px 8px",
+                                cursor: "pointer",
+                            }}
+                            onClick={() => alert(`Clicked for ${params.data.sku}`)} // Example action
+                        >
+                            Info
+                        </button>
+                    </div>
+                );
+            },
+
+            cellStyle: {fontWeight: "500"}, // Optional: Styling
+            tooltipField: "components", // Optional: Tooltip for longer values
         },
-        {
-            headerName: "EWFDirect",
-            field: "ewfdirect",
-            width: 120,
-            filter: true,
-            cellStyle: {textAlign: "center", fontWeight: "500"}
-        },
-        {
-            headerName: "Amazon",
-            field: "amazon",
-            width: 120,
-            filter: true,
-            cellStyle: {textAlign: "center", fontWeight: "500"}
-        },
-        {
-            headerName: "Wayfair",
-            field: "wayfair",
-            width: 120,
-            filter: true,
-            cellStyle: {textAlign: "center", fontWeight: "500"}
-        },
-        {
-            headerName: "Cymax",
-            field: "cymax",
-            width: 120,
-            filter: true,
-            cellStyle: {textAlign: "center", fontWeight: "500"}
-        },
-        {
-            headerName: "Overstock",
-            field: "overstock",
-            width: 120,
-            filter: true,
-            cellStyle: {textAlign: "center", fontWeight: "500"}
-        },
-        {
-            headerName: "DIS",
-            field: "discontinued",
-            width: 120,
-            filter: true,
-            cellStyle: {textAlign: "center", fontWeight: "500"}
-        },
+
     ]
     const defaultColDef = {
         resizable: true,
@@ -158,6 +152,7 @@ export default function PInventory() {
         gridRef.current?.api.exportDataAsCsv(); // Trigger the CSV export
     };
 
+
     return (
         <>
             <PageMeta
@@ -167,7 +162,10 @@ export default function PInventory() {
             <PageBreadcrumb pageTitle="Product Inventory"/>
 
             <div className="flex justify-end mb-4">
-                <button className="bg-brand-300 mx-2 hover:bg-brand-500 text-white font-semibold py-1.5 px-3 rounded-xl flex items-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-300" onClick={onExportCSV}>Export to CSV</button>
+                <button
+                    className="bg-brand-300 mx-2 hover:bg-brand-500 text-white font-semibold py-1.5 px-3 rounded-xl flex items-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    onClick={onExportCSV}>Export to CSV
+                </button>
 
                 <button
                     onClick={() => setForceUpdate((prev) => prev + 1)}
@@ -212,4 +210,3 @@ export default function PInventory() {
         </>
     )
 }
-

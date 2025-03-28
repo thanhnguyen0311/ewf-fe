@@ -1,6 +1,6 @@
 // src/utils/axiosInstance.js
 import axios from "axios";
-import {getToken, login} from "../services/authService";
+import {getToken} from "../services/authService";
 
 
 const axiosInstance = axios.create({
@@ -11,14 +11,12 @@ const axiosInstance = axios.create({
 // Interceptor to attach token to every request
 axiosInstance.interceptors.request.use(
     async (config) => {
-        let token = getToken();
+        const token = getToken();
 
-        if (token != null) {
-            config.headers["Authorization"] = `Bearer ${token}`;
-        } else {
-            token = await login("demo@eastwestfurniture.net", "123456")
+        if (token) {
             config.headers["Authorization"] = `Bearer ${token}`;
         }
+
         return config;
     },
     (error) => {
@@ -32,9 +30,9 @@ axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            // Handle token expiration or invalid token
+
             localStorage.removeItem("authToken");
-            window.location.href = "/login"; // Redirect to login page
+            window.location.href = "/signin";
         }
         return Promise.reject(error);
     }
