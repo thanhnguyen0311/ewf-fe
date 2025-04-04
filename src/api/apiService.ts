@@ -20,6 +20,7 @@ export const updateComponent = async (componentRequest: ComponentRequestProp): P
 
 
 export const getComponentsInventory = async (): Promise<ComponentProp[]> => {
+
     const response = await axiosInstance.get<ComponentProp[]>(
         `/api/inventory/components`,
     );
@@ -38,6 +39,7 @@ export const getComponentsInventory = async (): Promise<ComponentProp[]> => {
             const bIndex = sortOrder.indexOf(b.sku);
             return aIndex - bIndex;
         });
+
 }
 
 export const getProductsInventory = async (): Promise<ProductProp[]> => {
@@ -50,7 +52,7 @@ export const getProductsInventory = async (): Promise<ProductProp[]> => {
 
 export const getProductDetails = async (): Promise<ProductDetailProp[]> => {
     const response = await axiosInstance.get<ProductDetailProp[]>(
-        `/api/inventory/products`,
+        `/api/product/all`,
     );
 
     return response.data

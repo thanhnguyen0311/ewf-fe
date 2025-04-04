@@ -12,18 +12,29 @@ export type ProductDetailProp = {
     id: number;
     sku: string;
     localSku: string;
-    image: string;
     upc: string;
     asin: string;
     title: string;
     localTitle: string;
     description: string;
+    htmlDescription: string;
     type: string;
+    collection: string;
+    order: string;
+    category: string;
+    mainCategory: string;
+    subCategory: string;
     shippingMethod: string;
     pieces: string;
     discontinued: boolean;
-    components: { componentSku: string; quantity: number }[],
-
+    amazon: boolean;
+    cymax: boolean;
+    overstock: boolean;
+    wayfair: boolean;
+    ewfdirect: boolean;
+    houstondirect: boolean | false;
+    ewfmain: boolean | false;
+    components: {id: number;componentId: number; sku: string; quantity: number }[],
 };
 
 export default function ProductSheet() {
@@ -40,13 +51,6 @@ export default function ProductSheet() {
         try {
             setLoading(true);
             const products = await getProductDetails();
-            for (let i = 0; i < products.length; i++) {
-                if (i === 500) break;
-                products[i].components = [
-                    {componentSku: "COMP123", quantity: 2},
-                    {componentSku: "COMP456", quantity: 5},
-                ];
-            }
             setProducts(products);
             setLoading(false);
         } catch (error) {
@@ -56,9 +60,13 @@ export default function ProductSheet() {
         }
     }
     const columnDefs: ColDef[] = [
+
         {
-            headerName: "",
-            width: 25
+            headerName: "ORDER",
+            field: "order",
+            sortable: true,
+            width: 120,
+            filter: "agTextColumnFilter",
         },
         {
             headerName: "SKU",
@@ -66,7 +74,9 @@ export default function ProductSheet() {
             sortable: true,
             width: 180,
             filter: "agTextColumnFilter",
-            cellStyle: {fontWeight: "600"}
+            cellStyle: {fontWeight: "600"},
+            pinned: "left"
+
         },
         {
             headerName: "Local SKU",
@@ -77,12 +87,27 @@ export default function ProductSheet() {
             cellStyle: {fontWeight: "600"}
         },
         {
+            headerName: "Items",
+            field: "components", // Field containing the array of by-products
+            sortable: true,
+            width: 400,
+            filter: "agTextColumnFilter", // Text filter for filtering by component SKUs or quantities
+            valueGetter: (params) => {
+                const components = params.data?.components as {id: number; componentId: number; sku: string; quantity: number }[] | undefined;
+                return components
+                    ?.map((item) => `${item.sku} (${item.quantity})`) // Map over components array to get only the SKUs
+                    .join(" - ") || "No Components"; // Join the SKUs with a comma and return "No Components" if the array is empty or undefined
+            },
+
+            cellStyle: {fontWeight: "500"}, // Optional: Styling
+            tooltipField: "components", // Optional: Tooltip for longer values
+        },
+        {
             headerName: "UPC",
             field: "upc",
             sortable: true,
             width: 180,
             filter: "agTextColumnFilter",
-            cellStyle: {fontWeight: "600"}
         },
         {
             headerName: "ASIN",
@@ -90,45 +115,111 @@ export default function ProductSheet() {
             sortable: true,
             width: 180,
             filter: "agTextColumnFilter",
-            cellStyle: {fontWeight: "600"}
         },
         {
-            headerName: "Items",
-            field: "components", // Field containing the array of by-products
+            headerName: "Type",
+            field: "type",
             sortable: true,
-            filter: "agTextColumnFilter", // Text filter for filtering by component SKUs or quantities
-            cellRenderer: (params: { value: { componentSku: string; quantity: number; }[]; data: { sku: any; }; }) => {
-                // Check if the value exists, and map it to a readable string with a button
-                return (
-                    <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
-                    <span>
-                        {params.value
-                            ? params.value
-                                .map((item: { componentSku: string; quantity: number }) =>
-                                    `${item.componentSku} (${item.quantity})`
-                                )
-                                .join(" | ")
-                            : ""}
-                    </span>
-                        <button
-                            style={{
-                                backgroundColor: "#007bff",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "4px",
-                                padding: "4px 8px",
-                                cursor: "pointer",
-                            }}
-                            onClick={() => alert(`Clicked for ${params.data.sku}`)} // Example action
-                        >
-                            Info
-                        </button>
-                    </div>
-                );
-            },
+            width: 120,
+            filter: "agTextColumnFilter",
+        },
+        {
+            headerName: "Collection",
+            field: "collection",
+            sortable: true,
+            width: 120,
+            filter: "agTextColumnFilter",
+        },
+        {
+            headerName: "CAT",
+            field: "category",
+            sortable: true,
+            width: 120,
+            filter: "agTextColumnFilter",
+        },
+        {
+            headerName: "Pieces",
+            field: "pieces",
+            sortable: true,
+            width: 120,
+            filter: "agTextColumnFilter",
+        },
+        {
+            headerName: "Shipping",
+            field: "shippingMethod",
+            sortable: true,
+            width: 120,
+            filter: "agTextColumnFilter",
+        },
+        {
+            headerName: "Main Category",
+            field: "mainCategory",
+            sortable: true,
+            width: 120,
+            filter: "agTextColumnFilter",
+        },
+        {
+            headerName: "Sub Category",
+            field: "subCategory",
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
+        },
 
-            cellStyle: {fontWeight: "500"}, // Optional: Styling
-            tooltipField: "components", // Optional: Tooltip for longer values
+
+        {
+            headerName: "Amazon",
+            field: "amazon",
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
+        },
+
+        {
+            headerName: "Cymax",
+            field: "cymax",
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
+        },
+
+        {
+            headerName: "Overstock",
+            field: "overstock",
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
+        },
+
+        {
+            headerName: "Wayfair",
+            field: "wayfair",
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
+        },
+
+        {
+            headerName: "EWFDirect",
+            field: "ewfdirect",
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
+        },
+        {
+            headerName: "EWFDirect",
+            field: "ewfdirect",
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
+        },
+
+        {
+            headerName: "DIS",
+            field: "discontinued",
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
         },
 
     ]
@@ -139,6 +230,7 @@ export default function ProductSheet() {
             return {
                 fontSize: "15px",
                 fontWeight: "500",
+                textAlign: "center",
                 textDecoration: params.data.discontinue ? "line-through" : "none",
             };
         }
