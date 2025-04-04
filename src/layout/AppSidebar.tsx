@@ -39,15 +39,17 @@ const navItems: NavItem[] = [
     icon: <BoxIconLine />,
     subItems: [
         { name: "Add Product", path: "/product/new", pro: false },
-        { name: "Products", path: "/products", pro: false },
+        { name: "Product Details", path: "/products", pro: false },
+        { name: "Shopify", path: "/products", pro: false },
+        { name: "Inventory", path: "/inventory/products", pro: false },
     ],
   },
   {
-    name: "Inventory",
-    icon: <FolderIcon />,
+    name: "Components",
+    icon: <BoxIconLine />,
     subItems: [
-        { name: "Products", path: "/inventory/products", pro: false },
-        { name: "Components", path: "/inventory/components", pro: false },
+        { name: "Dimensions", path: "/", pro: false },
+        { name: "Inventory", path: "/inventory/components", pro: false },
     ],
   },
   {

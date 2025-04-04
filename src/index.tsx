@@ -10,6 +10,7 @@ import App from "./App";
 import { ThemeProvider } from "./context/ThemeContext";
 import { AppWrapper } from "./components/common/PageMeta";
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+import {AuthProvider} from "./context/AuthContext";
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -20,7 +21,9 @@ root.render(
   <React.StrictMode>
     <AppWrapper>
       <ThemeProvider>
-        <App />
+          <AuthProvider>
+              <App />
+          </AuthProvider>
       </ThemeProvider>
     </AppWrapper>
   </React.StrictMode>

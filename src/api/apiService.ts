@@ -1,24 +1,28 @@
 import {ComponentProp, ComponentRequestProp, data_sort} from "../pages/Inventory/Components/CInventory";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
+import {ProductProp} from "../pages/Inventory/Product/PInventory";
+import {ProductDetailProp} from "../pages/Product/ProductSheet";
+
 
 export const updateComponent = async (componentRequest: ComponentRequestProp): Promise<ComponentProp> => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/inventory/components`, {
-        method: "PUT",
+    const response = await axiosInstance.put("/api/inventory/components", componentRequest, {
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify(componentRequest)
     });
 
-    if (!response.ok) {
+    if (response.status !== 200) {
         throw new Error(`Failed to update component with status: ${response.status}`);
     }
-    return response.json();
+
+    return response.data;
 };
 
-export const getComponents = async (): Promise<ComponentProp[]> => {
-    const response = await axios.get<ComponentProp[]>(
-        `${process.env.REACT_APP_API_URL}/api/inventory/components`
+
+export const getComponentsInventory = async (): Promise<ComponentProp[]> => {
+
+    const response = await axiosInstance.get<ComponentProp[]>(
+        `/api/inventory/components`,
     );
     const sortOrder = data_sort.split(',');
 
@@ -35,29 +39,41 @@ export const getComponents = async (): Promise<ComponentProp[]> => {
             const bIndex = sortOrder.indexOf(b.sku);
             return aIndex - bIndex;
         });
+
 }
 
+export const getProductsInventory = async (): Promise<ProductProp[]> => {
+    const response = await axiosInstance.get<ProductProp[]>(
+        `/api/inventory/products`,
+    );
+
+    return response.data
+}
+
+export const getProductDetails = async (): Promise<ProductDetailProp[]> => {
+    const response = await axiosInstance.get<ProductDetailProp[]>(
+        `/api/product/all`,
+    );
+
+    return response.data
+}
+
+
 export const productSearch= async (searchValue: string, currentPage: number) => {
-    try {
-        const requestBody = {
-            page: currentPage,
-            sku: searchValue
-        };
+    const requestBody = {
+        page: currentPage,
+        sku: searchValue,
+    };
 
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/inventory/products/search`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(requestBody)
-        });
+    const response = await axiosInstance.post("/api/inventory/products/search", requestBody, {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
 
-        if (!response.ok) {
-            throw new Error("Failed to fetch products.");
-        }
-
-        return await response.json()
-    } catch (err) {
-        console.error(err);
+    if (response.status !== 200) {
+        throw new Error("Failed to fetch products.");
     }
+
+    return response.data;
 }

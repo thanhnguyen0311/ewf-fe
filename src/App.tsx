@@ -11,6 +11,8 @@ import Orders from "./pages/Order/Orders";
 import NewOrder from "./pages/Order/NewOrder";
 import PInventory from "./pages/Inventory/Product/PInventory";
 import CInventory from "./pages/Inventory/Components/CInventory";
+import Logout from "./pages/AuthPages/Logout";
+import ProductSheet from "./pages/Product/ProductSheet";
 
 export default function App() {
   return (
@@ -20,7 +22,7 @@ export default function App() {
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
             <Route index path="/" element={<Ecommerce />} />
-            <Route path="/products" element={<UserProfiles />} />
+            <Route path="/products" element={<ProductSheet />} />
             <Route path="/product/:sku" element={<ProductDetail />} />
             <Route path="/order" element={<Orders />} />
             <Route path="/order/new" element={<NewOrder />} />
@@ -33,6 +35,7 @@ export default function App() {
           <Route element={<AuthLayout />}>
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/logout" element={<Logout />} />
           </Route>
 
           {/* Fallback Route */}

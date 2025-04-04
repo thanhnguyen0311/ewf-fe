@@ -1,30 +1,44 @@
-import PageMeta from "../../../components/common/PageMeta";
-import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import React, {useEffect, useRef, useState} from "react";
-import {getProductsInventory} from "../../../api/apiService";
 import {AgGridReact} from "ag-grid-react";
-import Loader from "../../UiElements/Loader/Loader";
+import PageMeta from "../../components/common/PageMeta";
+import PageBreadcrumb from "../../components/common/PageBreadCrumb";
+import Loader from "../UiElements/Loader/Loader";
+import {getProductDetails} from "../../api/apiService";
 
 import {ColDef} from 'ag-grid-community';
 
 
-export type ProductProp = {
+export type ProductDetailProp = {
     id: number;
     sku: string;
-    quantity: number;
-    asin: string;
+    localSku: string;
     upc: string;
+    asin: string;
+    title: string;
+    localTitle: string;
+    description: string;
+    htmlDescription: string;
+    type: string;
+    collection: string;
+    order: string;
+    category: string;
+    mainCategory: string;
+    subCategory: string;
+    shippingMethod: string;
+    pieces: string;
     discontinued: boolean;
-    ewfdirect: boolean;
     amazon: boolean;
     cymax: boolean;
     overstock: boolean;
     wayfair: boolean;
-    localSku: string;
+    ewfdirect: boolean;
+    houstondirect: boolean | false;
+    ewfmain: boolean | false;
+    components: {id: number;componentId: number; sku: string; quantity: number }[],
 };
 
-export default function PInventory() {
-    const [products, setProducts] = useState<ProductProp[]>([]);
+export default function ProductSheet() {
+    const [products, setProducts] = useState<ProductDetailProp[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [forceUpdate, setForceUpdate] = useState(0);
@@ -32,10 +46,11 @@ export default function PInventory() {
     const [isZoomed, setIsZoomed] = useState(false);
     const [zoomImage, setZoomImage] = useState<string | null>(null);
 
+
     const fetchProducts = async () => {
         try {
             setLoading(true);
-            const products = await getProductsInventory();
+            const products = await getProductDetails();
             setProducts(products);
             setLoading(false);
         } catch (error) {
@@ -44,10 +59,14 @@ export default function PInventory() {
             setLoading(false);
         }
     }
-    const columnDefs: ColDef<ProductProp>[] = [
+    const columnDefs: ColDef[] = [
+
         {
-            headerName: "",
-            width: 25
+            headerName: "ORDER",
+            field: "order",
+            sortable: true,
+            width: 120,
+            filter: "agTextColumnFilter",
         },
         {
             headerName: "SKU",
@@ -55,7 +74,9 @@ export default function PInventory() {
             sortable: true,
             width: 180,
             filter: "agTextColumnFilter",
-            cellStyle: {fontWeight: "600"}
+            cellStyle: {fontWeight: "600"},
+            pinned: "left"
+
         },
         {
             headerName: "Local SKU",
@@ -66,12 +87,27 @@ export default function PInventory() {
             cellStyle: {fontWeight: "600"}
         },
         {
+            headerName: "Items",
+            field: "components", // Field containing the array of by-products
+            sortable: true,
+            width: 400,
+            filter: "agTextColumnFilter", // Text filter for filtering by component SKUs or quantities
+            valueGetter: (params) => {
+                const components = params.data?.components as {id: number; componentId: number; sku: string; quantity: number }[] | undefined;
+                return components
+                    ?.map((item) => `${item.sku} (${item.quantity})`) // Map over components array to get only the SKUs
+                    .join(" - ") || "No Components"; // Join the SKUs with a comma and return "No Components" if the array is empty or undefined
+            },
+
+            cellStyle: {fontWeight: "500"}, // Optional: Styling
+            tooltipField: "components", // Optional: Tooltip for longer values
+        },
+        {
             headerName: "UPC",
             field: "upc",
             sortable: true,
             width: 180,
             filter: "agTextColumnFilter",
-            cellStyle: {fontWeight: "600"}
         },
         {
             headerName: "ASIN",
@@ -79,64 +115,113 @@ export default function PInventory() {
             sortable: true,
             width: 180,
             filter: "agTextColumnFilter",
-            cellStyle: {fontWeight: "600"}
         },
         {
-            headerName: "Inventory",
-            field: "quantity",
+            headerName: "Type",
+            field: "type",
+            sortable: true,
             width: 120,
-            filter: true,
-            cellStyle: (params: any) => {
-                return {
-                    textAlign: "center",
-                    fontWeight: "500",
-                    fontSize: "18px",
-                    color: params.data.quantity > 30 ? "green" : params.data.quantity > 5 ? "orange" : "red",
-                };
-            }
+            filter: "agTextColumnFilter",
+        },
+        {
+            headerName: "Collection",
+            field: "collection",
+            sortable: true,
+            width: 120,
+            filter: "agTextColumnFilter",
+        },
+        {
+            headerName: "CAT",
+            field: "category",
+            sortable: true,
+            width: 120,
+            filter: "agTextColumnFilter",
+        },
+        {
+            headerName: "Pieces",
+            field: "pieces",
+            sortable: true,
+            width: 120,
+            filter: "agTextColumnFilter",
+        },
+        {
+            headerName: "Shipping",
+            field: "shippingMethod",
+            sortable: true,
+            width: 120,
+            filter: "agTextColumnFilter",
+        },
+        {
+            headerName: "Main Category",
+            field: "mainCategory",
+            sortable: true,
+            width: 120,
+            filter: "agTextColumnFilter",
+        },
+        {
+            headerName: "Sub Category",
+            field: "subCategory",
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
+        },
+
+
+        {
+            headerName: "Amazon",
+            field: "amazon",
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
+        },
+
+        {
+            headerName: "Cymax",
+            field: "cymax",
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
+        },
+
+        {
+            headerName: "Overstock",
+            field: "overstock",
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
+        },
+
+        {
+            headerName: "Wayfair",
+            field: "wayfair",
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
+        },
+
+        {
+            headerName: "EWFDirect",
+            field: "ewfdirect",
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
         },
         {
             headerName: "EWFDirect",
             field: "ewfdirect",
-            width: 120,
-            filter: true,
-            cellStyle: {textAlign: "center", fontWeight: "500"}
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
         },
-        {
-            headerName: "Amazon",
-            field: "amazon",
-            width: 120,
-            filter: true,
-            cellStyle: {textAlign: "center", fontWeight: "500"}
-        },
-        {
-            headerName: "Wayfair",
-            field: "wayfair",
-            width: 120,
-            filter: true,
-            cellStyle: {textAlign: "center", fontWeight: "500"}
-        },
-        {
-            headerName: "Cymax",
-            field: "cymax",
-            width: 120,
-            filter: true,
-            cellStyle: {textAlign: "center", fontWeight: "500"}
-        },
-        {
-            headerName: "Overstock",
-            field: "overstock",
-            width: 120,
-            filter: true,
-            cellStyle: {textAlign: "center", fontWeight: "500"}
-        },
+
         {
             headerName: "DIS",
             field: "discontinued",
-            width: 120,
-            filter: true,
-            cellStyle: {textAlign: "center", fontWeight: "500"}
+            sortable: true,
+            width: 150,
+            filter: "agTextColumnFilter",
         },
+
     ]
     const defaultColDef = {
         resizable: true,
@@ -145,6 +230,7 @@ export default function PInventory() {
             return {
                 fontSize: "15px",
                 fontWeight: "500",
+                textAlign: "center",
                 textDecoration: params.data.discontinue ? "line-through" : "none",
             };
         }
@@ -158,6 +244,7 @@ export default function PInventory() {
         gridRef.current?.api.exportDataAsCsv(); // Trigger the CSV export
     };
 
+
     return (
         <>
             <PageMeta
@@ -167,7 +254,10 @@ export default function PInventory() {
             <PageBreadcrumb pageTitle="Product Inventory"/>
 
             <div className="flex justify-end mb-4">
-                <button className="bg-brand-300 mx-2 hover:bg-brand-500 text-white font-semibold py-1.5 px-3 rounded-xl flex items-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-300" onClick={onExportCSV}>Export to CSV</button>
+                <button
+                    className="bg-brand-300 mx-2 hover:bg-brand-500 text-white font-semibold py-1.5 px-3 rounded-xl flex items-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    onClick={onExportCSV}>Export to CSV
+                </button>
 
                 <button
                     onClick={() => setForceUpdate((prev) => prev + 1)}
@@ -212,4 +302,3 @@ export default function PInventory() {
         </>
     )
 }
-
