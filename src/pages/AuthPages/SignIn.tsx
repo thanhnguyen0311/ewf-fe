@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import GridShape from "../../components/common/GridShape";
 import Input from "../../components/form/input/InputField";
 import Label from "../../components/form/Label";
@@ -17,13 +17,22 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+
   const handleSignIn = async () => {
     setLoading(true);
     setError(null);
     try {
       const userData = await login(email, password);
       if (userData) {
-        window.location.href = "/"
+        if (isChecked) {
+          localStorage.setItem("savedEmail", email);
+          localStorage.setItem("savedPassword", password);
+        } else {
+          localStorage.removeItem("savedEmail");
+          localStorage.removeItem("savedPassword");
+        }
+        window.location.href = "/";
+
       } else {
         setError("Failed to retrieve user data. Please try again.");
       }
@@ -33,6 +42,16 @@ export default function SignIn() {
       setLoading(false); // Reset loading state
     }
   }
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("savedEmail");
+    const savedPassword = localStorage.getItem("savedPassword");
+    if (savedEmail && savedPassword) {
+      setEmail(savedEmail);
+      setPassword(savedPassword);
+      setIsChecked(true);
+    }
+  }, []);
 
 
   return (
@@ -122,7 +141,9 @@ export default function SignIn() {
                         Email <span className="text-error-500">*</span>{" "}
                       </Label>
                       <Input placeholder="info@gmail.com"
+                             type="email"
                              onChange={(e) => setEmail(e.target.value)}
+                             value={email}
                       />
                     </div>
                     <div>
@@ -134,6 +155,7 @@ export default function SignIn() {
                           type={showPassword ? "text" : "password"}
                           placeholder="Enter your password"
                           onChange={(e) => setPassword(e.target.value)}
+                          value={password}
                         />
                         <span
                           onClick={() => setShowPassword(!showPassword)}

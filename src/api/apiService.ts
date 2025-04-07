@@ -1,7 +1,7 @@
 import {ComponentProp, ComponentRequestProp, data_sort} from "../pages/Inventory/Components/CInventory";
 import axiosInstance from "../utils/axiosInstance";
 import {ProductProp} from "../pages/Inventory/Product/PInventory";
-import {ProductDetailProp} from "../pages/Product/ProductSheet";
+import {ProductDetailProp, ProductDetailRequestProp} from "../pages/Product/ProductSheet";
 
 
 export const updateComponent = async (componentRequest: ComponentRequestProp): Promise<ComponentProp> => {
@@ -17,6 +17,21 @@ export const updateComponent = async (componentRequest: ComponentRequestProp): P
 
     return response.data;
 };
+
+export const updateProductDetail = async (productRequest: ProductDetailRequestProp): Promise<ProductDetailProp> => {
+    const response = await axiosInstance.put(`/api/product/${productRequest.id}`, productRequest, {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    if (response.status !== 200) {
+        throw new Error(`Failed to update product with status: ${response.status}`);
+    }
+
+    return response.data;
+};
+
 
 
 export const getComponentsInventory = async (): Promise<ComponentProp[]> => {
