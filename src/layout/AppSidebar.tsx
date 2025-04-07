@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useRef, useState } from "react";
+import React, {useEffect, useCallback, useRef, useState, useContext} from "react";
 import { Link, useLocation } from "react-router";
 
 // Assume these icons are imported from an icon library
@@ -11,6 +11,7 @@ import {
   PlugInIcon,
 } from "../icons";
 import SidebarWidget from "./SidebarWidget";
+import {AuthContext} from "../context/AuthContext";
 
 type NavItem = {
   name: string;
@@ -117,7 +118,7 @@ const othersItems: NavItem[] = [
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const location = useLocation();
-
+  const auth = useContext(AuthContext);
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: "main" | "others";
     index: number;

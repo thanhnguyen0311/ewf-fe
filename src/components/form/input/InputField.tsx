@@ -57,6 +57,7 @@ const Input: FC<InputProps> = ({
         value={value}
         onChange={onChange}
         min={min}
+        autoComplete = {type ? type : "off"}
         max={max}
         step={step}
         disabled={disabled}
