@@ -8,7 +8,7 @@ import {
   ChevronDownIcon, PieChartIcon, FileIcon, FolderIcon,
   GridIcon,
   HorizontaLDots,
-  PlugInIcon,
+  PlugInIcon, PencilIcon
 } from "../icons";
 import SidebarWidget from "./SidebarWidget";
 import {AuthContext} from "../context/AuthContext";
@@ -17,7 +17,7 @@ type NavItem = {
   name: string;
   icon: React.ReactNode;
   path?: string;
-  subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
+  subItems?: { name: string; path: string; pro?: boolean; new?: boolean, active?: boolean }[];
 };
 
 const navItems: NavItem[] = [
@@ -31,26 +31,26 @@ const navItems: NavItem[] = [
     name: "Orders",
     icon: <FileIcon />,
     subItems: [
-      { name: "New Order", path: "/order/new", pro: false },
-      { name: "Orders", path: "/order", pro: false },
+      { name: "New Order", path: "/order/new", pro: false, active: true },
+      { name: "Orders", path: "/order", pro: false, active: true },
     ],
   },
   {
     name: "Products",
     icon: <BoxIconLine />,
     subItems: [
-        { name: "Add Product", path: "/product/new", pro: false },
-        { name: "Product Details", path: "/products", pro: false },
-        { name: "Shopify", path: "/products", pro: false },
-        { name: "Inventory", path: "/inventory/products", pro: false },
+        { name: "Add Product", path: "/product/new", pro: false, active: true },
+        { name: "Product Details", path: "/products", pro: false, active: true },
+        { name: "Shopify", path: "/products", pro: false, active: true },
+        { name: "Inventory", path: "/inventory/products", pro: false, active: true },
     ],
   },
   {
     name: "Components",
     icon: <BoxIconLine />,
     subItems: [
-        { name: "Dimensions", path: "/", pro: false },
-        { name: "Inventory", path: "/inventory/components", pro: false },
+        { name: "Dimensions", path: "/", pro: false, active: true },
+        { name: "Inventory", path: "/inventory/components", pro: false, active: true },
     ],
   },
   {
@@ -93,24 +93,20 @@ const othersItems: NavItem[] = [
   //     { name: "Bar Chart", path: "/bar-chart", pro: false },
   //   ],
   // },
-  // {
-  //   icon: <BoxCubeIcon />,
-  //   name: "UI Elements",
-  //   subItems: [
-  //     { name: "Alerts", path: "/alerts", pro: false },
-  //     { name: "Avatar", path: "/avatars", pro: false },
-  //     { name: "Badge", path: "/badges", pro: false },
-  //     { name: "Buttons", path: "/buttons", pro: false },
-  //     { name: "Images", path: "/images", pro: false },
-  //     { name: "Videos", path: "/videos", pro: false },
-  //   ],
-  // },
+  {
+    icon: <PencilIcon />,
+    name: "Settings",
+    subItems: [
+      { name: "Users", path: "/users", pro: false , active: false },
+      { name: "Permissions", path: "/permissions", pro: false , active: false },
+    ],
+  },
   {
     icon: <PlugInIcon />,
     name: "Authentication",
     subItems: [
-      { name: "Sign In", path: "/signin", pro: false },
-      { name: "Log Out", path: "/logout", pro: false },
+      { name: "Sign In", path: "/signin", pro: false, active: true },
+      { name: "Log Out", path: "/logout", pro: false, active: true },
     ],
   },
 ];
@@ -133,10 +129,13 @@ const AppSidebar: React.FC = () => {
     [location.pathname]
   );
 
+
+
   useEffect(() => {
     let submenuMatched = false;
     ["main", "others"].forEach((menuType) => {
       const items = menuType === "main" ? navItems : othersItems;
+
       items.forEach((nav, index) => {
         if (nav.subItems) {
           nav.subItems.forEach((subItem) => {
@@ -183,7 +182,8 @@ const AppSidebar: React.FC = () => {
   };
 
   const renderMenuItems = (items: NavItem[], menuType: "main" | "others") => (
-    <ul className="flex flex-col gap-4">
+      
+      <ul className="flex flex-col gap-4">
       {items.map((nav, index) => (
         <li key={nav.name}>
           {nav.subItems ? (
@@ -259,44 +259,63 @@ const AppSidebar: React.FC = () => {
               }}
             >
               <ul className="mt-2 space-y-1 ml-9">
-                {nav.subItems.map((subItem) => (
-                  <li key={subItem.name}>
-                    <Link
-                      to={subItem.path}
-                      className={`menu-dropdown-item ${
-                        isActive(subItem.path)
-                          ? "menu-dropdown-item-active"
-                          : "menu-dropdown-item-inactive"
-                      }`}
-                    >
-                      {subItem.name}
-                      <span className="flex items-center gap-1 ml-auto">
-                        {subItem.new && (
-                          <span
-                            className={`ml-auto ${
-                              isActive(subItem.path)
-                                ? "menu-dropdown-badge-active"
-                                : "menu-dropdown-badge-inactive"
-                            } menu-dropdown-badge`}
-                          >
-                            new
-                          </span>
-                        )}
-                        {subItem.pro && (
-                          <span
-                            className={`ml-auto ${
-                              isActive(subItem.path)
-                                ? "menu-dropdown-badge-active"
-                                : "menu-dropdown-badge-inactive"
-                            } menu-dropdown-badge`}
-                          >
-                            pro
-                          </span>
-                        )}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
+                {nav.subItems.map((subItem) => {
+                  if (auth?.user?.role === "ADMIN") {
+                    if (subItem.name === "Users" || subItem.name === "Permissions"){
+                      subItem.active = true
+                    }
+                  }
+
+                  if (auth?.isLoggedIn){
+                    if (subItem.name === "Sign In") {
+                      subItem.active = false
+                    }
+                  } else {
+                    if (subItem.name === "Log Out") {
+                      subItem.active = false
+                    }
+                  }
+
+
+                  return subItem.active ? (
+                    <li key={subItem.name}>
+                      <Link
+                        to={subItem.path}
+                        className={`menu-dropdown-item ${
+                          isActive(subItem.path)
+                            ? "menu-dropdown-item-active"
+                            : "menu-dropdown-item-inactive"
+                        }`}
+                      >
+                        {subItem.name}
+                        <span className="flex items-center gap-1 ml-auto">
+                          {subItem.new && (
+                            <span
+                              className={`ml-auto ${
+                                isActive(subItem.path)
+                                  ? "menu-dropdown-badge-active"
+                                  : "menu-dropdown-badge-inactive"
+                              } menu-dropdown-badge`}
+                            >
+                              new
+                            </span>
+                          )}
+                          {subItem.pro && (
+                            <span
+                              className={`ml-auto ${
+                                isActive(subItem.path)
+                                  ? "menu-dropdown-badge-active"
+                                  : "menu-dropdown-badge-inactive"
+                              } menu-dropdown-badge`}
+                            >
+                              pro
+                            </span>
+                          )}
+                        </span>
+                      </Link>
+                    </li>
+                  ) : null;
+                })}
               </ul>
             </div>
           )}
