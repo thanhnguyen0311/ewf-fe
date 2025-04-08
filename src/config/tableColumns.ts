@@ -10,6 +10,19 @@ export const ordersTableColumns = [
     'Action'
 ];
 
+export const usersTableColumns = [
+    "#",
+    'First Name',
+    'Last Name',
+    'Email',
+    'Role',
+    'Create Date',
+    'Last seen',
+    'Status',
+    'Active',
+    ''
+];
+
 export const componentsProductContainerTableColumns = [
     '',
     'SKU',

@@ -410,10 +410,10 @@ export default function ProductSheet() {
     return (
         <>
             <PageMeta
-                title="Product Inventory | East West Furniture"
+                title="Product Management | East West Furniture"
                 description=""
             />
-            <PageBreadcrumb pageTitle="Product Inventory"/>
+            <PageBreadcrumb pageTitle="Product Management"/>
 
             <div className="flex justify-end mb-4">
                 <button
@@ -433,7 +433,7 @@ export default function ProductSheet() {
 
                 <div
                     className="ag-theme-quartz shadow border rounded-xl border-gray-300"
-                    style={{height: "800px", width: "100%", marginTop: "20px"}}
+                    style={{height: "1000px", width: "100%", marginTop: "20px"}}
                 >
                     {!loading ? (<AgGridReact
                         ref={gridRef}

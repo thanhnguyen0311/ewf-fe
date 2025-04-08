@@ -4,6 +4,8 @@ import {ProductProp} from "../pages/Inventory/Product/PInventory";
 import {ProductDetailProp, ProductDetailRequestProp} from "../pages/Product/ProductSheet";
 
 
+
+
 export const updateComponent = async (componentRequest: ComponentRequestProp): Promise<ComponentProp> => {
     const response = await axiosInstance.put("/api/inventory/components", componentRequest, {
         headers: {

@@ -2,10 +2,8 @@ import { Route, BrowserRouter as Router, Routes } from "react-router";
 import AppLayout from "./layout/AppLayout";
 import AuthLayout from "./layout/AuthLayout";
 import SignIn from "./pages/AuthPages/SignIn";
-import SignUp from "./pages/AuthPages/SignUp";
 import Ecommerce from "./pages/Dashboard/ECommerce";
 import NotFound from "./pages/OtherPage/NotFound";
-import UserProfiles from "./pages/UserProfiles";
 import ProductDetail from "./pages/Product/ProductDetail";
 import Orders from "./pages/Order/Orders";
 import NewOrder from "./pages/Order/NewOrder";
@@ -13,6 +11,8 @@ import PInventory from "./pages/Inventory/Product/PInventory";
 import CInventory from "./pages/Inventory/Components/CInventory";
 import Logout from "./pages/AuthPages/Logout";
 import ProductSheet from "./pages/Product/ProductSheet";
+import Users from "./pages/AuthPages/Users";
+import Permissions from "./pages/AuthPages/Permissions";
 
 export default function App() {
   return (
@@ -28,13 +28,14 @@ export default function App() {
             <Route path="/order/new" element={<NewOrder />} />
             <Route path="/inventory/products" element={<PInventory />} />
             <Route path="/inventory/components" element={<CInventory />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/permissions" element={<Permissions />} />
 
           </Route>
 
           {/* Auth Layout */}
           <Route element={<AuthLayout />}>
             <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
             <Route path="/logout" element={<Logout />} />
           </Route>
 
