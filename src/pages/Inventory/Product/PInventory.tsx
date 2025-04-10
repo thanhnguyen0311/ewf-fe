@@ -155,7 +155,7 @@ export default function PInventory() {
     }, [forceUpdate]);
 
     const onExportCSV = () => {
-        gridRef.current?.api.exportDataAsCsv(); // Trigger the CSV export
+        gridRef.current?.api.exportDataAsCsv();
     };
 
     return (

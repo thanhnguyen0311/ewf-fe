@@ -68,7 +68,6 @@ export default function Orders() {
                                                                 className="block font-bold text-gray-800 text-theme-sm dark:text-white/90">
                                                             #{order.invoiceNumber}
                                                             </span>
-
                                                                 {order.ponumber &&
                                                                     <span
                                                                         className="block text-gray-500 text-theme-xs dark:text-gray-400">
