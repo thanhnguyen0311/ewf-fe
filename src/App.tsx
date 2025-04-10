@@ -11,7 +11,7 @@ import PInventory from "./pages/Inventory/Product/PInventory";
 import CInventory from "./pages/Inventory/Components/CInventory";
 import Logout from "./pages/AuthPages/Logout";
 import ProductSheet from "./pages/Product/ProductSheet";
-import Users from "./pages/AuthPages/Users";
+import Users from "./pages/User/Users";
 import Permissions from "./pages/AuthPages/Permissions";
 
 export default function App() {
