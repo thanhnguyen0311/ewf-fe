@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {UserProp} from "../../interfaces/User";
 import {Role} from "../../interfaces/Role";
-import {getRoles, getUsers} from "../../api/apiService";
+import {getRoles} from "../../api/UserApiService";
 
 interface UserEditModalProps {
     user: UserProp | null;
@@ -22,8 +22,6 @@ export default function UserEditModal({ user, isOpen, onClose, onSave }: UserEdi
             console.log("Failed to fetch components. Please try again.");
         }
     }
-
-
 
     // Sync state if a new user is selected
     React.useEffect(() => {

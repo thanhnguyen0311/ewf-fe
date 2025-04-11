@@ -2,15 +2,16 @@ import React, {useEffect, useState} from "react";
 import PageMeta from "../../components/common/PageMeta";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import ComponentCard from "../../components/common/ComponentCard";
-import BarChartOne from "../../components/charts/bar/BarChartOne";
 import Loader from "../UiElements/Loader/Loader";
 import {Table, TableBody, TableCell, TableHeader, TableRow} from "../../components/ui/table";
-import {ordersTableColumns, usersTableColumns} from "../../config/tableColumns";
-import {ProductDetailProp} from "../Product/ProductSheet";
-import {getProductDetails, getUsers} from "../../api/apiService";
+import {usersTableColumns} from "../../config/tableColumns";
 import {formatDate} from "../../utils/formatDate";
 import UserEditModal from "./UserEditModal";
-import {UserProp} from "../../interfaces/User";
+import {mapUserPropToDto, UserProp} from "../../interfaces/User";
+import {getUsers, updateUser} from "../../api/UserApiService";
+import {mapProductDetailPropToRequest} from "../../utils/mapFunctions";
+import {updateProductDetail} from "../../api/apiService";
+import {ProductDetailProp} from "../Product/ProductSheet";
 
 
 
@@ -32,10 +33,16 @@ export default function Users() {
         setSelectedUser(null);
     };
 
-    const handleSave = (updatedUser: UserProp) => {
+    const handleSave = async (editedUser: UserProp) => {
         setUsers((prevUsers) =>
-            prevUsers.map((user) => (user.id === updatedUser.id ? updatedUser : user))
+            prevUsers.map((user) => (user.id === editedUser.id ? editedUser : user))
         );
+        const userRequestDto = mapUserPropToDto(editedUser)
+        try {
+            await updateUser(userRequestDto);
+        } catch (error: any) {
+            console.error("Error updating product details:", error);
+        }
     };
 
 
@@ -118,12 +125,12 @@ export default function Users() {
                                                         {user.isActive ? "✅" : "X"}
                                                     </TableCell>
                                                     <TableCell>
-                                                        <button
+                                                        {user.roleId !== 2 && <button
                                                             onClick={() => handleEditClick(user)}
                                                             className="text-blue-500 hover:text-blue-700"
                                                         >
                                                             ✏️
-                                                        </button>
+                                                        </button>}
                                                     </TableCell>
 
                                                 </TableRow>
