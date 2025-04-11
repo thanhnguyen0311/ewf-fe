@@ -9,3 +9,20 @@ export interface UserProp {
     lastLogin: string; // ISO date string
     isActive: boolean;
 }
+export interface UserRequestDto {
+    id: number;
+    firstName: string;
+    lastName: string;
+    isActive: boolean;
+    roleId: number;
+}
+
+export function mapUserPropToDto(userProp: UserProp): UserRequestDto {
+    return {
+        id: userProp.id,
+        firstName: userProp.firstName,
+        lastName: userProp.lastName,
+        isActive: userProp.isActive,
+        roleId: userProp.roleId,
+    };
+}

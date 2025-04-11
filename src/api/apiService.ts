@@ -77,22 +77,6 @@ export const getProductDetails = async (): Promise<ProductDetailProp[]> => {
     return response.data
 }
 
-export const getUsers = async (): Promise<UserProp[]> => {
-    const response = await axiosInstance.get<UserProp[]>(
-        `/api/users`,
-    );
-
-    return response.data
-}
-
-export const getRoles = async (): Promise<Role[]> => {
-    const response = await axiosInstance.get<Role[]>(
-        `/api/roles`,
-    );
-
-    return response.data
-}
-
 
 export const productSearch= async (searchValue: string, currentPage: number) => {
     const requestBody = {
