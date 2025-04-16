@@ -256,6 +256,16 @@ export default function ProductSheet() {
             width: 180,
             editable: true,
             filter: "agTextColumnFilter",
+            onCellClicked: (params) => {
+                const asin = params.value;
+                if (asin) {
+                    window.open(`https://www.amazon.com/dp/${asin}`, "_blank");
+                }
+            },
+            cellStyle: {
+                color: "blue",
+                fontWeight: "400",
+                textDecoration: "underline"},
         },
         {
             headerName: "Type",
