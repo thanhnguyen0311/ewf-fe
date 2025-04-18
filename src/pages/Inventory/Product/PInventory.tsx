@@ -6,25 +6,12 @@ import {AgGridReact} from "ag-grid-react";
 import Loader from "../../UiElements/Loader/Loader";
 
 import {ColDef} from 'ag-grid-community';
+import {ProductInventoryProp} from "../../../interfaces/Product";
 
 
-export type ProductProp = {
-    id: number;
-    sku: string;
-    quantity: number;
-    asin: string;
-    upc: string;
-    discontinued: boolean;
-    ewfdirect: boolean;
-    amazon: boolean;
-    cymax: boolean;
-    overstock: boolean;
-    wayfair: boolean;
-    localSku: string;
-};
 
 export default function PInventory() {
-    const [products, setProducts] = useState<ProductProp[]>([]);
+    const [products, setProducts] = useState<ProductInventoryProp[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [forceUpdate, setForceUpdate] = useState(0);
@@ -44,7 +31,7 @@ export default function PInventory() {
             setLoading(false);
         }
     }
-    const columnDefs: ColDef<ProductProp>[] = [
+    const columnDefs: ColDef<ProductInventoryProp>[] = [
         {
             headerName: "",
             width: 25

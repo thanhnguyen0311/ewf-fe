@@ -1,7 +1,5 @@
 import axios from "axios";
-import {ComponentProp, ComponentRequestProp, data_sort} from "../pages/Inventory/Components/CInventory";
 import axiosInstance from "../utils/axiosInstance";
-import {ProductDetailProp} from "../pages/Product/ProductSheet";
 import {UserDto} from "../context/AuthContext";
 
 

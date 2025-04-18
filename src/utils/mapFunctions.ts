@@ -1,5 +1,5 @@
 import {ComponentProp, ComponentRequestProp} from "../pages/Inventory/Components/CInventory";
-import {ProductDetailProp, ProductDetailRequestProp} from "../pages/Product/ProductSheet";
+import {ProductDetailProp, ProductDetailRequestProp} from "../interfaces/Product";
 
 export const mapComponentPropToRequest = (component: ComponentProp): ComponentRequestProp => {
     const {

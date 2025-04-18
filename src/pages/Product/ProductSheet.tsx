@@ -3,67 +3,14 @@ import {AgGridReact} from "ag-grid-react";
 import PageMeta from "../../components/common/PageMeta";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import Loader from "../UiElements/Loader/Loader";
-import {getProductDetails, updateComponent, updateProductDetail} from "../../api/apiService";
+import {getProductDetails, updateProductDetail} from "../../api/apiService";
 
 import { ColDef, ColGroupDef } from 'ag-grid-community';
 import {mapComponentPropToRequest, mapProductDetailPropToRequest} from "../../utils/mapFunctions";
 import {ComponentProp} from "../Inventory/Components/CInventory";
+import {ProductDetailProp} from "../../interfaces/Product";
 
 
-export type ProductDetailProp = {
-    id: number;
-    sku: string;
-    localSku: string;
-    upc: string;
-    asin: string;
-    title: string;
-    localTitle: string;
-    description: string;
-    htmlDescription: string;
-    type: string;
-    collection: string;
-    order: string;
-    category: string;
-    mainCategory: string;
-    subCategory: string;
-    shippingMethod: string;
-    pieces: string;
-    discontinued: boolean;
-    amazon: boolean;
-    cymax: boolean;
-    overstock: boolean;
-    wayfair: boolean;
-    ewfdirect: boolean;
-    houstondirect: boolean | false;
-    ewfmain: boolean | false;
-    components: {id: number;componentId: number; sku: string; quantity: number; pos: number }[],
-};
-
-export type ProductDetailRequestProp = {
-    id: number;
-    upc: string;
-    asin: string;
-    title: string;
-    localTitle: string;
-    description: string;
-    htmlDescription: string;
-    type: string;
-    collection: string;
-    order: string;
-    category: string;
-    mainCategory: string;
-    subCategory: string;
-    shippingMethod: string;
-    pieces: string;
-    discontinued: boolean;
-    amazon: boolean;
-    cymax: boolean;
-    overstock: boolean;
-    wayfair: boolean;
-    ewfdirect: boolean;
-    houstondirect: boolean;
-    ewfmain: boolean;
-}
 
 export default function ProductSheet() {
     const [products, setProducts] = useState<ProductDetailProp[]>([]);
@@ -256,6 +203,16 @@ export default function ProductSheet() {
             width: 180,
             editable: true,
             filter: "agTextColumnFilter",
+            onCellClicked: (params) => {
+                const asin = params.value;
+                if (asin) {
+                    window.open(`https://www.amazon.com/dp/${asin}`, "_blank");
+                }
+            },
+            cellStyle: {
+                color: "blue",
+                fontWeight: "400",
+                textDecoration: "underline"},
         },
         {
             headerName: "Type",
@@ -313,50 +270,100 @@ export default function ProductSheet() {
             editable: true,
             filter: "agTextColumnFilter",
         },
-
         {
-            headerName: "Amazon",
-            field: "amazon",
+            headerName: "Description",
+            field: "description",
             sortable: true,
             width: 150,
             editable: true,
             filter: "agTextColumnFilter",
         },
-
         {
-            headerName: "Cymax",
-            field: "cymax",
+            headerName: "HTML Description",
+            field: "htmlDescription",
             sortable: true,
             width: 150,
             editable: true,
             filter: "agTextColumnFilter",
         },
-
         {
-            headerName: "Overstock",
-            field: "overstock",
-            sortable: true,
-            width: 150,
-            editable: true,
-            filter: "agTextColumnFilter",
-        },
+            headerName: "Sale Channel",
+            children: [
+                {
+                    headerName: "EWFDirect",
+                    field: "ewfdirect",
+                    sortable: true,
+                    columnGroupShow: "closed",
+                    width: 150,
+                    editable: true,
+                    filter: "agTextColumnFilter",
+                },
+                {
+                    headerName: "EWFDirect",
+                    field: "ewfdirect",
+                    sortable: true,
+                    columnGroupShow: "open",
+                    width: 150,
+                    editable: true,
+                    filter: "agTextColumnFilter",
+                },
 
-        {
-            headerName: "Wayfair",
-            field: "wayfair",
-            sortable: true,
-            width: 150,
-            editable: true,
-            filter: "agTextColumnFilter",
-        },
+                {
+                    headerName: "Houston",
+                    field: "houstondirect",
+                    sortable: true,
+                    columnGroupShow: "open",
+                    width: 150,
+                    editable: true,
+                    filter: "agTextColumnFilter",
+                },
 
-        {
-            headerName: "EWFDirect",
-            field: "ewfdirect",
-            sortable: true,
-            width: 150,
-            editable: true,
-            filter: "agTextColumnFilter",
+                {
+                    headerName: "EWFMain",
+                    field: "ewfmain",
+                    sortable: true,
+                    columnGroupShow: "open",
+                    width: 150,
+                    editable: true,
+                    filter: "agTextColumnFilter",
+                },
+                {
+                    headerName: "Amazon",
+                    field: "amazon",
+                    columnGroupShow: "open",
+                    sortable: true,
+                    width: 150,
+                    editable: true,
+                    filter: "agTextColumnFilter",
+                },
+                {
+                    headerName: "Cymax",
+                    field: "cymax",
+                    columnGroupShow: "open",
+                    sortable: true,
+                    width: 150,
+                    editable: true,
+                    filter: "agTextColumnFilter",
+                },
+                {
+                    headerName: "Overstock",
+                    field: "overstock",
+                    columnGroupShow: "open",
+                    sortable: true,
+                    width: 150,
+                    editable: true,
+                    filter: "agTextColumnFilter",
+                },
+                {
+                    headerName: "Wayfair",
+                    field: "wayfair",
+                    columnGroupShow: "open",
+                    sortable: true,
+                    width: 150,
+                    editable: true,
+                    filter: "agTextColumnFilter",
+                }
+            ],
         },
 
         {
@@ -433,7 +440,7 @@ export default function ProductSheet() {
 
                 <div
                     className="ag-theme-quartz shadow border rounded-xl border-gray-300"
-                    style={{height: "1000px", width: "100%", marginTop: "20px"}}
+                    style={{height: "800px", width: "100%", marginTop: "20px"}}
                 >
                     {!loading ? (<AgGridReact
                         ref={gridRef}

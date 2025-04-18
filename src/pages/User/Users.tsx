@@ -9,9 +9,6 @@ import {formatDate} from "../../utils/formatDate";
 import UserEditModal from "./UserEditModal";
 import {mapUserPropToDto, UserProp} from "../../interfaces/User";
 import {getUsers, updateUser} from "../../api/UserApiService";
-import {mapProductDetailPropToRequest} from "../../utils/mapFunctions";
-import {updateProductDetail} from "../../api/apiService";
-import {ProductDetailProp} from "../Product/ProductSheet";
 
 
 
