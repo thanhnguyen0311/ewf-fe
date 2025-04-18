@@ -10,8 +10,9 @@ import {Link} from "react-router-dom";
 import ComponentCard from "../../components/common/ComponentCard";
 import {Table, TableBody, TableCell, TableHeader, TableRow} from "../../components/ui/table";
 import {componentsProductContainerTableColumns} from "../../config/tableColumns";
+import {ProductProp} from "../../interfaces/Product";
 
-type ComponentProps = {
+export type ComponentProps = {
     id: number;
     sku: string;
     inventory: number;
@@ -23,20 +24,7 @@ type ComponentProps = {
     };
 };
 
-type ProductProp = {
-    id: number;
-    sku: string;
-    localSku: string;
-    finish: string;
-    category: string;
-    inventory: number;
-    images: {
-        dim: string[];
-        img: string[];
-    };
-    components: ComponentProps[];
-    subProducts: ProductProp[];
-};
+
 
 export default function ProductDetail() {
     const {sku} = useParams(); // Retrieve the dynamic `id` from the URL

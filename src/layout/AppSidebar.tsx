@@ -41,7 +41,7 @@ const navItems: NavItem[] = [
     subItems: [
         { name: "Add Product", path: "/product/new", pro: false, active: true },
         { name: "Product Details", path: "/products", pro: false, active: true },
-        { name: "Shopify", path: "/products", pro: false, active: true },
+        { name: "Shopify", path: "/product/shopify", pro: false, active: true },
         { name: "Inventory", path: "/inventory/products", pro: false, active: true },
     ],
   },

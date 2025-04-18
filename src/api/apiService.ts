@@ -1,9 +1,6 @@
 import {ComponentProp, ComponentRequestProp, data_sort} from "../pages/Inventory/Components/CInventory";
 import axiosInstance from "../utils/axiosInstance";
-import {ProductProp} from "../pages/Inventory/Product/PInventory";
-import {ProductDetailProp, ProductDetailRequestProp} from "../pages/Product/ProductSheet";
-import {UserProp} from "../interfaces/User";
-import {Role} from "../interfaces/Role";
+import {ProductDetailProp, ProductDetailRequestProp, ProductInventoryProp} from "../interfaces/Product";
 
 
 
@@ -61,8 +58,8 @@ export const getComponentsInventory = async (): Promise<ComponentProp[]> => {
 
 }
 
-export const getProductsInventory = async (): Promise<ProductProp[]> => {
-    const response = await axiosInstance.get<ProductProp[]>(
+export const getProductsInventory = async (): Promise<ProductInventoryProp[]> => {
+    const response = await axiosInstance.get<ProductInventoryProp[]>(
         `/api/inventory/products`,
     );
 
