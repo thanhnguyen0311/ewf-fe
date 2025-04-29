@@ -27,8 +27,18 @@ export const mapComponentPropToRequest = (component: ComponentProp): ComponentRe
     };
 };
 
+export const mapComponentsToMinimalFormat = (
+    components: { id: number; componentId: number; sku: string; quantity: number; pos: number }[]
+): { id: number; quantity: number }[] => {
+    return components.map((component) => ({
+        id: component.id, // Extract the "id"
+        quantity: component.quantity, // Extract the "quantity"
+    }));
+};
 
-export const mapProductDetailPropToRequest = (product: ProductDetailProp): ProductDetailRequestProp => {
+export const mapProductDetailPropToRequest = (
+    product: ProductDetailProp
+): ProductDetailRequestProp => {
     const {
         id,
         upc,
@@ -53,6 +63,7 @@ export const mapProductDetailPropToRequest = (product: ProductDetailProp): Produ
         ewfdirect,
         houstondirect,
         ewfmain,
+        components, // Include components from the input object
     } = product;
 
     return {
@@ -79,5 +90,6 @@ export const mapProductDetailPropToRequest = (product: ProductDetailProp): Produ
         ewfdirect,
         houstondirect,
         ewfmain,
+        components: mapComponentsToMinimalFormat(components), // Apply mapping to components
     };
 };

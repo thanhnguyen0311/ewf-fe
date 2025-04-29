@@ -1,4 +1,5 @@
 import {ComponentProps} from "../pages/Product/ProductDetail";
+import {ImageProp} from "./Image";
 
 export type ProductDetailProp = {
     id: number;
@@ -28,6 +29,7 @@ export type ProductDetailProp = {
     houstondirect: boolean | false;
     ewfmain: boolean | false;
     components: {id: number;componentId: number; sku: string; quantity: number; pos: number }[],
+    images: ImageProp | null;
 };
 export type ProductProp = {
     id: number;
@@ -62,6 +64,7 @@ export type ProductDetailRequestProp = {
     discontinued: boolean;
     amazon: boolean;
     cymax: boolean;
+    components: {id: number;quantity: number}[],
     overstock: boolean;
     wayfair: boolean;
     ewfdirect: boolean;
