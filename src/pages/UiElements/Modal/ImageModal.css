@@ -13,9 +13,14 @@
 
 .modal {
     background-color: #fff;
-    padding: 25px;
+    padding: 20px 50px;
+
     width: 90%;
-    max-width: 600px;
+    max-width: 700px;
+    /* Add scroll and height constraints */
+    max-height: 800px; /* Limit the maximum height of the modal */
+    overflow-y: auto; /* Add vertical scrolling when content is too large */
+
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     text-align: center;
@@ -106,4 +111,12 @@ label {
 
 .btn-close:hover {
     background-color: #d32f2f;
+}
+
+.image-preview {
+    width: 100px; /* Default width */
+    height: 100px; /* Default height */
+    margin-right: 20px;
+    margin-top: 10px;
+    border-radius: 4px;
 }

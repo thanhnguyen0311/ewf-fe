@@ -29,7 +29,7 @@ export type ProductDetailProp = {
     houstondirect: boolean | false;
     ewfmain: boolean | false;
     components: {id: number;componentId: number; sku: string; quantity: number; pos: number }[],
-    images: ImageProp | null;
+    images: ImageProp | { cgi: [], img: [], dim: []};
 };
 export type ProductProp = {
     id: number;
@@ -70,6 +70,7 @@ export type ProductDetailRequestProp = {
     ewfdirect: boolean;
     houstondirect: boolean;
     ewfmain: boolean;
+    images: ImageProp;
 }
 
 export type ProductInventoryProp = {

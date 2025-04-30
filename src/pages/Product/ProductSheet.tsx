@@ -451,20 +451,28 @@ export default function ProductSheet() {
         if (params.colDef.field === "images") {
             setSelectedImages(params.data.images); // Pass the selected cell's images
             setSelectedRowId(params.data.id); // Keep reference to the row ID that needs updating
-            setModalVisible(true); // Open the modal
+            setModalVisible(true);
+
         }
     };
 
 
 
     const handleModalSave = (updatedImages: ImageProp) => {
-        // Update the specific row in the grid
         setProducts((prevProducts) =>
             prevProducts.map((product) => {
                 if (product.id === selectedRowId) {
-                    const productDetailRequestDto = mapProductDetailPropToRequest(product)
-                    updateProductDetail(productDetailRequestDto).then(() => {});
-                    return { ...product, images: updatedImages };
+                    const updatedProduct = { ...product, images: updatedImages };
+
+                    // Map the updated product to the request DTO
+                    const productDetailRequestDto = mapProductDetailPropToRequest(updatedProduct);
+
+                    // Make API call to update the product details
+                    updateProductDetail(productDetailRequestDto).then(() => {
+                        console.log("Product details updated successfully!");
+                    });
+
+                    return updatedProduct;
                 }
                 return product;
             })

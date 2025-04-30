@@ -63,6 +63,7 @@ export const mapProductDetailPropToRequest = (
         ewfdirect,
         houstondirect,
         ewfmain,
+        images,
         components, // Include components from the input object
     } = product;
 
@@ -88,6 +89,7 @@ export const mapProductDetailPropToRequest = (
         overstock,
         wayfair,
         ewfdirect,
+        images,
         houstondirect,
         ewfmain,
         components: mapComponentsToMinimalFormat(components), // Apply mapping to components

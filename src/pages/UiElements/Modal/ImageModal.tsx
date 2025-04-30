@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {ImageProp} from "../../../interfaces/Image";
 import "./ImageModal.css";
+import ImageUrlEditor from "../../../components/ui/images/ImageUrlEditor";
+import Loader from "../Loader/Loader";
 
 interface ProductImageModalProps {
     isVisible: boolean;
@@ -11,111 +13,118 @@ interface ProductImageModalProps {
 
 const ProductImageModal: React.FC<ProductImageModalProps> = ({ isVisible, onClose, imagesData, onSave }) => {
     const [images, setImages] = useState<ImageProp>(imagesData || { cgi: [], img: [], dim: []});
-
-
-    const handleInputChange = (type: keyof ImageProp, value: string) => {
-        setImages({
-            ...images,
-            [type]: value.split(",").map((item) => item.trim()), // Convert comma-separated string to array
-        });
-    };
+    const [editImages, setEditImages] = useState<ImageProp>(imagesData || { cgi: [], img: [], dim: []});
 
     useEffect(() => {
-        if (imagesData) {
-            setImages(imagesData);
+        if (isVisible && imagesData) {
+            setImages(imagesData); // Sync the original images
+            setEditImages(imagesData); // Reset the edit images
         }
-    }, [imagesData]);
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape" && isVisible) {
+                onClose(); // Close the modal when ESC is pressed
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown); // Add event listener
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown); // Cleanup on component unmount
+        };
+
+
+    }, [isVisible, imagesData]);
+
 
     if (!isVisible || !imagesData) return null;
 
     const handleSave = () => {
-        onSave(images);
+        onSave(editImages);
         onClose();
     };
 
 
+    const handleUrlChange = (index: number, newUrl: string, type: keyof ImageProp) => {
+        // Update the specific array (cgi, img, or dim) within the images state
+        setEditImages((prevState) => {
+            const updatedArray = [...prevState[type]];
+            if (newUrl === '') {
+                // Remove the element if newUrl is empty
+                updatedArray.splice(index, 1);
+            } else {
+                // Update the specific URL at the given index
+                updatedArray[index] = newUrl;
+            }
+
+            return {
+                ...prevState,
+                [type]: updatedArray, // Update the corresponding type in state
+            };
+        });
+    };
 
 
     return (
         <div className="modal-overlay">
             <div className="modal">
-                <h2 className="modal-title">Edit Images</h2>
-                <form className="modal-form">
-                    <div className="form-group">
-                        <label htmlFor="cgi-input">CGI Images</label>
-                        <>
-                            {images.cgi.map((url, index) => {
-                                const cleanedUrl = url.replace(/"/g, ''); // Remove quotes if present
-
-                                return (
-                                    <div
+                    <h2 className="modal-title">Edit Images</h2>
+                    <form className="modal-form">
+                        <div className="form-group">
+                            <label htmlFor="cgi-input">CGI Images</label>
+                            <>
+                                {editImages.cgi.map((url, index) => (
+                                    <ImageUrlEditor
                                         key={index}
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '10px',
-                                            marginBottom: '10px'
-                                        }}
-                                    >
-
-                                    {/* Preview Image */}
-                                        <img
-                                            src={cleanedUrl}
-                                            alt={`Preview ${index}`}
-                                            style={{ width: '100px', height: '100px', objectFit: 'cover', marginRight: '10px' }}
-                                            onError={(e) => {
-                                                // Fallback in case of a broken URL
-                                                e.currentTarget.src = 'https://via.placeholder.com/100';
-                                            }}
-                                        />
-                                        {/* URL Input */}
-                                        <input
-                                            type="text"
-                                            value={cleanedUrl}
-                                            onChange={(e) => handleInputChange('cgi', e.target.value)}
-                                            style={{ width: '300px' }}
-                                        />
-                                    </div>
-                                );
-                            })}
-                        </>
-
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="img-input">IMG Images</label>
-                        {images.img.map((url, index) => (
-                            <>
-                                <a key={index} href={url} >
-                                    {url}
-                                </a>
-                                <br></br>
+                                        url={url}
+                                        onUrlChange={(newUrl) => handleUrlChange(index, newUrl, "cgi")} // Pass handler with index
+                                    />
+                                ))}
                             </>
-                        ))}
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="dim-input">DIM Images</label>
-                        {images.dim.map((url, index) => (
-                            <>
-                                <a key={index} href={url} >
-                                    {url}
-                                </a>
-                                <br></br>
-                            </>
-                        ))}
-                    </div>
-                    <div className="modal-buttons">
-                        <button type="button" className="btn btn-save" onClick={handleSave}>
-                            Save
-                        </button>
-                        <button type="button" className="btn btn-close" onClick={onClose}>
-                            Close
-                        </button>
-                    </div>
-                </form>
+
+
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="img-input">IMG Images</label>
+                            {editImages.img.map((url, index) => (
+                                <ImageUrlEditor
+                                    key={index}
+                                    url={url}
+                                    onUrlChange={(newUrl) => handleUrlChange(index, newUrl, "img")} // Pass handler with index
+                                />
+                            ))}
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="dim-input">DIM Images</label>
+                            {editImages.dim.map((url, index) => (
+                                <ImageUrlEditor
+                                    key={index}
+                                    url={url}
+                                    onUrlChange={(newUrl) => handleUrlChange(index, newUrl, "dim")} // Pass handler with index
+                                />
+                            ))}
+                        </div>
+                        <div className="modal-buttons">
+                            <button type="button" className="btn btn-save" onClick={handleSave}>
+                                Save
+                            </button>
+                            <button type="button" className="btn btn-close" onClick={onClose}>
+                                Close
+                            </button>
+                        </div>
+                    </form>
             </div>
         </div>
     );
 };
 
 export default ProductImageModal;
+
+
+
+
+
+
+
+
+
 
