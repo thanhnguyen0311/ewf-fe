@@ -9,7 +9,7 @@ import { ColDef, ColGroupDef } from 'ag-grid-community';
 import {mapProductDetailPropToRequest} from "../../utils/mapFunctions";
 import {ProductDetailProp} from "../../interfaces/Product";
 import {ImageProp} from "../../interfaces/Image";
-import ProductImageModal from "../UiElements/Modal/ImageModal";
+import ProductImageModal from "../UiElements/Modal/Image/ImageModal";
 
 
 
@@ -19,7 +19,8 @@ export default function ProductSheet() {
     const [error, setError] = useState<string | null>(null);
     const [forceUpdate, setForceUpdate] = useState(0);
     const gridRef = useRef<AgGridReact<any>>(null);
-    const [isModalVisible, setModalVisible] = useState(false);
+    const [isImageModalVisible, setImageModalVisible] = useState(false);
+    const [isComponentsModalVisible, setComponentsModalVisible] = useState(false);
     const [selectedImages, setSelectedImages] = useState<ImageProp | null>(null);
     const [selectedRowId, setSelectedRowId] = useState<number | null>(null);
 
@@ -289,6 +290,14 @@ export default function ProductSheet() {
             filter: "agTextColumnFilter",
         },
         {
+            headerName: "Title",
+            field: "title",
+            sortable: true,
+            width: 120,
+            editable: true,
+            filter: "agTextColumnFilter",
+        },
+        {
             headerName: "Shipping",
             field: "shippingMethod",
             sortable: true,
@@ -443,7 +452,6 @@ export default function ProductSheet() {
         } catch (error: any) {
             console.error("Error updating product details:", error);
         }
-
     };
 
     const handleCellDoubleClick = (params: any) => {
@@ -451,9 +459,14 @@ export default function ProductSheet() {
         if (params.colDef.field === "images") {
             setSelectedImages(params.data.images); // Pass the selected cell's images
             setSelectedRowId(params.data.id); // Keep reference to the row ID that needs updating
-            setModalVisible(true);
-
+            setImageModalVisible(true);
         }
+
+        if (params.colDef.field === "components") {
+            setSelectedRowId(params.data.id); // Keep reference to the row ID that needs updating
+            setImageModalVisible(true);
+        }
+
     };
 
 
@@ -545,8 +558,8 @@ export default function ProductSheet() {
                 </div>
 
                 <ProductImageModal
-                    isVisible={isModalVisible}
-                    onClose={() => setModalVisible(false)}
+                    isVisible={isImageModalVisible}
+                    onClose={() => setImageModalVisible(false)}
                     imagesData={selectedImages}
                     onSave={handleModalSave}
                 />
