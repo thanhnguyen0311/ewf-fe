@@ -14,6 +14,7 @@ import ProductSheet from "./pages/Product/ProductSheet";
 import Users from "./pages/User/Users";
 import Permissions from "./pages/AuthPages/Permissions";
 import Shopify from "./pages/Product/Shopify";
+import InboundReceiving from "./pages/Inventory/Inbound/InboundReceiving";
 
 export default function App() {
   return (
@@ -29,7 +30,8 @@ export default function App() {
             <Route path="/order" element={<Orders />} />
             <Route path="/order/new" element={<NewOrder />} />
             <Route path="/inventory/products" element={<PInventory />} />
-            <Route path="/inventory/components" element={<CInventory />} />
+            <Route path="/inventory/inbound" element={<InboundReceiving />} />
+            <Route path="/components" element={<CInventory />} />
             <Route path="/users" element={<Users />} />
             <Route path="/permissions" element={<Permissions />} />
 

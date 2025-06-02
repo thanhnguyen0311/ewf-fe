@@ -6,7 +6,7 @@ import {ProductDetailProp, ProductDetailRequestProp, ProductInventoryProp} from 
 
 
 export const updateComponent = async (componentRequest: ComponentRequestProp): Promise<ComponentProp> => {
-    const response = await axiosInstance.put("/api/inventory/components", componentRequest, {
+    const response = await axiosInstance.put("/v1/inventory/components", componentRequest, {
         headers: {
             "Content-Type": "application/json",
         },
@@ -20,7 +20,7 @@ export const updateComponent = async (componentRequest: ComponentRequestProp): P
 };
 
 export const updateProductDetail = async (productRequest: ProductDetailRequestProp): Promise<ProductDetailProp> => {
-    const response = await axiosInstance.put(`/api/product/${productRequest.id}`, productRequest, {
+    const response = await axiosInstance.put(`/v1/product/${productRequest.id}`, productRequest, {
         headers: {
             "Content-Type": "application/json",
         },
@@ -38,7 +38,7 @@ export const updateProductDetail = async (productRequest: ProductDetailRequestPr
 export const getComponentsInventory = async (): Promise<ComponentProp[]> => {
 
     const response = await axiosInstance.get<ComponentProp[]>(
-        `/api/inventory/components`,
+        `/v1/inventory/components`,
     );
     const sortOrder = data_sort.split(',');
 
@@ -60,7 +60,7 @@ export const getComponentsInventory = async (): Promise<ComponentProp[]> => {
 
 export const getProductsInventory = async (): Promise<ProductInventoryProp[]> => {
     const response = await axiosInstance.get<ProductInventoryProp[]>(
-        `/api/inventory/products`,
+        `/v1/inventory/products`,
     );
 
     return response.data
@@ -68,7 +68,7 @@ export const getProductsInventory = async (): Promise<ProductInventoryProp[]> =>
 
 export const getProductDetails = async (): Promise<ProductDetailProp[]> => {
     const response = await axiosInstance.get<ProductDetailProp[]>(
-        `/api/product/all`,
+        `/v1/product/all`,
     );
 
     return response.data
@@ -81,7 +81,7 @@ export const productSearch= async (searchValue: string, currentPage: number) => 
         sku: searchValue,
     };
 
-    const response = await axiosInstance.post("/api/inventory/products/search", requestBody, {
+    const response = await axiosInstance.post("/v1/inventory/products/search", requestBody, {
         headers: {
             "Content-Type": "application/json",
         },
@@ -93,3 +93,4 @@ export const productSearch= async (searchValue: string, currentPage: number) => 
 
     return response.data;
 }
+

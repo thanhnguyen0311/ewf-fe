@@ -12,7 +12,6 @@ interface UrlEditorProps {
 const ImageUrlEditor: React.FC<UrlEditorProps> = ({ url, onUrlChange, onMoveTop, onMoveBottom}) => {
     const cleanedUrl = url.replace(/"/g, ''); // Remove unnecessary quotes
 
-
     return (
         <div
             style={{

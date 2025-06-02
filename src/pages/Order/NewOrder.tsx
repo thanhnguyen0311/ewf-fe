@@ -97,8 +97,8 @@ export default function NewOrder() {
                                         />
                                         <span
                                             className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-              <CalenderIcon/>
-            </span>
+                                      <CalenderIcon/>
+                                    </span>
                                     </div>
                                 </div>
                                 <div>

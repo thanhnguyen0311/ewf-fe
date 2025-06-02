@@ -4,6 +4,7 @@ import ComponentCard from "../../components/common/ComponentCard";
 import Alert from "../../components/ui/alert/Alert";
 import PageMeta from "../../components/common/PageMeta";
 
+
 export default function Alerts() {
   return (
     <>

@@ -17,22 +17,20 @@ const ProductImageModal: React.FC<ProductImageModalProps> = ({ isVisible, onClos
 
     useEffect(() => {
         if (isVisible && imagesData) {
-            setImages(imagesData); // Sync the original images
-            setEditImages(imagesData); // Reset the edit images
+            setImages(imagesData);
+            setEditImages(imagesData);
         }
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === "Escape" && isVisible) {
-                onClose(); // Close the modal when ESC is pressed
+                onClose();
             }
         };
 
-        window.addEventListener("keydown", handleKeyDown); // Add event listener
+        window.addEventListener("keydown", handleKeyDown);
 
         return () => {
-            window.removeEventListener("keydown", handleKeyDown); // Cleanup on component unmount
+            window.removeEventListener("keydown", handleKeyDown);
         };
-
-
     }, [isVisible, imagesData]);
 
 

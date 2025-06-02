@@ -43,8 +43,6 @@ export default function ProductSheet() {
         return (images.cgi?.length || 0) + (images.img?.length || 0) + (images.dim?.length || 0);
     };
 
-    // @ts-ignore
-    // @ts-ignore
     const columnDefs: (ColDef | ColGroupDef)[] = [
 
         {
