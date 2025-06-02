@@ -8,7 +8,7 @@ import {
   ChevronDownIcon, PieChartIcon, FileIcon, FolderIcon,
   GridIcon,
   HorizontaLDots,
-  PlugInIcon, PencilIcon
+  PlugInIcon, PencilIcon, TableIcon
 } from "../icons";
 import SidebarWidget from "./SidebarWidget";
 import {AuthContext} from "../context/AuthContext";
@@ -36,21 +36,21 @@ const navItems: NavItem[] = [
     ],
   },
   {
+    name: "Inventory",
+    icon: <TableIcon />,
+    subItems: [
+      { name: "Inbound Receiving", path: "/inventory/inbound", pro: false, active: true },
+      { name: "Product Inventory", path: "/inventory/products", pro: false, active: true },
+    ],
+  },
+  {
     name: "Products",
     icon: <BoxIconLine />,
     subItems: [
         { name: "Add Product", path: "/product/new", pro: false, active: true },
         { name: "Product Details", path: "/products", pro: false, active: true },
-        { name: "Shopify", path: "/product/shopify", pro: false, active: true },
-        { name: "Inventory", path: "/inventory/products", pro: false, active: true },
-    ],
-  },
-  {
-    name: "Components",
-    icon: <BoxIconLine />,
-    subItems: [
         { name: "Dimensions", path: "/", pro: false, active: true },
-        { name: "Inventory", path: "/inventory/components", pro: false, active: true },
+        { name: "Components", path: "/components", pro: false, active: true },
     ],
   },
   {
@@ -344,33 +344,7 @@ const AppSidebar: React.FC = () => {
           !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
         }`}
       >
-        <Link to="/">
-          {isExpanded || isHovered || isMobileOpen ? (
-            <>
-              <img
-                className="dark:hidden w-[100%]"
-                src="/images/logo/logo.svg"
-                alt="Logo"
-                width={150}
-                height={40}
-              />
-              {/*<img*/}
-              {/*  className="hidden dark:block"*/}
-              {/*  src="/images/logo/logo-dark.svg"*/}
-              {/*  alt="Logo"*/}
-              {/*  width={150}*/}
-              {/*  height={40}*/}
-              {/*/>*/}
-            </>
-          ) : (
-            <img
-              src="/images/logo/Luxury-icon.png"
-              alt="Logo"
-              width={60}
-              height={60}
-            />
-          )}
-        </Link>
+
       </div>
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <nav className="mb-6">

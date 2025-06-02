@@ -4,7 +4,7 @@ import {Role} from "../interfaces/Role";
 
 export const getUsers = async (): Promise<UserProp[]> => {
     const response = await axiosInstance.get<UserProp[]>(
-        `/api/users`,
+        `/v1/users`,
     );
 
     return response.data
@@ -12,14 +12,14 @@ export const getUsers = async (): Promise<UserProp[]> => {
 
 export const getRoles = async (): Promise<Role[]> => {
     const response = await axiosInstance.get<Role[]>(
-        `/api/roles`,
+        `/v1/roles`,
     );
 
     return response.data
 }
 
 export const updateUser = async (userRequestDto: UserRequestDto): Promise<UserProp> => {
-    const response = await axiosInstance.put(`/api/users`, userRequestDto, {
+    const response = await axiosInstance.put(`/v1/users`, userRequestDto, {
         headers: {
             "Content-Type": "application/json",
         },

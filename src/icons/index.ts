@@ -103,5 +103,5 @@ export {
   HorizontaLDots,
   ChevronUpIcon,
   ChatIcon,
-  MoreDotIcon,
+  MoreDotIcon
 };

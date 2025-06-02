@@ -6,9 +6,10 @@ import Loader from "../UiElements/Loader/Loader";
 import {getProductDetails, updateProductDetail} from "../../api/apiService";
 
 import { ColDef, ColGroupDef } from 'ag-grid-community';
-import {mapComponentPropToRequest, mapProductDetailPropToRequest} from "../../utils/mapFunctions";
-import {ComponentProp} from "../Inventory/Components/CInventory";
+import {mapProductDetailPropToRequest} from "../../utils/mapFunctions";
 import {ProductDetailProp} from "../../interfaces/Product";
+import {ImageProp} from "../../interfaces/Image";
+import ProductImageModal from "../UiElements/Modal/Image/ImageModal";
 
 
 
@@ -18,8 +19,10 @@ export default function ProductSheet() {
     const [error, setError] = useState<string | null>(null);
     const [forceUpdate, setForceUpdate] = useState(0);
     const gridRef = useRef<AgGridReact<any>>(null);
-    const [isZoomed, setIsZoomed] = useState(false);
-    const [zoomImage, setZoomImage] = useState<string | null>(null);
+    const [isImageModalVisible, setImageModalVisible] = useState(false);
+    const [isComponentsModalVisible, setComponentsModalVisible] = useState(false);
+    const [selectedImages, setSelectedImages] = useState<ImageProp | null>(null);
+    const [selectedRowId, setSelectedRowId] = useState<number | null>(null);
 
 
     const fetchProducts = async () => {
@@ -34,8 +37,12 @@ export default function ProductSheet() {
             setLoading(false);
         }
     }
-    // @ts-ignore
-    // @ts-ignore
+
+    const countTotalImages = (images: ImageProp): number => {
+        if (!images) return 0; // Handle cases where images might be null or undefined
+        return (images.cgi?.length || 0) + (images.img?.length || 0) + (images.dim?.length || 0);
+    };
+
     const columnDefs: (ColDef | ColGroupDef)[] = [
 
         {
@@ -62,8 +69,12 @@ export default function ProductSheet() {
             field: "localSku",
             sortable: true,
             width: 180,
+            editable: true,
             filter: "agTextColumnFilter",
-            cellStyle: {fontWeight: "600"}
+            cellStyle: {
+                fontWeight: "600",
+                border: "1px solid #ccc"
+            }
         },
         {
             headerName: "Items",
@@ -81,7 +92,11 @@ export default function ProductSheet() {
                             .map((item) => `${item.sku} (${item.quantity})`)
                             .join(" | ") || "No Components";
                     },
-                    cellStyle: { fontWeight: '500', textAlign: 'start', fontSize: '13px' },
+                    cellStyle: {
+                        fontWeight: '500',
+                        textAlign: 'start',
+                        fontSize: '13px' ,
+                        border: "1px solid #ccc"},
                 },
                 {
                     headerName: "Item1",
@@ -123,7 +138,10 @@ export default function ProductSheet() {
                         const item = components?.find((component) => component.pos === 3);
                         return item ? `${item.sku} (${item.quantity})` : null; // Return the 'sku' or null if no match
                     },
-                    cellStyle: { fontWeight: '500', fontSize: '13px' },
+                    cellStyle: {
+                        fontWeight: '500',
+                        fontSize: '13px'
+                    },
                 },
 
                 {
@@ -138,7 +156,10 @@ export default function ProductSheet() {
                         const item = components?.find((component) => component.pos === 4);
                         return item ? `${item.sku} (${item.quantity})`: null; // Return the 'sku' or null if no match
                     },
-                    cellStyle: { fontWeight: '500', fontSize: '13px' },
+                    cellStyle: {
+                        fontWeight: '500',
+                        fontSize: '13px',
+                    },
                 },
 
                 {
@@ -153,7 +174,10 @@ export default function ProductSheet() {
                         const item = components?.find((component) => component.pos === 5);
                         return item ? `${item.sku} (${item.quantity})` : null; // Return the 'sku' or null if no match
                     },
-                    cellStyle: { fontWeight: '500', fontSize: '13px' },
+                    cellStyle: {
+                        fontWeight: '500',
+                        fontSize: '13px'
+                    },
                 },
 
                 {
@@ -168,7 +192,10 @@ export default function ProductSheet() {
                         const item = components?.find((component) => component.pos === 6);
                         return item ? `${item.sku} (${item.quantity})` : null; // Return the 'sku' or null if no match
                     },
-                    cellStyle: { fontWeight: '500', fontSize: '13px' },
+                    cellStyle: {
+                        fontWeight: '500',
+                        fontSize: '13px'
+                    },
                 },
 
                 {
@@ -183,10 +210,22 @@ export default function ProductSheet() {
                         const item = components?.find((component) => component.pos === 7);
                         return item ? `${item.sku} (${item.quantity})`  : null; // Return the 'sku' or null if no match
                     },
-                    cellStyle: { fontWeight: '500', fontSize: '13px' },
+                    cellStyle: {
+                        fontWeight: '500',
+                        fontSize: '13px' },
                 },
             ],
             tooltipField: "components",
+        },
+        {
+            headerName: "Images",
+            field: "images",
+            sortable: true,
+            width: 120,
+            valueGetter: (params: any) => countTotalImages(params.data.images),
+            filter: "agTextColumnFilter",
+            cellStyle: { cursor: "pointer", border: "1px solid #ccc",textAlign: "center",fontWeight: '500',
+                fontSize: '13px' },
         },
         {
             headerName: "UPC",
@@ -212,7 +251,9 @@ export default function ProductSheet() {
             cellStyle: {
                 color: "blue",
                 fontWeight: "400",
-                textDecoration: "underline"},
+                textDecoration: "underline",
+                border: "1px solid #ccc"
+            },
         },
         {
             headerName: "Type",
@@ -241,6 +282,14 @@ export default function ProductSheet() {
         {
             headerName: "Pieces",
             field: "pieces",
+            sortable: true,
+            width: 120,
+            editable: true,
+            filter: "agTextColumnFilter",
+        },
+        {
+            headerName: "Title",
+            field: "title",
             sortable: true,
             width: 120,
             editable: true,
@@ -385,6 +434,8 @@ export default function ProductSheet() {
                 fontWeight: "500",
                 textAlign: "center",
                 textDecoration: params.data.discontinue ? "line-through" : "none",
+                border: "1px solid #ccc",
+
             };
         }
     };
@@ -394,14 +445,49 @@ export default function ProductSheet() {
         const productDetailRequestDto = mapProductDetailPropToRequest(productProp)
         try {
             const updateProduct: ProductDetailProp = await updateProductDetail(productDetailRequestDto);
-            event.node.setData(updateProduct); // Update grid row with the updated data
-            // message.success("Product details updated successfully!"); // Show success notification
+            event.node.setData(updateProduct);
+
         } catch (error: any) {
             console.error("Error updating product details:", error);
-
-            // Displaying the error using an Ant Design message or custom pop-up
-            // message.error(error.message || "An error occurred while updating the product. Please try again.");
         }
+    };
+
+    const handleCellDoubleClick = (params: any) => {
+        // Trigger modal ONLY if the double-clicked column is "Images"
+        if (params.colDef.field === "images") {
+            setSelectedImages(params.data.images); // Pass the selected cell's images
+            setSelectedRowId(params.data.id); // Keep reference to the row ID that needs updating
+            setImageModalVisible(true);
+        }
+
+        if (params.colDef.field === "components") {
+            setSelectedRowId(params.data.id); // Keep reference to the row ID that needs updating
+            setImageModalVisible(true);
+        }
+
+    };
+
+
+
+    const handleModalSave = (updatedImages: ImageProp) => {
+        setProducts((prevProducts) =>
+            prevProducts.map((product) => {
+                if (product.id === selectedRowId) {
+                    const updatedProduct = { ...product, images: updatedImages };
+
+                    // Map the updated product to the request DTO
+                    const productDetailRequestDto = mapProductDetailPropToRequest(updatedProduct);
+
+                    // Make API call to update the product details
+                    updateProductDetail(productDetailRequestDto).then(() => {
+                        console.log("Product details updated successfully!");
+                    });
+
+                    return updatedProduct;
+                }
+                return product;
+            })
+        );
 
     };
 
@@ -425,7 +511,7 @@ export default function ProductSheet() {
             <div className="flex justify-end mb-4">
                 <button
                     className="bg-brand-300 mx-2 hover:bg-brand-500 text-white font-semibold py-1.5 px-3 rounded-xl flex items-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    onClick={onExportCSV}>Export to CSV
+                    onClick={onExportCSV}>Export
                 </button>
 
                 <button
@@ -437,6 +523,7 @@ export default function ProductSheet() {
             </div>
 
             <Loader isLoading={loading}>
+                {/*Modal Section */}
 
                 <div
                     className="ag-theme-quartz shadow border rounded-xl border-gray-300"
@@ -461,12 +548,19 @@ export default function ProductSheet() {
                             };
                         }}
                         onCellValueChanged={handleCellValueChanged}
+                        onCellDoubleClicked={handleCellDoubleClick}
+
                         rowHeight={30}
                     />) : <></>}
+
                 </div>
-                {/*{isZoomed && zoomImage && (*/}
-                {/*    <ImageModal image={zoomImage} name="" toggleZoom={toggleZoom} />*/}
-                {/*)}*/}
+
+                <ProductImageModal
+                    isVisible={isImageModalVisible}
+                    onClose={() => setImageModalVisible(false)}
+                    imagesData={selectedImages}
+                    onSave={handleModalSave}
+                />
 
             </Loader>
         </>
