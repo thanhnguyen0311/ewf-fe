@@ -9,12 +9,10 @@ import {Html5QrcodeScanner} from 'html5-qrcode';
 import {ComponentInboundProp} from "../../../interfaces/Component";
 import {getComponentInbound} from "../../../api/ComponentApiService";
 import {LPNRequestProp} from "../../../interfaces/LPN";
-import LabelPreview from "../../../components/label/LabelPreview";
 import {CalenderIcon} from "../../../icons";
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import Button from "../../../components/ui/button/Button";
-import {bg} from "@fullcalendar/core/internal-common";
 import {useNotification} from "../../../context/NotificationContext";
 import Loader from "../../UiElements/Loader/Loader";
 import {BayLocationProp} from "../../../interfaces/BayLocation";
@@ -59,6 +57,7 @@ export default function InboundReceiving() {
         tagID: false,
         sku: false,
         quantity: false,
+        bayCode: false,
     });
 
 
@@ -255,15 +254,23 @@ export default function InboundReceiving() {
 
     const filterBayLocation = (value: string) => {
         if (value.trim() === "") {
-            setFilteredComponents([]); // Reset filtered results if input is empty
+            setFilteredBayLocation([]); // Reset filtered results if input is empty
             return;
         }
 
-        const results = componentInboundData.filter((component) =>
-            component.sku.toLowerCase().includes(value.toLowerCase()) || component.upc.includes(value)
+        const results = bayLocationData.filter((bay) =>
+            bay.bayCode.toLowerCase().includes(value.toLowerCase())
         );
 
-        setFilteredComponents(results); // Save matched results
+        setFilteredBayLocation(results);
+    };
+    const handleBayLocationSelect = (bay: BayLocationProp) => {
+        setLpnResquest((prevState) => ({
+            ...prevState,
+            bayCode: bay.bayCode, // Replace "newSkuValue" with the desired value
+        }));
+
+        setFilteredBayLocation([]);
     };
 
 
@@ -278,14 +285,17 @@ export default function InboundReceiving() {
         setScanTarget(type)
     }
 
+
     const handleSubmit = () => {
+
+        const isValid = bayLocationData.some((bay) => bay.bayCode === lpnRequest.bayCode);
         const newErrors: { [key: string]: boolean } = {
             tagID: !lpnRequest.tagID || lpnRequest.tagID.trim() === "",
             sku: !lpnRequest.sku || lpnRequest.sku.trim() === "",
             quantity: !lpnRequest.quantity || lpnRequest.quantity <= 0,
+            bayCode: lpnRequest.bayCode.trim() === "" ? false : !isValid,
         };
         setErrors(newErrors);
-
         // Check if there are any errors
         const hasErrors = Object.values(newErrors).some((error) => error);
 
@@ -316,6 +326,8 @@ export default function InboundReceiving() {
         }, 1000);
 
     };
+
+
 
     return (
         <>
@@ -382,14 +394,14 @@ export default function InboundReceiving() {
                                     />
                                     {/* Dropdown List */}
                                     {filteredComponents.length > 0 && (
-                                        <ul className="absolute z-10 w-full text-theme-xm bg-white border rounded shadow max-h-48 overflow-y-auto">
+                                        <ul className="absolute z-10 w-full text-theme-xm bg-white dark:bg-white border rounded shadow max-h-48 overflow-y-auto">
                                             {filteredComponents.map((component) => (
                                                 <li
                                                     key={component.sku} // Or a unique identifier
                                                     className="px-4 py-2 cursor-pointer hover:bg-gray-100"
                                                     onClick={() => handleComponentSelect(component)}
                                                 >
-                                                    {component.sku} ({component.upc})
+                                                    <p className="text-sm">{component.sku} ({component.upc})</p>
                                                 </li>
                                             ))}
                                         </ul>
@@ -492,12 +504,12 @@ export default function InboundReceiving() {
                                     type="text"
                                     value={lpnRequest.bayCode}
                                     placeholder="Enter or scan bay code"
-                                    className="w-full pr-20 px-4 py-2 border rounded"
-                                    onChange={(e) =>
-                                        setLpnResquest((prevState) => ({
-                                            ...prevState,
-                                            bayCode: e.target.value, // Replace "newSkuValue" with the desired value
-                                        }))}/>
+                                    className={`mt-1 block w-full ${
+                                        errors.bayCode ? "border-red-500" : "border-gray-300"
+                                    }`}
+                                    onChange={handleInputBayLocationChange}
+                                />
+
                                 <button
                                     type="button"
                                     onClick={() => handleScan("bayCode")}
@@ -505,6 +517,48 @@ export default function InboundReceiving() {
                                 >
                                     <img src={"/images/icons/qr-code.png"} className="w-6" alt="QR Code"/>
                                 </button>
+
+                                {errors.bayCode && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        Invalid Bay Code. Please select a valid Bay Code from the dropdown.
+                                    </p>
+                                )}
+
+                                {/* Dropdown List */}
+                                {filteredBayLocation.length > 0 && (
+                                    <ul className="absolute z-10 w-full text-theme-xm bg-white border rounded shadow max-h-48 overflow-y-auto">
+                                        {filteredBayLocation.map((bay) => {
+                                            const available = Math.max(0, bay.maxPallets - bay.capacity);
+                                            const availabilityPercentage = (available / bay.maxPallets) * 100; // Calculate percentage
+
+                                            // Determine color based on availability
+                                            const availabilityColor =
+                                                availabilityPercentage > 50
+                                                    ? "text-green-600"
+                                                    : availabilityPercentage > 0
+                                                        ? "text-yellow-600"
+                                                        : "text-red-600";
+
+
+
+                                            return (
+                                                <li
+                                                    key={bay.bayCode} // Or a unique identifier
+                                                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                                                    onClick={() => handleBayLocationSelect(bay)}
+                                                >
+                                                    <div className="flex flex-wrap text-sm items-center gap-4 text-gray-600">
+                                                        <span>Bay: <span className="font-semibold text-gray-800">{bay.bayCode}</span></span>
+                                                        <span>Zone: <span className="font-semibold text-gray-800">{bay.zone}</span></span>
+                                                        <span>Max Pallets: <span className="font-semibold text-gray-800">{bay.maxPallets}</span></span>
+                                                        <span>Available: <span className={`font-semibold text-gray-800 ${availabilityColor}`}>{available}</span></span>
+                                                    </div>
+                                                </li>
+                                            )}
+                                        )}
+                                    </ul>
+                                )}
+
                             </div>
                         </div>
 
