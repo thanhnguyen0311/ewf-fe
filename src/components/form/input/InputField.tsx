@@ -13,6 +13,7 @@ interface InputProps {
   step?: number;
   disabled?: boolean;
   success?: boolean;
+  onFocus?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: boolean;
   hint?: string; // Optional hint text
 }
@@ -24,6 +25,7 @@ const Input: FC<InputProps> = ({
   placeholder,
   value,
   onChange,
+                                 onFocus,
   className = "",
   min,
   max,
@@ -56,6 +58,7 @@ const Input: FC<InputProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        onFocus={onFocus}
         min={min}
         autoComplete = {type ? type : "off"}
         max={max}

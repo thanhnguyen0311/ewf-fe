@@ -1,5 +1,5 @@
-import {ComponentProps} from "../pages/Product/ProductDetail";
 import {ImageProp} from "./Image";
+import {ComponentProps} from "./Component";
 
 export type ProductDetailProp = {
     id: number;

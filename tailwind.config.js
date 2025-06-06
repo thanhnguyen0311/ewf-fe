@@ -3,6 +3,7 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   darkMode: "class",
+  devtool: false,
   theme: {
     fontFamily: {
       // outfit: ["Outfit", "sans-serif"],
@@ -15,6 +16,22 @@ module.exports = {
       "3xl": "2500px",
       ...defaultTheme.screens,
     },
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          enforce: "pre",
+          use: ["source-map-loader"],
+          exclude: [
+            /node_modules\/html5-qrcode/, // Exclude html5-qrcode from source map loader
+          ],
+        },
+      ],
+    },
+    stats: {
+      warningsFilter: /Failed to parse source map/, // Suppress source map warnings globally
+    },
+
     extend: {
       fontSize: {
         "title-2xl": ["72px", "90px"],

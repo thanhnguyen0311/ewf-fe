@@ -21,13 +21,13 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <AppWrapper>
-            <NotificationProvider>
-                <ThemeProvider>
-                    <AuthProvider>
+                <NotificationProvider>
+                    <ThemeProvider>
+                        <AuthProvider>
                             <App/>
-                    </AuthProvider>
-                </ThemeProvider>
-            </NotificationProvider>
+                        </AuthProvider>
+                    </ThemeProvider>
+                </NotificationProvider>
         </AppWrapper>
     </React.StrictMode>
 );

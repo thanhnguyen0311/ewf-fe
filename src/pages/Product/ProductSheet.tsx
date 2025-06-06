@@ -10,6 +10,7 @@ import {mapProductDetailPropToRequest} from "../../utils/mapFunctions";
 import {ProductDetailProp} from "../../interfaces/Product";
 import {ImageProp} from "../../interfaces/Image";
 import ProductImageModal from "../UiElements/Modal/Image/ImageModal";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 
 
 
