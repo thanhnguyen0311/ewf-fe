@@ -12,17 +12,6 @@ import {Table, TableBody, TableCell, TableHeader, TableRow} from "../../componen
 import {componentsProductContainerTableColumns} from "../../config/tableColumns";
 import {ProductProp} from "../../interfaces/Product";
 
-export type ComponentProps = {
-    id: number;
-    sku: string;
-    inventory: number;
-    finish: string;
-    category: string;
-    images: {
-        dim: string[];
-        img: string[];
-    };
-};
 
 
 

@@ -1,0 +1,35 @@
+/* Modal container for the virtual keyboard */
+.virtual-keyboard-popup {
+    position: fixed;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px; /* Smaller width for the keyboard */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    z-index: 1000; /* Ensure it always appears above */
+}
+
+/* Full-screen overlay for detecting outside clicks */
+.keyboard-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent background overlay */
+    z-index: 999; /* Below the keyboard modal */
+}
+
+/* Input styling to match the keyboard */
+.input-field {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}

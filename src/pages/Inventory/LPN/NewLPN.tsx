@@ -1,11 +1,7 @@
-import PageMeta from "../../../components/common/PageMeta";
-import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import React, {useEffect, useRef, useState} from 'react';
 import Form from "../../../components/form/Form";
-import ComponentCard from "../../../components/common/ComponentCard";
 import Label from "../../../components/form/Label";
 import Input from "../../../components/form/input/InputField";
-import {Html5QrcodeScanner} from 'html5-qrcode';
 import {ComponentInboundProp} from "../../../interfaces/Component";
 import {getComponentInbound} from "../../../api/ComponentApiService";
 import {LPNRequestProp} from "../../../interfaces/LPN";
@@ -17,6 +13,8 @@ import {useNotification} from "../../../context/NotificationContext";
 import Loader from "../../UiElements/Loader/Loader";
 import {BayLocationProp} from "../../../interfaces/BayLocation";
 import {getBayLocations} from "../../../api/BayLocationApiService";
+import {createNewLpn} from "../../../api/LpnApiService";
+import VirtualKeyboard from "../../UiElements/VirtualKeyBoard/VirtualKeyboard";
 
 
 const defaultLpnRequest: LPNRequestProp = {
@@ -29,12 +27,9 @@ const defaultLpnRequest: LPNRequestProp = {
 };
 
 
-export default function InboundReceiving() {
+export default function NewLPN() {
     const [lpnRequest, setLpnResquest] = useState<LPNRequestProp>(defaultLpnRequest);
     const [containerNumber, setContainerNumber] = useState(""); // To display captured result
-
-    const [isScanning, setIsScanning] = useState(false); // To toggle camera
-    const [scanTarget, setScanTarget] = useState("")
 
     const [componentInboundData, setComponentInboundData] = useState<ComponentInboundProp[]>([]);
     const [filteredComponents, setFilteredComponents] = useState<ComponentInboundProp[]>([]);
@@ -45,13 +40,11 @@ export default function InboundReceiving() {
     const [loading, setLoading] = useState<boolean>(true);
     const debounceTimer = useRef<NodeJS.Timeout | null>(null); // For debouncing
 
+    const [showKeyboard, setShowKeyboard] = useState("");
 
     const [showCalendar, setShowCalendar] = useState(false); // State to toggle calendar visibility
 
     const {sendNotification} = useNotification();
-
-    const [scanResult, setScanResult] = useState('');
-    const scannerRef = useRef<Html5QrcodeScanner | null>(null);
 
     const [errors, setErrors] = useState<{ [key: string]: boolean }>({
         tagID: false,
@@ -60,6 +53,30 @@ export default function InboundReceiving() {
         bayCode: false,
     });
 
+    // A debounce hook to limit state updates
+    const useDebounce = (callback: (...args: any[]) => void, delay: number) => {
+        const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+        return (...args: any[]) => {
+            if (debounceRef.current) clearTimeout(debounceRef.current);
+
+            debounceRef.current = setTimeout(() => {
+                callback(...args);
+            }, delay);
+        };
+    };
+
+    const handleKeyboardChange = useDebounce((input: string, type: string) => {
+        if (type === "tagID") handleInputTagIDChange(input)
+        if (type === "sku") handleInputSKUChange(input)
+        if (type === "containerNumber") {
+            setLpnResquest((prevState) => ({
+                ...prevState,
+                containerNumber: input,
+            }));
+        }
+        if (type === "bayCode") handleInputBayLocationChange(input)
+    }, 200);
 
     useEffect(() => {
         setLoading(true)
@@ -92,80 +109,6 @@ export default function InboundReceiving() {
     }, []);
 
 
-    useEffect(() => {
-        if (isScanning && !scannerRef.current) {
-            // Initialize scanner
-            scannerRef.current = new Html5QrcodeScanner(
-                "qr-reader", // ID of element to render scanner
-                {
-                    fps: 10,    // Frames per second
-                    qrbox: {
-                        width: 150,
-                        height: 150
-                    }
-                },
-                false // Verbose logging disabled
-            );
-
-            // Scanner success callback
-            const onScanSuccess = (decodedText: string, decodedResult: any) => {
-                setScanResult(decodedText); // Save scanned text
-                setIsScanning(false); // Stop scanning
-
-                switch (scanTarget) {
-                    case "sku":
-                        const matchedComponent = componentInboundData.find(
-                            (component) => component.upc === decodedText // Match the UPC
-                        );
-                        if (matchedComponent && decodedText.length > 0) {
-                            setLpnResquest((prevState) => ({
-                                ...prevState,
-                                sku: matchedComponent.sku,
-                            }));
-                        }
-
-                        break;
-                    case "containerNumber":
-                        setContainerNumber(decodedText);
-                        break;
-                    case "tagID":
-                        setLpnResquest((prevState) => ({
-                            ...prevState,
-                            tagID: decodedText, // Update quantity
-                        }));
-                        break;
-                    case "bayCode":
-                        setLpnResquest((prevState) => ({
-                            ...prevState,
-                            bayCode: decodedText, // Update quantity
-                        }));
-                        break;
-                    default:
-                        break;
-                }
-
-            };
-
-            // Error callback
-            const onScanError = (errorMessage: string) => {
-                console.error("Scan error:", errorMessage);
-            };
-
-            // Render scanner
-            scannerRef.current.render(onScanSuccess, onScanError);
-        }
-
-        return () => {
-            if (scannerRef.current) {
-                scannerRef.current.clear(); // Destroy scanner on unmount
-                scannerRef.current = null; // Clean up reference
-            }
-        };
-    }, [isScanning]);
-
-
-
-
     const handleInputQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const numericValue = value.replace(/[^0-9]/g, ""); // Removes any non-numeric characters
@@ -182,8 +125,19 @@ export default function InboundReceiving() {
 
     };
 
-    const handleInputSKUChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
+    const handleInputTagIDChange = (input: string) => {
+        setLpnResquest((prevState) => ({
+            ...prevState,
+            tagID: input,
+        }));
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            tagID: false,
+        }));
+    }
+
+    const handleInputSKUChange = (value: string) => {
         setLpnResquest((prevState) => ({
             ...prevState,
             sku: value, // Replace "newSkuValue" with the desired value
@@ -205,7 +159,6 @@ export default function InboundReceiving() {
         }));
     };
 
-
     const filterComponents = (value: string) => {
         if (value.trim() === "") {
             setFilteredComponents([]); // Reset filtered results if input is empty
@@ -216,7 +169,25 @@ export default function InboundReceiving() {
             component.sku.toLowerCase().includes(value.toLowerCase()) || component.upc.includes(value)
         );
 
-        setFilteredComponents(results); // Save matched results
+        // Check for an exact match
+        const exactMatch = componentInboundData.find(
+            (component) =>
+                component.sku.toLowerCase() === value.toLowerCase() || component.upc === value
+        );
+
+
+        if (exactMatch) {
+            // If there's an exact match, preselect it
+            setLpnResquest((prevState) => ({
+                ...prevState,
+                sku: exactMatch.sku, // Automatically set the SKU in state
+            }));
+
+            setFilteredComponents([]); // Clear the filteredComponents list since we autoselected
+        } else {
+            // Otherwise, set the filtered results normally
+            setFilteredComponents(results);
+        }
     };
 
     const handleComponentSelect = (component: ComponentInboundProp) => {
@@ -229,8 +200,7 @@ export default function InboundReceiving() {
     };
 
 
-    const handleInputBayLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
+    const handleInputBayLocationChange = (value: string) => {
         setLpnResquest((prevState) => ({
             ...prevState,
             bayCode: value, // Replace "newSkuValue" with the desired value
@@ -262,8 +232,29 @@ export default function InboundReceiving() {
             bay.bayCode.toLowerCase().includes(value.toLowerCase())
         );
 
-        setFilteredBayLocation(results);
+
+        // Check for an exact match
+        const exactMatch = bayLocationData.find(
+            (bay) =>
+                bay.bayCode.toLowerCase() === value.toLowerCase()
+        );
+
+
+        if (exactMatch) {
+            // If there's an exact match, preselect it
+            setLpnResquest((prevState) => ({
+                ...prevState,
+                bayCode: exactMatch.bayCode, // Automatically set the SKU in state
+            }));
+
+            setFilteredBayLocation([]); // Clear the filteredComponents list since we autoselected
+        } else {
+            // Otherwise, set the filtered results normally
+            setFilteredBayLocation(results);
+        }
     };
+
+
     const handleBayLocationSelect = (bay: BayLocationProp) => {
         setLpnResquest((prevState) => ({
             ...prevState,
@@ -281,12 +272,10 @@ export default function InboundReceiving() {
     };
 
     const handleScan = (type: string) => {
-        setIsScanning(true)
-        setScanTarget(type)
+
     }
 
-
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
 
         const isValid = bayLocationData.some((bay) => bay.bayCode === lpnRequest.bayCode);
         const newErrors: { [key: string]: boolean } = {
@@ -295,7 +284,9 @@ export default function InboundReceiving() {
             quantity: !lpnRequest.quantity || lpnRequest.quantity <= 0,
             bayCode: lpnRequest.bayCode.trim() === "" ? false : !isValid,
         };
+
         setErrors(newErrors);
+
         // Check if there are any errors
         const hasErrors = Object.values(newErrors).some((error) => error);
 
@@ -311,9 +302,10 @@ export default function InboundReceiving() {
 
         setLoading(true);
 
-        setTimeout(() => {
-            setLoading(false);
+        try {
+            await createNewLpn(lpnRequest);
 
+            // Notify user of success
             sendNotification(
                 "success",
                 "Success",
@@ -323,21 +315,23 @@ export default function InboundReceiving() {
                     autoHideDuration: 4000, // Optional: 4 seconds timeout
                 }
             );
-        }, 1000);
-
+        } catch (error) {
+            // Handle API request error
+            console.error("Error creating new LPN:", error);
+            sendNotification(
+                "error",
+                "Submission Failed",
+                "Failed to save the LPN Request. Please try again later."
+            );
+        } finally {
+            // Always reset loading state
+            setLoading(false);
+        }
     };
-
 
 
     return (
         <>
-            <PageMeta
-                title="Inbound Receiving | East West Furniture"
-                description=""
-            />
-            <PageBreadcrumb pageTitle="Inbound Receiving"/>
-
-            <ComponentCard title="Create a new LPN">
                 <Loader isLoading={loading}>
                     <Form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-6">
@@ -348,34 +342,25 @@ export default function InboundReceiving() {
                                         type="text"
                                         value={lpnRequest.tagID}
                                         placeholder="Enter or scan"
-                                        className={`mt-1 block w-full ${
+                                        className={`mt-1 block w-full pr-12 ${
                                             errors.tagID ? "border-red-500" : "border-gray-300"
                                         }`}
-                                        onChange={(e) => {
-                                            const {value} = e.target; // Extract value for better readability
-
-                                            setLpnResquest((prevState) => ({
-                                                ...prevState,
-                                                tagID: value, // Set the tagID field
-                                            }));
-
-                                            setErrors((prevErrors) => ({
-                                                ...prevErrors,
-                                                tagID: false, // Ensure `field` is defined in the scope
-                                            }));
-                                        }}
+                                        onChange={(e) => {handleInputTagIDChange(e.target.value)}}
                                     />
-
                                     <button
                                         type="button"
-                                        onClick={() => handleScan("tagID")}
-                                        className="absolute right-1 top-1/2 -translate-y-1/2 px-4 py-1 bg-transparent text-black rounded"
+                                        onClick={() => setShowKeyboard("tagID")}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
                                     >
-                                        <img src={"/images/icons/qr-code.png"} className="w-6" alt="QR Code"/>
+                                        <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
                                     </button>
+
+
                                 </div>
                                 {errors.tagID && (
-                                    <p className="text-sm text-red-500 mt-1">Tag ID is required</p>
+                                    <p className="text-sm text-red-500 mt-1">
+                                        Tag ID is required
+                                    </p>
                                 )}
 
                             </div>
@@ -390,7 +375,7 @@ export default function InboundReceiving() {
                                         className={`mt-1 block w-full ${
                                             errors.sku ? "border-red-500" : "border-gray-300"
                                         }`}
-                                        onChange={handleInputSKUChange}
+                                        onChange={(e) => handleInputSKUChange(e.target.value)}
                                     />
                                     {/* Dropdown List */}
                                     {filteredComponents.length > 0 && (
@@ -409,10 +394,10 @@ export default function InboundReceiving() {
 
                                     <button
                                         type="button"
-                                        onClick={() => handleScan("sku")}
-                                        className="absolute right-1 top-1/2 -translate-y-1/2 px-4 py-1 bg-transparent text-black rounded"
+                                        onClick={() => setShowKeyboard("sku")}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
                                     >
-                                        <img src={"/images/icons/qr-code.png"} className="w-6" alt="QR Code"/>
+                                        <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
                                     </button>
                                 </div>
 
@@ -421,6 +406,8 @@ export default function InboundReceiving() {
                                 )}
 
                             </div>
+
+
                             <div>
                                 <Label>Quantity</Label>
                                 <div className="relative w-24">
@@ -441,6 +428,8 @@ export default function InboundReceiving() {
                                 )}
 
                             </div>
+
+
                             <div>
                                 <Label>Container Number</Label>
                                 <div className="relative w-full max-w-xl">
@@ -453,49 +442,14 @@ export default function InboundReceiving() {
                                     />
                                     <button
                                         type="button"
-                                        onClick={() => handleScan("containerNumber")}
-                                        className="absolute right-1 top-1/2 -translate-y-1/2 px-4 py-1 bg-transparent text-black rounded"
+                                        onClick={() => setShowKeyboard("containerNumber")}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
                                     >
-                                        <img src={"/images/icons/qr-code.png"} className="w-6" alt="QR Code"/>
+                                        <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
                                     </button>
                                 </div>
                             </div>
-
                         </div>
-
-                        {/* Modal for QR Reader */}
-                        {isScanning && (
-                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                                <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-md">
-                                    {/* Modal Header */}
-                                    <div className="flex justify-between items-center p-4 border-b">
-                                        <h5 className="text-lg font-bold">Scan SKU</h5>
-                                        <button
-                                            onClick={() => setIsScanning(false)}
-                                            className="text-gray-500 hover:text-gray-800"
-                                        >
-                                            ✕
-                                        </button>
-                                    </div>
-
-                                    {/* Modal Body: QR Scanner */}
-                                    <div className="p-4">
-                                        <div id="qr-reader" style={{width: '100%'}}></div>
-                                    </div>
-
-                                    {/* Modal Footer (optional) */}
-                                    <div className="flex justify-end p-4 border-t">
-                                        <button
-                                            onClick={() => setIsScanning(false)}
-                                            className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded hover:bg-red-600"
-                                        >
-                                            Close
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
 
                         <div>
                             <Label>Bay Location</Label>
@@ -507,15 +461,15 @@ export default function InboundReceiving() {
                                     className={`mt-1 block w-full ${
                                         errors.bayCode ? "border-red-500" : "border-gray-300"
                                     }`}
-                                    onChange={handleInputBayLocationChange}
+                                    onChange={(e) => handleInputBayLocationChange(e.target.value)}
                                 />
 
                                 <button
                                     type="button"
-                                    onClick={() => handleScan("bayCode")}
-                                    className="absolute right-1 top-1/2 -translate-y-1/2 px-4 py-1 bg-transparent text-black rounded"
+                                    onClick={() => setShowKeyboard("bayCode")}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
                                 >
-                                    <img src={"/images/icons/qr-code.png"} className="w-6" alt="QR Code"/>
+                                    <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
                                 </button>
 
                                 {errors.bayCode && (
@@ -528,33 +482,38 @@ export default function InboundReceiving() {
                                 {filteredBayLocation.length > 0 && (
                                     <ul className="absolute z-10 w-full text-theme-xm bg-white border rounded shadow max-h-48 overflow-y-auto">
                                         {filteredBayLocation.map((bay) => {
-                                            const available = Math.max(0, bay.maxPallets - bay.capacity);
-                                            const availabilityPercentage = (available / bay.maxPallets) * 100; // Calculate percentage
+                                                const available = Math.max(0, bay.maxPallets - bay.capacity);
+                                                const availabilityPercentage = (available / bay.maxPallets) * 100; // Calculate percentage
 
-                                            // Determine color based on availability
-                                            const availabilityColor =
-                                                availabilityPercentage > 50
-                                                    ? "text-green-600"
-                                                    : availabilityPercentage > 0
-                                                        ? "text-yellow-600"
-                                                        : "text-red-600";
+                                                // Determine color based on availability
+                                                const availabilityColor =
+                                                    availabilityPercentage > 50
+                                                        ? "text-green-600"
+                                                        : availabilityPercentage > 0
+                                                            ? "text-yellow-600"
+                                                            : "text-red-600";
 
 
-
-                                            return (
-                                                <li
-                                                    key={bay.bayCode} // Or a unique identifier
-                                                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                                                    onClick={() => handleBayLocationSelect(bay)}
-                                                >
-                                                    <div className="flex flex-wrap text-sm items-center gap-4 text-gray-600">
-                                                        <span>Bay: <span className="font-semibold text-gray-800">{bay.bayCode}</span></span>
-                                                        <span>Zone: <span className="font-semibold text-gray-800">{bay.zone}</span></span>
-                                                        <span>Max Pallets: <span className="font-semibold text-gray-800">{bay.maxPallets}</span></span>
-                                                        <span>Available: <span className={`font-semibold text-gray-800 ${availabilityColor}`}>{available}</span></span>
-                                                    </div>
-                                                </li>
-                                            )}
+                                                return (
+                                                    <li
+                                                        key={bay.bayCode} // Or a unique identifier
+                                                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                                                        onClick={() => handleBayLocationSelect(bay)}
+                                                    >
+                                                        <div
+                                                            className="flex flex-wrap text-sm items-center gap-4 text-gray-600">
+                                                            <span>Bay: <span
+                                                                className="font-semibold text-gray-800">{bay.bayCode}</span></span>
+                                                            <span>Zone: <span
+                                                                className="font-semibold text-gray-800">{bay.zone}</span></span>
+                                                            <span>Max Pallets: <span
+                                                                className="font-semibold text-gray-800">{bay.maxPallets}</span></span>
+                                                            <span>Available: <span
+                                                                className={`font-semibold text-gray-800 ${availabilityColor}`}>{available}</span></span>
+                                                        </div>
+                                                    </li>
+                                                )
+                                            }
                                         )}
                                     </ul>
                                 )}
@@ -582,14 +541,12 @@ export default function InboundReceiving() {
                                 >
                                     <CalenderIcon/>
                                 </span>
-
                             </div>
 
                             {showCalendar && (
                                 <div className="absolute z-10 mt-2 bg-white border rounded shadow-lg">
                                     <Flatpickr
                                         className="p-2"
-
                                         options={{
                                             enableTime: false,
                                             dateFormat: "Y-m-d",
@@ -606,17 +563,25 @@ export default function InboundReceiving() {
                                     />
                                 </div>
                             )}
-                        </div>
 
+                            {showKeyboard && (
+                                <div className="keyboard-overlay">
+                                    <VirtualKeyboard
+                                        input={lpnRequest.tagID}
+                                        onChange={(input) => {if (showKeyboard) handleKeyboardChange(input, showKeyboard)}}
+                                        onClose={() => setShowKeyboard("")} // Close keyboard modal
+                                    />
+                                </div>
+                            )}
+                        </div>
 
                         <Button size="sm"
                                 variant="outline"
-                                onClick={handleSubmit}>
+                                type="submit">
                             Save
                         </Button>
                     </Form>
                 </Loader>
-            </ComponentCard>
         </>
     )
 }
