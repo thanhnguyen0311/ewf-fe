@@ -3,7 +3,7 @@ import React, {ReactNode} from "react";
 interface ButtonProps {
     children: ReactNode; // Button text or content
     size?: "sm" | "md" | "xs"; // Button size
-    variant?: "primary" | "outline"; // Button variant
+    variant?: "primary" | "outline" | "normal"; // Button variant
     startIcon?: ReactNode; // Icon before the text
     endIcon?: ReactNode; // Icon after the text
     onClick?: () => void; // Click handler
@@ -23,6 +23,7 @@ const Button: React.FC<ButtonProps> = ({
                                            disabled = false,
                                            type = "button"
                                        }) => {
+
     // Size Classes
     const sizeClasses = {
         xs: "px-3 py-2 text-xs",
@@ -36,6 +37,8 @@ const Button: React.FC<ButtonProps> = ({
             "bg-brand-400 text-white shadow-theme-xs hover:bg-brand-500 disabled:bg-brand-300",
         outline:
             "bg-transparent text-orange-500 ring-1 ring-inset ring-orange-500 hover:bg-orange-50 dark:hover:bg-orange-50/[0.1]",
+        normal:
+            "bg-transparent text-gray-500 ring-1 ring-inset ring-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300", // Normal button styles
     };
 
     return (

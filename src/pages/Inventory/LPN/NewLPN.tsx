@@ -8,12 +8,12 @@ import {LPNRequestProp} from "../../../interfaces/LPN";
 import {CalenderIcon} from "../../../icons";
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import jsPDF from "jspdf";
 import Button from "../../../components/ui/button/Button";
 import {useNotification} from "../../../context/NotificationContext";
 import Loader from "../../UiElements/Loader/Loader";
 import {BayLocationProp} from "../../../interfaces/BayLocation";
 import {getBayLocations} from "../../../api/BayLocationApiService";
-import {createNewLpn} from "../../../api/LpnApiService";
 import VirtualKeyboard from "../../UiElements/VirtualKeyBoard/VirtualKeyboard";
 
 
@@ -29,7 +29,6 @@ const defaultLpnRequest: LPNRequestProp = {
 
 export default function NewLPN() {
     const [lpnRequest, setLpnResquest] = useState<LPNRequestProp>(defaultLpnRequest);
-    const [containerNumber, setContainerNumber] = useState(""); // To display captured result
 
     const [componentInboundData, setComponentInboundData] = useState<ComponentInboundProp[]>([]);
     const [filteredComponents, setFilteredComponents] = useState<ComponentInboundProp[]>([]);
@@ -41,6 +40,7 @@ export default function NewLPN() {
     const debounceTimer = useRef<NodeJS.Timeout | null>(null); // For debouncing
 
     const [showKeyboard, setShowKeyboard] = useState("");
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const [showCalendar, setShowCalendar] = useState(false); // State to toggle calendar visibility
 
@@ -108,22 +108,6 @@ export default function NewLPN() {
         fetchComponentInboundData();
     }, []);
 
-
-    const handleInputQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        const numericValue = value.replace(/[^0-9]/g, ""); // Removes any non-numeric characters
-        setLpnResquest((prevState) => ({
-            ...prevState,
-            quantity: numericValue === "" ? 0 : parseInt(numericValue, 10), // Update quantity
-        }));
-
-        // Clear validation error immediately after fixing the field
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            quantity: false,
-        }));
-
-    };
 
     const handleInputTagIDChange = (input: string) => {
         setLpnResquest((prevState) => ({
@@ -271,10 +255,6 @@ export default function NewLPN() {
         return date.toISOString().split("T")[0]; // Extract "YYYY-MM-DD"
     };
 
-    const handleScan = (type: string) => {
-
-    }
-
     const handleSubmit = async () => {
 
         const isValid = bayLocationData.some((bay) => bay.bayCode === lpnRequest.bayCode);
@@ -303,7 +283,7 @@ export default function NewLPN() {
         setLoading(true);
 
         try {
-            await createNewLpn(lpnRequest);
+            // await createNewLpn(lpnRequest);
 
             // Notify user of success
             sendNotification(
@@ -315,6 +295,9 @@ export default function NewLPN() {
                     autoHideDuration: 4000, // Optional: 4 seconds timeout
                 }
             );
+            setIsSubmitted(true);
+            handlePrintLabel()
+
         } catch (error) {
             // Handle API request error
             console.error("Error creating new LPN:", error);
@@ -329,259 +312,358 @@ export default function NewLPN() {
         }
     };
 
+    const generateZPL = (data : LPNRequestProp) => {
+        return `
+        ^XA
+        ^FO50,50^A0N,50,50^FDLabel Details^FS
+        ^FO50,120^A0N,40,40^FDTag ID: ${data.tagID}^FS
+        ^FO50,180^A0N,40,40^FDSKU: ${data.sku}^FS
+        ^FO50,240^A0N,40,40^FDQuantity: ${data.quantity}^FS
+        ^FO50,300^A0N,40,40^FDBay Code: ${data.bayCode}^FS
+        ^FO50,360^A0N,40,40^FDDate: ${data.date}^FS  
+        ^FO50,420^A0N,40,40^FDContainer Number: ${data.containerNumber}^FS
+        ^XZ
+
+    `;
+    };
+
+    const downloadLpnRequestAsPdf = (lpnRequest: LPNRequestProp) => {
+        // Create a new PDF document
+        const doc = new jsPDF();
+
+        // Add title
+        doc.setFont("Helvetica", "bold");
+        doc.setFontSize(16);
+        doc.text("LPN Request Details", 10, 10);
+
+        // Add `lpnRequest` data to the PDF
+        doc.setFontSize(12);
+        doc.setFont("Helvetica", "normal");
+        doc.text(`Tag ID: ${lpnRequest.tagID}`, 10, 30);
+        doc.text(`SKU: ${lpnRequest.sku}`, 10, 40);
+        doc.text(`Container Number: ${lpnRequest.containerNumber}`, 10, 50);
+        doc.text(`Quantity: ${lpnRequest.quantity}`, 10, 60);
+        doc.text(`Bay Code: ${lpnRequest.bayCode}`, 10, 70);
+        doc.text(`Date: ${new Date(lpnRequest.date).toLocaleString()}`, 10, 80); // Format date
+
+        doc.save("lpn-request-details.pdf");
+    };
+
+
+    const handlePrintLabel = () => {
+        console.log("Printing label...");
+        console.log(generateZPL(lpnRequest))
+        downloadLpnRequestAsPdf(lpnRequest)
+        // Add logic for printing the label here
+    };
+
 
     return (
         <>
-                <Loader isLoading={loading}>
-                    <Form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="space-y-6">
-                            <div>
-                                <Label>RFID Tag ID</Label>
-                                <div className="relative w-full max-w-xl">
-                                    <Input
-                                        type="text"
-                                        value={lpnRequest.tagID}
-                                        placeholder="Enter or scan"
-                                        className={`mt-1 block w-full pr-12 ${
-                                            errors.tagID ? "border-red-500" : "border-gray-300"
-                                        }`}
-                                        onChange={(e) => {handleInputTagIDChange(e.target.value)}}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowKeyboard("tagID")}
-                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
-                                    >
-                                        <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
-                                    </button>
-
-
-                                </div>
-                                {errors.tagID && (
-                                    <p className="text-sm text-red-500 mt-1">
-                                        Tag ID is required
-                                    </p>
-                                )}
-
-                            </div>
-
-                            <div>
-                                <Label>SKU</Label>
-                                <div className="relative w-full max-w-xl">
-                                    <Input
-                                        type="text"
-                                        value={lpnRequest.sku}
-                                        placeholder="Enter or scan"
-                                        className={`mt-1 block w-full ${
-                                            errors.sku ? "border-red-500" : "border-gray-300"
-                                        }`}
-                                        onChange={(e) => handleInputSKUChange(e.target.value)}
-                                    />
-                                    {/* Dropdown List */}
-                                    {filteredComponents.length > 0 && (
-                                        <ul className="absolute z-10 w-full text-theme-xm bg-white dark:bg-white border rounded shadow max-h-48 overflow-y-auto">
-                                            {filteredComponents.map((component) => (
-                                                <li
-                                                    key={component.sku} // Or a unique identifier
-                                                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                                                    onClick={() => handleComponentSelect(component)}
-                                                >
-                                                    <p className="text-sm">{component.sku} ({component.upc})</p>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
-
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowKeyboard("sku")}
-                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
-                                    >
-                                        <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
-                                    </button>
-                                </div>
-
-                                {errors.sku && (
-                                    <p className="text-sm text-red-500 mt-1">SKU is required</p>
-                                )}
-
-                            </div>
-
-
-                            <div>
-                                <Label>Quantity</Label>
-                                <div className="relative w-24">
-                                    <Input
-                                        type="number"
-                                        value={lpnRequest.quantity}
-                                        placeholder="Enter number of items"
-                                        className={`mt-1 block w-full ${
-                                            errors.quantity ? "border-red-500" : "border-gray-300"
-                                        }`}
-                                        onChange={handleInputQuantityChange}
-                                    />
-                                </div>
-                                {errors.quantity && (
-                                    <p className="text-sm text-red-500 mt-1">
-                                        Quantity must be greater than 0
-                                    </p>
-                                )}
-
-                            </div>
-
-
-                            <div>
-                                <Label>Container Number</Label>
-                                <div className="relative w-full max-w-xl">
-                                    <Input
-                                        type="text"
-                                        value={containerNumber}
-                                        placeholder="Enter or scan"
-                                        className="w-full pr-20 px-4 py-2 border rounded"
-                                        onChange={(e) => setContainerNumber(e.target.value)}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowKeyboard("containerNumber")}
-                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
-                                    >
-                                        <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
+            <Loader isLoading={loading}>
+                <Form onSubmit={() => {
+                }} className="space-y-4">
+                    <div className="space-y-6">
                         <div>
-                            <Label>Bay Location</Label>
+                            <Label className="ml-1 font-semibold">RFID Tag ID</Label>
                             <div className="relative w-full max-w-xl">
                                 <Input
                                     type="text"
-                                    value={lpnRequest.bayCode}
-                                    placeholder="Enter or scan bay code"
-                                    className={`mt-1 block w-full ${
-                                        errors.bayCode ? "border-red-500" : "border-gray-300"
+                                    value={lpnRequest.tagID}
+                                    placeholder="Enter or scan"
+                                    className={`mt-1 block w-full bg-white pr-12 ${
+                                        errors.tagID ? "border-red-500" : "border-gray-300"
                                     }`}
-                                    onChange={(e) => handleInputBayLocationChange(e.target.value)}
+                                    onChange={(e) => {
+                                        handleInputTagIDChange(e.target.value)
+                                    }}
+                                    disabled={isSubmitted}
                                 />
-
-                                <button
+                                {!isSubmitted && <button
                                     type="button"
-                                    onClick={() => setShowKeyboard("bayCode")}
+                                    onClick={() => setShowKeyboard("tagID")}
                                     className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
                                 >
                                     <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
-                                </button>
+                                </button>}
 
-                                {errors.bayCode && (
-                                    <p className="text-red-500 text-sm mt-1">
-                                        Invalid Bay Code. Please select a valid Bay Code from the dropdown.
-                                    </p>
-                                )}
-
-                                {/* Dropdown List */}
-                                {filteredBayLocation.length > 0 && (
-                                    <ul className="absolute z-10 w-full text-theme-xm bg-white border rounded shadow max-h-48 overflow-y-auto">
-                                        {filteredBayLocation.map((bay) => {
-                                                const available = Math.max(0, bay.maxPallets - bay.capacity);
-                                                const availabilityPercentage = (available / bay.maxPallets) * 100; // Calculate percentage
-
-                                                // Determine color based on availability
-                                                const availabilityColor =
-                                                    availabilityPercentage > 50
-                                                        ? "text-green-600"
-                                                        : availabilityPercentage > 0
-                                                            ? "text-yellow-600"
-                                                            : "text-red-600";
-
-
-                                                return (
-                                                    <li
-                                                        key={bay.bayCode} // Or a unique identifier
-                                                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                                                        onClick={() => handleBayLocationSelect(bay)}
-                                                    >
-                                                        <div
-                                                            className="flex flex-wrap text-sm items-center gap-4 text-gray-600">
-                                                            <span>Bay: <span
-                                                                className="font-semibold text-gray-800">{bay.bayCode}</span></span>
-                                                            <span>Zone: <span
-                                                                className="font-semibold text-gray-800">{bay.zone}</span></span>
-                                                            <span>Max Pallets: <span
-                                                                className="font-semibold text-gray-800">{bay.maxPallets}</span></span>
-                                                            <span>Available: <span
-                                                                className={`font-semibold text-gray-800 ${availabilityColor}`}>{available}</span></span>
-                                                        </div>
-                                                    </li>
-                                                )
-                                            }
-                                        )}
-                                    </ul>
-                                )}
 
                             </div>
+                            {errors.tagID && (
+                                <p className="text-sm text-red-500 mt-1">
+                                    Tag ID is required
+                                </p>
+                            )}
+
                         </div>
 
                         <div>
-                            <Label htmlFor="datePicker">Date</Label>
-                            <div className="relative w-full max-w-xl"
-                            >
+                            <Label className="ml-1 font-semibold">SKU</Label>
+                            <div className="relative w-full max-w-xl">
                                 <Input
-                                    type="date"
-                                    id="datePicker"
-                                    name="datePicker"
-                                    value={formatDateForInput(lpnRequest.date)}
-                                    onChange={(e) => {
-                                        const newDate = new Date(e.target.value);
-                                        setLpnResquest({...lpnRequest, date: newDate.toISOString()});
-                                    }}
+                                    type="text"
+                                    value={lpnRequest.sku}
+                                    placeholder="Enter or scan"
+                                    className={`mt-1 block w-full bg-white ${
+                                        errors.sku ? "border-red-500" : "border-gray-300"
+                                    }`}
+                                    onChange={(e) => handleInputSKUChange(e.target.value)}
+                                    disabled={isSubmitted}
                                 />
-                                <span
-                                    className="absolute text-gray-500 -translate-y-1/2 right-3 top-1/2 dark:text-gray-400"
-                                    onClick={() => setShowCalendar(!showCalendar)}
+                                {/* Dropdown List */}
+                                {filteredComponents.length > 0 && (
+                                    <ul className="absolute z-10 w-full text-theme-xm bg-white dark:bg-white border rounded shadow max-h-48 overflow-y-auto">
+                                        {filteredComponents.map((component) => (
+                                            <li
+                                                key={component.sku} // Or a unique identifier
+                                                className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                                                onClick={() => handleComponentSelect(component)}
+                                            >
+                                                <p className="text-sm">{component.sku} ({component.upc})</p>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+
+                                {!isSubmitted && <button
+                                    type="button"
+                                    onClick={() => setShowKeyboard("sku")}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
                                 >
-                                    <CalenderIcon/>
-                                </span>
+                                    <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
+                                </button>}
                             </div>
 
-                            {showCalendar && (
-                                <div className="absolute z-10 mt-2 bg-white border rounded shadow-lg">
-                                    <Flatpickr
-                                        className="p-2"
-                                        options={{
-                                            enableTime: false,
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: lpnRequest.date,
-                                            clickOpens: true
-
-                                        }}
-                                        value={lpnRequest.date}
-                                        onChange={(selectedDates) => {
-                                            const newDate = selectedDates[0]?.toISOString() || "";
-                                            setLpnResquest({...lpnRequest, date: newDate});
-                                            setShowCalendar(false); // Hide calendar after selection
-                                        }}
-                                    />
-                                </div>
+                            {errors.sku && (
+                                <p className="text-sm text-red-500 mt-1">SKU is required</p>
                             )}
 
-                            {showKeyboard && (
-                                <div className="keyboard-overlay">
-                                    <VirtualKeyboard
-                                        input={lpnRequest.tagID}
-                                        onChange={(input) => {if (showKeyboard) handleKeyboardChange(input, showKeyboard)}}
-                                        onClose={() => setShowKeyboard("")} // Close keyboard modal
-                                    />
-                                </div>
+                        </div>
+
+
+                        <div>
+                            <Label className="ml-1 font-semibold">Quantity</Label>
+                            <div className="flex items-center w-40 relative">
+                                {!isSubmitted && <button
+                                    className="px-2 mx-2 py-1 bg-gray-200 border border-gray-300 rounded-r-md hover:bg-gray-300"
+                                    onClick={() => setLpnResquest((prev) => ({
+                                        ...prev,
+                                        quantity: prev.quantity + 1, // Increase quantity
+                                    }))}
+                                >
+                                    +
+                                </button>}
+                                <Input
+                                    type="number"
+                                    value={lpnRequest.quantity}
+                                    placeholder="Enter number of items"
+                                    className={`w-full text-theme-sm font-semibold text-center ${
+                                        errors.quantity ? "border-red-500" : "border-gray-300"
+                                    }`}
+                                    onChange={(e) =>
+                                        setLpnResquest((prev) => ({
+                                            ...prev,
+                                            quantity: parseInt(e.target.value) || 0,
+                                        }))
+                                    }
+                                    disabled={isSubmitted}
+                                />
+                                {!isSubmitted && <button
+                                    className="px-2 mx-2 py-1 bg-gray-200 border border-gray-300 rounded-l-md hover:bg-gray-300"
+                                    onClick={() => setLpnResquest((prev) => ({
+                                        ...prev,
+                                        quantity: Math.max(prev.quantity - 1, 0), // Decrease quantity, but not below 0
+                                    }))}
+                                >
+                                    –
+                                </button>}
+                            </div>
+                            {errors.quantity && (
+                                <p className="text-sm text-red-500 mt-1">
+                                    Quantity must be greater than 0
+                                </p>
                             )}
                         </div>
 
-                        <Button size="sm"
-                                variant="outline"
-                                type="submit">
-                            Save
-                        </Button>
-                    </Form>
-                </Loader>
+
+                        <div>
+                            <Label className="ml-1 font-semibold">Container Number</Label>
+                            <div className="relative w-full bg-white max-w-xl">
+                                <Input
+                                    type="text"
+                                    value={lpnRequest.containerNumber}
+                                    placeholder="Enter or scan"
+                                    className="w-full pr-20 px-4 py-2 border rounded"
+                                    onChange={(e) => setLpnResquest((prev) => ({
+                                        ...prev,
+                                        containerNumber: e.target.value,
+                                    }))
+                                    }
+                                    disabled={isSubmitted}
+                                />
+                                {!isSubmitted && <button
+                                    type="button"
+                                    onClick={() => setShowKeyboard("containerNumber")}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
+                                >
+                                    <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
+                                </button>}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <Label className="ml-1 font-semibold">Bay Location</Label>
+                        <div className="relative w-full max-w-xl">
+                            <Input
+                                type="text"
+                                value={lpnRequest.bayCode}
+                                placeholder="Enter or scan"
+                                disabled={isSubmitted}
+                                className={`mt-1 block bg-white w-full ${
+                                    errors.bayCode ? "border-red-500" : "border-gray-300"
+                                }`}
+                                onChange={(e) => handleInputBayLocationChange(e.target.value)}
+                            />
+
+                            {!isSubmitted && <button
+                                type="button"
+                                onClick={() => setShowKeyboard("bayCode")}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
+                            >
+                                <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
+                            </button>}
+
+                            {errors.bayCode && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    Invalid Bay Code. Please select a valid Bay Code from the dropdown.
+                                </p>
+                            )}
+
+                            {/* Dropdown List */}
+                            {filteredBayLocation.length > 0 && (
+                                <ul className="absolute z-10 w-full text-theme-xm bg-white border rounded shadow max-h-48 overflow-y-auto">
+                                    {filteredBayLocation.map((bay) => {
+                                            const available = Math.max(0, bay.maxPallets - bay.capacity);
+                                            const availabilityPercentage = (available / bay.maxPallets) * 100; // Calculate percentage
+
+                                            // Determine color based on availability
+                                            const availabilityColor =
+                                                availabilityPercentage > 50
+                                                    ? "text-green-600"
+                                                    : availabilityPercentage > 0
+                                                        ? "text-yellow-600"
+                                                        : "text-red-600";
+
+
+                                            return (
+                                                <li
+                                                    key={bay.bayCode} // Or a unique identifier
+                                                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                                                    onClick={() => handleBayLocationSelect(bay)}
+                                                >
+                                                    <div
+                                                        className="flex flex-wrap text-sm items-center gap-4 text-gray-600">
+                                                                <span>Bay: <span
+                                                                    className="font-semibold text-gray-800">{bay.bayCode}</span></span>
+                                                        <span>Zone: <span
+                                                            className="font-semibold text-gray-800">{bay.zone}</span></span>
+                                                        <span>Max Pallets: <span
+                                                            className="font-semibold text-gray-800">{bay.maxPallets}</span></span>
+                                                        <span>Available: <span
+                                                            className={`font-semibold text-gray-800 ${availabilityColor}`}>{available}</span></span>
+                                                    </div>
+                                                </li>
+                                            )
+                                        }
+                                    )}
+                                </ul>
+                            )}
+
+                        </div>
+                    </div>
+
+                    <div>
+                        <Label htmlFor="datePicker" className="ml-1 font-semibold">Date</Label>
+                        <div className="relative w-full bg-white max-w-xl"
+                        >
+                            <Input
+                                type="date"
+                                id="datePicker"
+                                disabled={isSubmitted}
+                                name="datePicker"
+                                value={formatDateForInput(lpnRequest.date)}
+                                onChange={(e) => {
+                                    const newDate = new Date(e.target.value);
+                                    setLpnResquest({...lpnRequest, date: newDate.toISOString()});
+                                }}
+                            />
+                            <span
+                                className="absolute text-gray-500 -translate-y-1/2 right-3 top-1/2 dark:text-gray-400"
+                                onClick={() => setShowCalendar(!showCalendar)}
+                            >
+                                        <CalenderIcon/>
+                                    </span>
+                        </div>
+
+                        {showCalendar && !isSubmitted && (
+                            <div className="absolute z-10 mt-2 bg-white border rounded shadow-lg">
+                                <Flatpickr
+                                    className="p-2"
+                                    options={{
+                                        enableTime: false,
+                                        dateFormat: "Y-m-d",
+                                        defaultDate: lpnRequest.date,
+                                        clickOpens: true
+
+                                    }}
+                                    value={lpnRequest.date}
+                                    onChange={(selectedDates) => {
+                                        const newDate = selectedDates[0]?.toISOString() || "";
+                                        setLpnResquest({...lpnRequest, date: newDate});
+                                        setShowCalendar(false); // Hide calendar after selection
+                                    }}
+                                />
+                            </div>
+                        )}
+
+                        {showKeyboard && (
+                            <div className="keyboard-overlay">
+                                <VirtualKeyboard
+                                    input={lpnRequest.tagID}
+                                    onChange={(input) => {
+                                        if (showKeyboard) handleKeyboardChange(input, showKeyboard)
+                                    }}
+                                    onClose={() => setShowKeyboard("")} // Close keyboard modal
+                                />
+                            </div>
+                        )}
+                    </div>
+                    <div className="mt-4 flex space-x-4">
+                        {!isSubmitted ? (<>
+                                <Button size="sm"
+                                        variant="outline"
+                                        onClick={handleSubmit}>
+                                    Save
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant="normal"
+                                    onClick={() => setLpnResquest(defaultLpnRequest)}>
+                                    Reset
+                                </Button>
+                            </>) :
+                            <Button
+                                size="sm"
+                                variant="primary"
+                                onClick={handlePrintLabel} // Print Label handler
+                            >
+                                Print
+                            </Button>
+                        }
+                    </div>
+                </Form>
+            </Loader>
         </>
     )
 }
