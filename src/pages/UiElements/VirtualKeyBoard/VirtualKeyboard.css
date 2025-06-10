@@ -1,10 +1,10 @@
 /* Modal container for the virtual keyboard */
 .virtual-keyboard-popup {
     position: fixed;
-    bottom: 20%;
+    bottom: 5%;
     left: 50%;
     transform: translateX(-50%);
-    width: 320px; /* Smaller width for the keyboard */
+    width: 380px; /* Smaller width for the keyboard */
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 10px;
