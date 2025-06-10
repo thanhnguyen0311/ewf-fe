@@ -15,6 +15,7 @@ import Loader from "../../UiElements/Loader/Loader";
 import {BayLocationProp} from "../../../interfaces/BayLocation";
 import {getBayLocations} from "../../../api/BayLocationApiService";
 import VirtualKeyboard from "../../UiElements/VirtualKeyBoard/VirtualKeyboard";
+import {createNewLpn} from "../../../api/LpnApiService";
 
 
 const defaultLpnRequest: LPNRequestProp = {
@@ -283,7 +284,7 @@ export default function NewLPN() {
         setLoading(true);
 
         try {
-            // await createNewLpn(lpnRequest);
+            await createNewLpn(lpnRequest);
 
             // Notify user of success
             sendNotification(
@@ -296,7 +297,6 @@ export default function NewLPN() {
                 }
             );
             setIsSubmitted(true);
-            handlePrintLabel()
 
         } catch (error) {
             // Handle API request error
@@ -307,57 +307,135 @@ export default function NewLPN() {
                 "Failed to save the LPN Request. Please try again later."
             );
         } finally {
-            // Always reset loading state
             setLoading(false);
         }
     };
 
-    const generateZPL = (data : LPNRequestProp) => {
+
+    const generateZplLabel = (lpnRequest: LPNRequestProp, upc: string): string => {
         return `
         ^XA
-        ^FO50,50^A0N,50,50^FDLabel Details^FS
-        ^FO50,120^A0N,40,40^FDTag ID: ${data.tagID}^FS
-        ^FO50,180^A0N,40,40^FDSKU: ${data.sku}^FS
-        ^FO50,240^A0N,40,40^FDQuantity: ${data.quantity}^FS
-        ^FO50,300^A0N,40,40^FDBay Code: ${data.bayCode}^FS
-        ^FO50,360^A0N,40,40^FDDate: ${data.date}^FS  
-        ^FO50,420^A0N,40,40^FDContainer Number: ${data.containerNumber}^FS
-        ^XZ
+        ^PW576          ; Set label width to 576 dots (2.84 inches)
+        ^LL384          ; Set label height to 384 dots (1.96 inches)
 
+        ; Set font size for smaller labels (30 dots)
+        ^CF0,40
+        ; SKU Label (Small Font)
+        ^FO30,30^FDSKU:^FS
+        ; SKU Value (Larger Font)
+        ^CF0,55
+        ^FO240,30^FD${lpnRequest.sku}^FS
+
+        ; Quantity Label (Small Font)
+        ^CF0,40
+        ^FO30,100^FDQty:^FS
+        ; Quantity Value (Larger Font)
+        ^CF0,55
+        ^FO240,100^FD${lpnRequest.quantity}^FS
+        
+        ; Container Number Label (Small Font)
+        ^CF0,40
+        ^FO30,170^FDContainer:^FS
+        ; Container Number Value (Larger Font)
+        ^CF0,55
+        ^FO240,170^FD${lpnRequest.containerNumber}^FS
+
+        ; Date Label (Small Font)
+        ^CF0,40
+        ^FO30,240^FDDate:^FS
+        ; Date Value (Larger Font)
+        ^CF0,55
+        ^FO240,240^FD${new Date(lpnRequest.date).toLocaleDateString()}^FS
+        
+        ; Barcode for UPC at the bottom
+        ^FO40,320^BY4,3,70      ; Set bar thickness (BY3), spacing (2), and height (60 dots)
+        ^BCN,100,Y,N            ; Code 128 Barcode, 100 dots high, display value below barcode (Y)
+        ^FD${upc}^FS            ; Print the UPC as the barcode
+
+        ^XZ
     `;
     };
 
-    const downloadLpnRequestAsPdf = (lpnRequest: LPNRequestProp) => {
-        // Create a new PDF document
-        const doc = new jsPDF();
-
-        // Add title
-        doc.setFont("Helvetica", "bold");
-        doc.setFontSize(16);
-        doc.text("LPN Request Details", 10, 10);
-
-        // Add `lpnRequest` data to the PDF
-        doc.setFontSize(12);
-        doc.setFont("Helvetica", "normal");
-        doc.text(`Tag ID: ${lpnRequest.tagID}`, 10, 30);
-        doc.text(`SKU: ${lpnRequest.sku}`, 10, 40);
-        doc.text(`Container Number: ${lpnRequest.containerNumber}`, 10, 50);
-        doc.text(`Quantity: ${lpnRequest.quantity}`, 10, 60);
-        doc.text(`Bay Code: ${lpnRequest.bayCode}`, 10, 70);
-        doc.text(`Date: ${new Date(lpnRequest.date).toLocaleString()}`, 10, 80); // Format date
-
-        doc.save("lpn-request-details.pdf");
-    };
-
-
     const handlePrintLabel = () => {
-        console.log("Printing label...");
-        console.log(generateZPL(lpnRequest))
-        downloadLpnRequestAsPdf(lpnRequest)
-        // Add logic for printing the label here
+        const component = componentInboundData.find((item) => item.sku === lpnRequest.sku);
+        const upc = component ? component.upc : "";
+        const zpl = generateZplLabel(lpnRequest, upc);
+
+        // Create a Blob object with the ZPL data
+        const blob = new Blob([zpl], {type: "application/octet-stream"});
+
+        // If the browser is Safari, use a different approach
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        if (isSafari) {
+            // Create a file URL and open it in a new tab
+            const reader = new FileReader();
+            reader.onloadend = function () {
+                const link = document.createElement("a");
+                link.href = reader.result as string;
+                link.download = "label.zpl";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+            reader.readAsDataURL(blob);
+        } else {
+            // For other browsers, use the usual method
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "label.zpl";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     };
 
+    const handlePrintSKULabel = () => {
+        if (!lpnRequest.sku) {
+            return;
+        }
+        const component = componentInboundData.find((item) => item.sku === lpnRequest.sku);
+        const upc = component ? component.upc : "";
+        const zpl = `
+            ^XA
+            ^PW575
+            ^LL392
+            
+            ^FO70,90
+            ^BY4,3,70
+            ^BCN,100,Y,N,N
+            ^FD${upc}^FS
+            
+            ^FO150,280
+            ^A0N,60,60
+            ^FD${lpnRequest.sku}^FS
+            
+            ^XZ
+            `
+        const blob = new Blob([zpl], {type: "application/octet-stream"});
 
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        if (isSafari) {
+            // Create a file URL and open it in a new tab
+            const reader = new FileReader();
+            reader.onloadend = function () {
+                const link = document.createElement("a");
+                link.href = reader.result as string;
+                link.download = `${lpnRequest.sku}.zpl`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+            reader.readAsDataURL(blob);
+        } else {
+            // For other browsers, use the usual method
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `${lpnRequest.sku}.zpl`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
     return (
         <>
             <Loader isLoading={loading}>
@@ -377,6 +455,13 @@ export default function NewLPN() {
                                     onChange={(e) => {
                                         handleInputTagIDChange(e.target.value)
                                     }}
+                                    onFocus={() => {
+                                        setLpnResquest((prevState) => ({
+                                            ...prevState,
+                                            tagID: "",
+                                        }));
+                                    }}
+
                                     disabled={isSubmitted}
                                 />
                                 {!isSubmitted && <button
@@ -399,40 +484,63 @@ export default function NewLPN() {
 
                         <div>
                             <Label className="ml-1 font-semibold">SKU</Label>
-                            <div className="relative w-full max-w-xl">
-                                <Input
-                                    type="text"
-                                    value={lpnRequest.sku}
-                                    placeholder="Enter or scan"
-                                    className={`mt-1 block w-full bg-white ${
-                                        errors.sku ? "border-red-500" : "border-gray-300"
-                                    }`}
-                                    onChange={(e) => handleInputSKUChange(e.target.value)}
-                                    disabled={isSubmitted}
-                                />
-                                {/* Dropdown List */}
-                                {filteredComponents.length > 0 && (
-                                    <ul className="absolute z-10 w-full text-theme-xm bg-white dark:bg-white border rounded shadow max-h-48 overflow-y-auto">
-                                        {filteredComponents.map((component) => (
-                                            <li
-                                                key={component.sku} // Or a unique identifier
-                                                className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                                                onClick={() => handleComponentSelect(component)}
-                                            >
-                                                <p className="text-sm">{component.sku} ({component.upc})</p>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
+                            <div className=" flex w-full max-w-xl">
+                                <div className="relative">
+                                    <Input
+                                        type="text"
+                                        value={lpnRequest.sku}
+                                        placeholder="Enter or scan"
+                                        className={`mt-1 block w-full bg-white ${
+                                            errors.sku ? "border-red-500" : "border-gray-300"
+                                        }`}
+                                        onFocus={() => {
+                                            setLpnResquest((prevState) => ({
+                                                ...prevState,
+                                                sku: "",
+                                            }));
+                                        }}
+                                        onChange={(e) => handleInputSKUChange(e.target.value)}
+                                        disabled={isSubmitted}
+                                    />
 
-                                {!isSubmitted && <button
-                                    type="button"
-                                    onClick={() => setShowKeyboard("sku")}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
-                                >
-                                    <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
-                                </button>}
+                                    {/* Dropdown List */}
+                                    {filteredComponents.length > 0 && (
+                                        <ul className="absolute z-10 w-full text-theme-xm bg-white dark:bg-white border rounded shadow max-h-48 overflow-y-auto">
+                                            {filteredComponents.map((component) => (
+                                                <li
+                                                    key={component.sku} // Or a unique identifier
+                                                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                                                    onClick={() => handleComponentSelect(component)}
+                                                >
+                                                    <p className="text-sm">{component.sku} ({component.upc})</p>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+
+                                    {!isSubmitted &&
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowKeyboard("sku")}
+                                            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
+                                        >
+                                            <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
+                                        </button>}
+                                </div>
+                                <div className="p-2">
+                                    <Button
+                                        size="xs"
+                                        variant="primary"
+                                        className="mx-2.5"
+                                        onClick={handlePrintSKULabel} // Print Label handler
+                                    >
+                                        Print
+                                    </Button>
+                                </div>
+
+
                             </div>
+
 
                             {errors.sku && (
                                 <p className="text-sm text-red-500 mt-1">SKU is required</p>
@@ -499,6 +607,13 @@ export default function NewLPN() {
                                         containerNumber: e.target.value,
                                     }))
                                     }
+                                    onFocus={() => {
+                                        setLpnResquest((prevState) => ({
+                                            ...prevState,
+                                            containerNumber: "",
+                                        }));
+                                    }}
+
                                     disabled={isSubmitted}
                                 />
                                 {!isSubmitted && <button
@@ -523,6 +638,13 @@ export default function NewLPN() {
                                 className={`mt-1 block bg-white w-full ${
                                     errors.bayCode ? "border-red-500" : "border-gray-300"
                                 }`}
+                                onFocus={() => {
+                                    setLpnResquest((prevState) => ({
+                                        ...prevState,
+                                        bayCode: "",
+                                    }));
+                                }}
+
                                 onChange={(e) => handleInputBayLocationChange(e.target.value)}
                             />
 
