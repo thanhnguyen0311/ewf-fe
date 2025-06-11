@@ -1,6 +1,6 @@
 import PageMeta from "../../../components/common/PageMeta";
 import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import 'flatpickr/dist/flatpickr.min.css';
 import Loader from "../../UiElements/Loader/Loader";
 import Button from "../../../components/ui/button/Button";
@@ -8,18 +8,15 @@ import {AgGridReact} from "ag-grid-react";
 import { ColDef, ColGroupDef } from 'ag-grid-community';
 import "ag-grid-community/styles/ag-theme-balham.css";
 import {useNavigate} from "react-router";
+import {LPNProp} from "../../../interfaces/LPN";
+import {getAllLpn} from "../../../api/LpnApiService";
 
 
 export default function LPN() {
     const gridRef = useRef<AgGridReact>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
-
-
-    const rowData = [
-        { orderId: 101, customer: "Alice", date: "2025-06-06", status: "Pending", total: 120 },
-        { orderId: 102, customer: "Bob", date: "2025-06-05", status: "Shipped", total: 80 },
-    ];
+    const [lpns, setLpns] = useState<LPNProp[]>([]);
 
 
     const columnDefs: (ColDef | ColGroupDef)[] = [
@@ -87,14 +84,6 @@ export default function LPN() {
             editable: false,
             filter: "agTextColumnFilter",
         },
-        {
-            headerName: "Created By",
-            field: "createdBy",
-            sortable: true,
-            width: 200,
-            editable: false,
-            filter: "agTextColumnFilter",
-        },
     ]
 
     const defaultColDef = {
@@ -107,6 +96,22 @@ export default function LPN() {
             };
         }
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await getAllLpn(); // Call API to fetch LPN data
+                setLpns(data); // Set table row data
+            } catch (error) {
+                console.error("Error fetching LPN data: ", error);
+            } finally {
+                setLoading(false); // Hide loader
+            }
+        };
+
+        fetchData();
+    }, []); // Empty dependency array ensures this runs once on mount
+
 
     return (
         <>
@@ -140,7 +145,7 @@ export default function LPN() {
                     {!loading ? (
                         <AgGridReact
                         ref={gridRef}
-                        rowData={rowData}
+                        rowData={lpns}
                         columnDefs={columnDefs}
                         defaultColDef={defaultColDef}
                         headerHeight={40}
