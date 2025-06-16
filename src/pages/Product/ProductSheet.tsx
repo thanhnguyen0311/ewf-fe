@@ -436,7 +436,7 @@ export default function ProductSheet() {
                 textAlign: "center",
                 textDecoration: params.data.discontinue ? "line-through" : "none",
                 border: "1px solid #ccc",
-
+                fontFamily: '"Times New Roman", Times, serif',
             };
         }
     };

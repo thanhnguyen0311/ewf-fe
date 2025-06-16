@@ -51,6 +51,7 @@ const Button: React.FC<ButtonProps> = ({
             onClick={onClick}
             type={type}
             disabled={disabled}
+
         >
             {startIcon && <span className="flex items-center">{startIcon}</span>}
             {children}

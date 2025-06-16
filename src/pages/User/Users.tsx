@@ -9,6 +9,8 @@ import {formatDate} from "../../utils/formatDate";
 import UserEditModal from "./UserEditModal";
 import {mapUserPropToDto, UserProp} from "../../interfaces/User";
 import {getUsers, updateUser} from "../../api/UserApiService";
+import Button from "../../components/ui/button/Button";
+import UserCreateModal from "./UserCreateModal";
 
 
 
@@ -17,7 +19,9 @@ export default function Users() {
     const [error, setError] = useState<string | null>(null);
     const [users, setUsers] = useState<UserProp[]>([]); // Store product list
     const [isModalOpen, setModalOpen] = useState(false);
+    const [isCreateUserModalOpen, setCreateUserModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<UserProp | null>(null);
+
 
 
     const handleEditClick = (user: UserProp) => {
@@ -26,6 +30,7 @@ export default function Users() {
     };
 
     const handleModalClose = () => {
+        setCreateUserModalOpen(false)
         setModalOpen(false);
         setSelectedUser(null);
     };
@@ -70,7 +75,19 @@ export default function Users() {
 
             <PageBreadcrumb pageTitle="User Management" />
             <div className="space-y-6">
+
+
                 <ComponentCard title="">
+                    <div className="flex justify-start mb-4">
+                        <Button size="sm"
+                                variant="outline"
+                                className={"mr-1.5 flex items-center"}
+                                onClick={() => setCreateUserModalOpen(true)}
+                        >
+                            Add
+                        </Button>
+                    </div>
+
                     <div
                         className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
                         <div className="max-w-full overflow-x-auto">
@@ -144,6 +161,10 @@ export default function Users() {
                                     onClose={handleModalClose}
                                     onSave={handleSave}
                                 />
+
+                                {isCreateUserModalOpen &&
+                                    <UserCreateModal onClose={handleModalClose} />
+                                }
 
                             </div>
                         </div>

@@ -1,6 +1,8 @@
-import {UserProp, UserRequestDto} from "../interfaces/User";
+import {UserCreateRequestDto, UserProp, UserRequestDto} from "../interfaces/User";
 import axiosInstance from "../utils/axiosInstance";
 import {Role} from "../interfaces/Role";
+
+
 
 export const getUsers = async (): Promise<UserProp[]> => {
     const response = await axiosInstance.get<UserProp[]>(
@@ -27,6 +29,20 @@ export const updateUser = async (userRequestDto: UserRequestDto): Promise<UserPr
 
     if (response.status !== 200) {
         throw new Error(`Failed to update product with status: ${response.status}`);
+    }
+
+    return response.data;
+}
+
+export const createUser = async (userCreateRequestDto: UserCreateRequestDto): Promise<UserProp> => {
+    const response = await axiosInstance.post(`/v1/users`, userCreateRequestDto, {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    if (response.status !== 200) {
+        throw new Error(`Failed to create user with status: ${response.status}`);
     }
 
     return response.data;

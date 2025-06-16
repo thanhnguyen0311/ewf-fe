@@ -1,6 +1,7 @@
 export interface ComponentInboundProp {
     sku: string;
     upc: string;
+    palletCapacity: number;
 }
 
 export interface ComponentProps {
