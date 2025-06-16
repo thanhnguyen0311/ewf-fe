@@ -1,3 +1,5 @@
+import {LPNRequestProp} from "./LPN";
+
 export interface UserProp {
     id: number;
     firstName: string;
@@ -16,6 +18,16 @@ export interface UserRequestDto {
     isActive: boolean;
     roleId: number;
 }
+
+export interface UserCreateRequestDto {
+    firstName: string;
+    lastName: string;
+    password: string;
+    status: boolean;
+    roleSlug: string;
+    email: string;
+}
+
 
 export function mapUserPropToDto(userProp: UserProp): UserRequestDto {
     return {

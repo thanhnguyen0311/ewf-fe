@@ -36,12 +36,9 @@ const navItems: NavItem[] = [
     ],
   },
   {
-    name: "Inventory",
+    name: "LPN Manager",
     icon: <TableIcon />,
-    subItems: [
-      { name: "LPN", path: "/inventory/lpn", pro: false, active: true },
-      { name: "Product", path: "/inventory/products", pro: false, active: true },
-    ],
+    path: "/lpn",
   },
   {
     name: "Products",
@@ -49,7 +46,8 @@ const navItems: NavItem[] = [
     subItems: [
         { name: "Add Product", path: "/product/new", pro: false, active: true },
         { name: "Product Details", path: "/products", pro: false, active: true },
-        { name: "Dimensions", path: "/", pro: false, active: true },
+        { name: "Inventory", path: "/inventory/products", pro: false, active: true },
+        // { name: "Dimensions", path: "/", pro: false, active: true },
         { name: "Components", path: "/components", pro: false, active: true },
     ],
   },

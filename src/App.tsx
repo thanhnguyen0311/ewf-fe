@@ -29,7 +29,7 @@ export default function App() {
             <Route path="/order" element={<Orders />} />
             <Route path="/order/new" element={<NewOrder />} />
             <Route path="/inventory/products" element={<PInventory />} />
-            <Route path="/inventory/lpn" element={<LPN />} />
+            <Route path="/lpn" element={<LPN />} />
             <Route path="/inventory/lpn/add" element={<NewLPN />} />
             <Route path="/components" element={<CInventory />} />
             <Route path="/users" element={<Users />} />

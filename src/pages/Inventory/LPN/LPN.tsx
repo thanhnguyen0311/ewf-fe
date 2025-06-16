@@ -11,16 +11,23 @@ import {useNavigate} from "react-router";
 import {LPNProp} from "../../../interfaces/LPN";
 import {getAllLpn} from "../../../api/LpnApiService";
 
+import "./LPN.css"
+import PutAwayLPN from "./PutAway/PutAwayLPN";
 
 export default function LPN() {
     const gridRef = useRef<AgGridReact>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
     const [lpns, setLpns] = useState<LPNProp[]>([]);
+    const [showPutAwayModal, setShowPutAwayModal] = useState(false);
 
 
     const columnDefs: (ColDef | ColGroupDef)[] = [
+        {
+            headerName: "",
+            width: 50,
 
+        },
         {
             headerName: "RFID Tag ID",
             field: "tagID",
@@ -45,14 +52,6 @@ export default function LPN() {
             editable: false,
         },
         {
-            headerName: "#Container",
-            field: "containerNumber",
-            sortable: true,
-            width: 250,
-            editable: false,
-            filter: "agTextColumnFilter",
-        },
-        {
             headerName: "Location",
             field: "bayCode",
             sortable: true,
@@ -61,16 +60,33 @@ export default function LPN() {
             filter: "agTextColumnFilter",
         },
         {
-            headerName: "Zone",
-            field: "zone",
+            headerName: "#Container",
+            field: "containerNumber",
             sortable: true,
-            width: 150,
+            width: 250,
             editable: false,
             filter: "agTextColumnFilter",
         },
         {
             headerName: "Status",
             field: "status",
+            sortable: true,
+            width: 150,
+            editable: false,
+            filter: "agTextColumnFilter",
+            cellStyle: (params: any) => {
+                return {
+                    fontSize: "14px",
+                    fontWeight: "700",
+                    padding: "2px",
+                    marginLeft: "15px",
+                    color: params.value === "active" ? "#009900" : "#ff0000",
+                };
+            }
+        },
+        {
+            headerName: "Zone",
+            field: "zone",
             sortable: true,
             width: 150,
             editable: false,
@@ -93,6 +109,8 @@ export default function LPN() {
             return {
                 fontSize: "14px",
                 fontWeight: "500",
+                padding: "2px",
+                marginLeft: "15px",
             };
         }
     };
@@ -110,7 +128,7 @@ export default function LPN() {
         };
 
         fetchData();
-    }, []); // Empty dependency array ensures this runs once on mount
+    }, [showPutAwayModal]); // Empty dependency array ensures this runs once on mount
 
 
     return (
@@ -123,23 +141,32 @@ export default function LPN() {
 
             <div className="flex justify-start mb-4">
                 <Button size="sm"
-                        variant="outline"
-                        className={"mr-1.5 flex items-center"}
+                        variant="primary"
+                        className={"mr-2.5 flex items-center"}
                         onClick={() => navigate("/inventory/lpn/add")}
                 >
-                    Add
+                    New LPN
                 </Button>
-                <Button size="sm"
-                        variant="outline"
-                        className={"mx-1.5 flex items-center"}
+                <Button
+                    size="sm"
+                    variant="primary"
+                    onClick={() => setShowPutAwayModal(true)}
+                    className={"mr-2.5 flex items-center"}
                 >
-                    History
+                    Put away
                 </Button>
+
+                {/*<Button size="sm"*/}
+                {/*        variant="primary"*/}
+                {/*        className={"mr-2.5 flex items-center"}*/}
+                {/*>*/}
+                {/*    History*/}
+                {/*</Button>*/}
             </div>
 
             <Loader isLoading={loading}>
                 <div
-                    className="ag-theme-balham shadow border rounded-xl border-gray-300"
+                    className="ag-theme-balham shadow rounded-xl "
                     style={{height: "700px", width: "100%", marginTop: "20px"}}
                 >
                     {!loading ? (
@@ -149,12 +176,18 @@ export default function LPN() {
                         columnDefs={columnDefs}
                         defaultColDef={defaultColDef}
                         headerHeight={40}
-                        sideBar={true}
-                        rowHeight={30}
+                        rowHeight={32}
                     />) : <></>}
 
                 </div>
             </Loader>
+
+            <PutAwayLPN
+                visible={showPutAwayModal}
+                onCancel={() => setShowPutAwayModal(false)}
+                lpnProps={lpns}
+            />
+
         </>
     )
 }

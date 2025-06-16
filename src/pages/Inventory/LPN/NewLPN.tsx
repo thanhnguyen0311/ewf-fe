@@ -8,7 +8,6 @@ import {LPNRequestProp} from "../../../interfaces/LPN";
 import {CalenderIcon} from "../../../icons";
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import jsPDF from "jspdf";
 import Button from "../../../components/ui/button/Button";
 import {useNotification} from "../../../context/NotificationContext";
 import Loader from "../../UiElements/Loader/Loader";
@@ -16,6 +15,10 @@ import {BayLocationProp} from "../../../interfaces/BayLocation";
 import {getBayLocations} from "../../../api/BayLocationApiService";
 import VirtualKeyboard from "../../UiElements/VirtualKeyBoard/VirtualKeyboard";
 import {createNewLpn} from "../../../api/LpnApiService";
+
+import {useSidebar} from "../../../context/SidebarContext";
+import useGoBack from "../../../hooks/useGoBack";
+import {generateZplLpnLabel, generateZplSkuLabel} from "../../../utils/labelGenerator";
 
 
 const defaultLpnRequest: LPNRequestProp = {
@@ -29,7 +32,11 @@ const defaultLpnRequest: LPNRequestProp = {
 
 
 export default function NewLPN() {
-    const [lpnRequest, setLpnResquest] = useState<LPNRequestProp>(defaultLpnRequest);
+
+    const {isMobile} = useSidebar();
+    const goBack = useGoBack();
+
+    const [lpnRequest, setLpnRequest] = useState<LPNRequestProp>(defaultLpnRequest);
 
     const [componentInboundData, setComponentInboundData] = useState<ComponentInboundProp[]>([]);
     const [filteredComponents, setFilteredComponents] = useState<ComponentInboundProp[]>([]);
@@ -71,7 +78,7 @@ export default function NewLPN() {
         if (type === "tagID") handleInputTagIDChange(input)
         if (type === "sku") handleInputSKUChange(input)
         if (type === "containerNumber") {
-            setLpnResquest((prevState) => ({
+            setLpnRequest((prevState) => ({
                 ...prevState,
                 containerNumber: input,
             }));
@@ -111,7 +118,7 @@ export default function NewLPN() {
 
 
     const handleInputTagIDChange = (input: string) => {
-        setLpnResquest((prevState) => ({
+        setLpnRequest((prevState) => ({
             ...prevState,
             tagID: input,
         }));
@@ -122,8 +129,9 @@ export default function NewLPN() {
         }));
     }
 
+
     const handleInputSKUChange = (value: string) => {
-        setLpnResquest((prevState) => ({
+        setLpnRequest((prevState) => ({
             ...prevState,
             sku: value, // Replace "newSkuValue" with the desired value
         }));
@@ -144,6 +152,7 @@ export default function NewLPN() {
         }));
     };
 
+
     const filterComponents = (value: string) => {
         if (value.trim() === "") {
             setFilteredComponents([]); // Reset filtered results if input is empty
@@ -162,10 +171,16 @@ export default function NewLPN() {
 
 
         if (exactMatch) {
+            // Find the matching bay location based on the `defaultSku`
+            const matchingBayLocation = bayLocationData.find(
+                (location) => location.defaultSku === exactMatch.sku
+            );
+
             // If there's an exact match, preselect it
-            setLpnResquest((prevState) => ({
+            setLpnRequest((prevState) => ({
                 ...prevState,
                 sku: exactMatch.sku, // Automatically set the SKU in state
+                quantity: exactMatch.palletCapacity || 12,
             }));
 
             setFilteredComponents([]); // Clear the filteredComponents list since we autoselected
@@ -175,10 +190,18 @@ export default function NewLPN() {
         }
     };
 
+
     const handleComponentSelect = (component: ComponentInboundProp) => {
-        setLpnResquest((prevState) => ({
+        // Find the matching bay location based on the `defaultSku`
+        const matchingBayLocation = bayLocationData.find(
+            (location) => location.defaultSku === component.sku
+        );
+
+
+        setLpnRequest((prevState) => ({
             ...prevState,
             sku: component.sku, // Replace "newSkuValue" with the desired value
+            quantity: component.palletCapacity || 12,
         }));
 
         setFilteredComponents([]);
@@ -186,7 +209,13 @@ export default function NewLPN() {
 
 
     const handleInputBayLocationChange = (value: string) => {
-        setLpnResquest((prevState) => ({
+        // Clear validation error immediately after fixing the field
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            bayCode: false,
+        }));
+
+        setLpnRequest((prevState) => ({
             ...prevState,
             bayCode: value, // Replace "newSkuValue" with the desired value
         }));
@@ -199,12 +228,22 @@ export default function NewLPN() {
         debounceTimer.current = setTimeout(() => {
             filterBayLocation(value);
         }, 300); // Debounce time (e.g., 300ms)
+        // Check for an exact match
+        if (value.trim() !== "") {
+            const exactMatch = bayLocationData.find(
+                (bay) =>
+                    bay.bayCode.toLowerCase() === value.toLowerCase()
+            );
 
-        // Clear validation error immediately after fixing the field
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            bayCode: false,
-        }));
+            if (!exactMatch) {
+                // Clear validation error immediately after fixing the field
+                setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    bayCode: true,
+                }));
+            }
+        }
+
     };
 
     const filterBayLocation = (value: string) => {
@@ -227,7 +266,7 @@ export default function NewLPN() {
 
         if (exactMatch) {
             // If there's an exact match, preselect it
-            setLpnResquest((prevState) => ({
+            setLpnRequest((prevState) => ({
                 ...prevState,
                 bayCode: exactMatch.bayCode, // Automatically set the SKU in state
             }));
@@ -241,7 +280,7 @@ export default function NewLPN() {
 
 
     const handleBayLocationSelect = (bay: BayLocationProp) => {
-        setLpnResquest((prevState) => ({
+        setLpnRequest((prevState) => ({
             ...prevState,
             bayCode: bay.bayCode, // Replace "newSkuValue" with the desired value
         }));
@@ -256,14 +295,13 @@ export default function NewLPN() {
         return date.toISOString().split("T")[0]; // Extract "YYYY-MM-DD"
     };
 
+
     const handleSubmit = async () => {
 
-        const isValid = bayLocationData.some((bay) => bay.bayCode === lpnRequest.bayCode);
         const newErrors: { [key: string]: boolean } = {
             tagID: !lpnRequest.tagID || lpnRequest.tagID.trim() === "",
             sku: !lpnRequest.sku || lpnRequest.sku.trim() === "",
             quantity: !lpnRequest.quantity || lpnRequest.quantity <= 0,
-            bayCode: lpnRequest.bayCode.trim() === "" ? false : !isValid,
         };
 
         setErrors(newErrors);
@@ -290,7 +328,7 @@ export default function NewLPN() {
             sendNotification(
                 "success",
                 "Success",
-                "LPN Request has been saved successfully",
+                "LPN has been created successfully",
                 {
                     showLink: false,
                     autoHideDuration: 4000, // Optional: 4 seconds timeout
@@ -312,54 +350,10 @@ export default function NewLPN() {
     };
 
 
-    const generateZplLabel = (lpnRequest: LPNRequestProp, upc: string): string => {
-        return `
-        ^XA
-        ^PW576          ; Set label width to 576 dots (2.84 inches)
-        ^LL384          ; Set label height to 384 dots (1.96 inches)
-
-        ; Set font size for smaller labels (30 dots)
-        ^CF0,40
-        ; SKU Label (Small Font)
-        ^FO30,30^FDSKU:^FS
-        ; SKU Value (Larger Font)
-        ^CF0,55
-        ^FO240,30^FD${lpnRequest.sku}^FS
-
-        ; Quantity Label (Small Font)
-        ^CF0,40
-        ^FO30,100^FDQty:^FS
-        ; Quantity Value (Larger Font)
-        ^CF0,55
-        ^FO240,100^FD${lpnRequest.quantity}^FS
-        
-        ; Container Number Label (Small Font)
-        ^CF0,40
-        ^FO30,170^FDContainer:^FS
-        ; Container Number Value (Larger Font)
-        ^CF0,55
-        ^FO240,170^FD${lpnRequest.containerNumber}^FS
-
-        ; Date Label (Small Font)
-        ^CF0,40
-        ^FO30,240^FDDate:^FS
-        ; Date Value (Larger Font)
-        ^CF0,55
-        ^FO240,240^FD${new Date(lpnRequest.date).toLocaleDateString()}^FS
-        
-        ; Barcode for UPC at the bottom
-        ^FO40,320^BY4,3,70      ; Set bar thickness (BY3), spacing (2), and height (60 dots)
-        ^BCN,100,Y,N            ; Code 128 Barcode, 100 dots high, display value below barcode (Y)
-        ^FD${upc}^FS            ; Print the UPC as the barcode
-
-        ^XZ
-    `;
-    };
-
     const handlePrintLabel = () => {
         const component = componentInboundData.find((item) => item.sku === lpnRequest.sku);
         const upc = component ? component.upc : "";
-        const zpl = generateZplLabel(lpnRequest, upc);
+        const zpl = generateZplLpnLabel(lpnRequest, upc);
 
         // Create a Blob object with the ZPL data
         const blob = new Blob([zpl], {type: "application/octet-stream"});
@@ -395,22 +389,8 @@ export default function NewLPN() {
         }
         const component = componentInboundData.find((item) => item.sku === lpnRequest.sku);
         const upc = component ? component.upc : "";
-        const zpl = `
-            ^XA
-            ^PW575
-            ^LL392
-            
-            ^FO70,90
-            ^BY4,3,70
-            ^BCN,100,Y,N,N
-            ^FD${upc}^FS
-            
-            ^FO150,280
-            ^A0N,60,60
-            ^FD${lpnRequest.sku}^FS
-            
-            ^XZ
-            `
+        const zpl = generateZplSkuLabel(upc, lpnRequest.sku);
+
         const blob = new Blob([zpl], {type: "application/octet-stream"});
 
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -436,194 +416,163 @@ export default function NewLPN() {
             document.body.removeChild(link);
         }
     }
+
     return (
         <>
             <Loader isLoading={loading}>
-                <Form onSubmit={() => {
-                }} className="space-y-4">
-                    <div className="space-y-6">
-                        <div>
-                            <Label className="ml-1 font-semibold">RFID Tag ID</Label>
-                            <div className="relative w-full max-w-xl">
+                <Form
+                    onSubmit={() => {
+                }}
+                    className={`space-y-4 ${isMobile && "min-h-screen"}`}>
+                    <div>
+                        <Label className="ml-1 font-semibold">RFID Tag ID</Label>
+                        <div className="relative w-full max-w-xl ">
+                            <Input
+                                type="text"
+                                value={lpnRequest.tagID}
+                                placeholder="Enter or scan"
+                                className={`mt-1 block w-full bg-white pr-12 ${
+                                    errors.tagID ? "border-red-500" : "border-gray-300"
+                                }`}
+                                onChange={(e) => {
+                                    handleInputTagIDChange(e.target.value)
+                                }}
+                                onFocus={() => {
+                                    setLpnRequest((prevState) => ({
+                                        ...prevState,
+                                        tagID: "",
+                                    }));
+                                }}
+
+                                disabled={isSubmitted}
+                            />
+
+                            {/*{!isSubmitted && <button*/}
+                            {/*    type="button"*/}
+                            {/*    onClick={() => setShowKeyboard("bayCode")}*/}
+                            {/*    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"*/}
+                            {/*>*/}
+                            {/*    <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>*/}
+                            {/*</button>}*/}
+
+
+                        </div>
+                        {errors.tagID && (
+                            <p className="text-sm text-red-500 mt-1">
+                                Tag ID is required
+                            </p>
+                        )}
+
+                    </div>
+
+                    <div>
+                        <Label className="ml-1 font-semibold">SKU</Label>
+                        <div className=" flex w-full max-w-xl">
+                            <div className="relative">
                                 <Input
                                     type="text"
-                                    value={lpnRequest.tagID}
+                                    value={lpnRequest.sku}
                                     placeholder="Enter or scan"
-                                    className={`mt-1 block w-full bg-white pr-12 ${
-                                        errors.tagID ? "border-red-500" : "border-gray-300"
+                                    className={`mt-1 block w-full bg-white ${
+                                        errors.sku ? "border-red-500" : "border-gray-300"
                                     }`}
-                                    onChange={(e) => {
-                                        handleInputTagIDChange(e.target.value)
-                                    }}
                                     onFocus={() => {
-                                        setLpnResquest((prevState) => ({
+                                        setLpnRequest((prevState) => ({
                                             ...prevState,
-                                            tagID: "",
+                                            sku: "",
                                         }));
                                     }}
-
+                                    onChange={(e) => handleInputSKUChange(e.target.value)}
                                     disabled={isSubmitted}
                                 />
-                                {!isSubmitted && <button
-                                    type="button"
-                                    onClick={() => setShowKeyboard("tagID")}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
-                                >
-                                    <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
-                                </button>}
 
+                                {/* Dropdown List */}
+                                {filteredComponents.length > 0 && (
+                                    <ul className="absolute z-10 w-full text-theme-xm bg-white dark:bg-white border rounded shadow max-h-48 overflow-y-auto">
+                                        {filteredComponents.map((component) => (
+                                            <li
+                                                key={component.sku} // Or a unique identifier
+                                                className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                                                onClick={() => handleComponentSelect(component)}
+                                            >
+                                                <p className="text-sm">{component.sku} ({component.upc})</p>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
 
                             </div>
-                            {errors.tagID && (
-                                <p className="text-sm text-red-500 mt-1">
-                                    Tag ID is required
-                                </p>
-                            )}
+                            <div className="p-2">
+                                <Button
+                                    size="xs"
+                                    variant="primary"
+                                    className="mx-2.5"
+                                    onClick={handlePrintSKULabel} // Print Label handler
+                                >
+                                    Print
+                                </Button>
+                            </div>
 
                         </div>
 
-                        <div>
-                            <Label className="ml-1 font-semibold">SKU</Label>
-                            <div className=" flex w-full max-w-xl">
-                                <div className="relative">
-                                    <Input
-                                        type="text"
-                                        value={lpnRequest.sku}
-                                        placeholder="Enter or scan"
-                                        className={`mt-1 block w-full bg-white ${
-                                            errors.sku ? "border-red-500" : "border-gray-300"
-                                        }`}
-                                        onFocus={() => {
-                                            setLpnResquest((prevState) => ({
-                                                ...prevState,
-                                                sku: "",
-                                            }));
-                                        }}
-                                        onChange={(e) => handleInputSKUChange(e.target.value)}
-                                        disabled={isSubmitted}
-                                    />
+                        {errors.sku && (
+                            <p className="text-sm text-red-500 mt-1">SKU is required</p>
+                        )}
 
-                                    {/* Dropdown List */}
-                                    {filteredComponents.length > 0 && (
-                                        <ul className="absolute z-10 w-full text-theme-xm bg-white dark:bg-white border rounded shadow max-h-48 overflow-y-auto">
-                                            {filteredComponents.map((component) => (
-                                                <li
-                                                    key={component.sku} // Or a unique identifier
-                                                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                                                    onClick={() => handleComponentSelect(component)}
-                                                >
-                                                    <p className="text-sm">{component.sku} ({component.upc})</p>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
-
-                                    {!isSubmitted &&
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowKeyboard("sku")}
-                                            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
-                                        >
-                                            <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
-                                        </button>}
-                                </div>
-                                <div className="p-2">
-                                    <Button
-                                        size="xs"
-                                        variant="primary"
-                                        className="mx-2.5"
-                                        onClick={handlePrintSKULabel} // Print Label handler
-                                    >
-                                        Print
-                                    </Button>
-                                </div>
+                    </div>
 
 
-                            </div>
-
-
-                            {errors.sku && (
-                                <p className="text-sm text-red-500 mt-1">SKU is required</p>
-                            )}
-
-                        </div>
-
-
-                        <div>
-                            <Label className="ml-1 font-semibold">Quantity</Label>
-                            <div className="flex items-center w-40 relative">
-                                {!isSubmitted && <button
-                                    className="px-2 mx-2 py-1 bg-gray-200 border border-gray-300 rounded-r-md hover:bg-gray-300"
-                                    onClick={() => setLpnResquest((prev) => ({
+                    <div>
+                        <Label className="ml-1 font-semibold">Quantity</Label>
+                        <div className=" flex w-full max-w-xl">
+                            <Input
+                                type="number"
+                                value={lpnRequest.quantity}
+                                placeholder="Enter number of items"
+                                className={`w-full text-theme-sm bg-white font-semibold text-center ${
+                                    errors.quantity ? "border-red-500" : "border-gray-300"
+                                }`}
+                                onChange={(e) =>
+                                    setLpnRequest((prev) => ({
                                         ...prev,
-                                        quantity: prev.quantity + 1, // Increase quantity
-                                    }))}
-                                >
-                                    +
-                                </button>}
-                                <Input
-                                    type="number"
-                                    value={lpnRequest.quantity}
-                                    placeholder="Enter number of items"
-                                    className={`w-full text-theme-sm font-semibold text-center ${
-                                        errors.quantity ? "border-red-500" : "border-gray-300"
-                                    }`}
-                                    onChange={(e) =>
-                                        setLpnResquest((prev) => ({
-                                            ...prev,
-                                            quantity: parseInt(e.target.value) || 0,
-                                        }))
-                                    }
-                                    disabled={isSubmitted}
-                                />
-                                {!isSubmitted && <button
-                                    className="px-2 mx-2 py-1 bg-gray-200 border border-gray-300 rounded-l-md hover:bg-gray-300"
-                                    onClick={() => setLpnResquest((prev) => ({
-                                        ...prev,
-                                        quantity: Math.max(prev.quantity - 1, 0), // Decrease quantity, but not below 0
-                                    }))}
-                                >
-                                    –
-                                </button>}
-                            </div>
-                            {errors.quantity && (
-                                <p className="text-sm text-red-500 mt-1">
-                                    Quantity must be greater than 0
-                                </p>
-                            )}
-                        </div>
-
-
-                        <div>
-                            <Label className="ml-1 font-semibold">Container Number</Label>
-                            <div className="relative w-full bg-white max-w-xl">
-                                <Input
-                                    type="text"
-                                    value={lpnRequest.containerNumber}
-                                    placeholder="Enter or scan"
-                                    className="w-full pr-20 px-4 py-2 border rounded"
-                                    onChange={(e) => setLpnResquest((prev) => ({
-                                        ...prev,
-                                        containerNumber: e.target.value,
+                                        quantity: parseInt(e.target.value) || 0,
                                     }))
-                                    }
-                                    onFocus={() => {
-                                        setLpnResquest((prevState) => ({
-                                            ...prevState,
-                                            containerNumber: "",
-                                        }));
-                                    }}
+                                }
+                                disabled={isSubmitted}
+                            />
+                        </div>
 
-                                    disabled={isSubmitted}
-                                />
-                                {!isSubmitted && <button
-                                    type="button"
-                                    onClick={() => setShowKeyboard("containerNumber")}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
-                                >
-                                    <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
-                                </button>}
-                            </div>
+                        {errors.quantity && (
+                            <p className="text-sm text-red-500 mt-1">
+                                Quantity must be greater than 0
+                            </p>
+                        )}
+                    </div>
+
+
+                    <div>
+                        <Label className="ml-1 font-semibold">Container Number</Label>
+                        <div className="relative w-full bg-white max-w-xl">
+                            <Input
+                                type="text"
+                                value={lpnRequest.containerNumber}
+                                placeholder="Enter or scan"
+                                className="w-full pr-20 px-4 border-gray-300 py-2 border rounded"
+                                onChange={(e) => setLpnRequest((prev) => ({
+                                    ...prev,
+                                    containerNumber: e.target.value,
+                                }))
+                                }
+                                onFocus={() => {
+                                    setLpnRequest((prevState) => ({
+                                        ...prevState,
+                                        containerNumber: "",
+                                    }));
+                                }}
+
+                                disabled={isSubmitted}
+                            />
+
                         </div>
                     </div>
 
@@ -639,7 +588,7 @@ export default function NewLPN() {
                                     errors.bayCode ? "border-red-500" : "border-gray-300"
                                 }`}
                                 onFocus={() => {
-                                    setLpnResquest((prevState) => ({
+                                    setLpnRequest((prevState) => ({
                                         ...prevState,
                                         bayCode: "",
                                     }));
@@ -648,13 +597,7 @@ export default function NewLPN() {
                                 onChange={(e) => handleInputBayLocationChange(e.target.value)}
                             />
 
-                            {!isSubmitted && <button
-                                type="button"
-                                onClick={() => setShowKeyboard("bayCode")}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-transparent text-black rounded hover:bg-gray-100 transition-colors"
-                            >
-                                <img src={"/images/icons/keyboard.png"} className="w-6 h-6" alt="keyboard"/>
-                            </button>}
+
 
                             {errors.bayCode && (
                                 <p className="text-red-500 text-sm mt-1">
@@ -686,10 +629,8 @@ export default function NewLPN() {
                                                 >
                                                     <div
                                                         className="flex flex-wrap text-sm items-center gap-4 text-gray-600">
-                                                                <span>Bay: <span
-                                                                    className="font-semibold text-gray-800">{bay.bayCode}</span></span>
-                                                        <span>Zone: <span
-                                                            className="font-semibold text-gray-800">{bay.zone}</span></span>
+                                                        <span>Bay: <span
+                                                            className="font-semibold text-gray-800">{bay.bayCode}</span></span>
                                                         <span>Max Pallets: <span
                                                             className="font-semibold text-gray-800">{bay.maxPallets}</span></span>
                                                         <span>Available: <span
@@ -714,10 +655,11 @@ export default function NewLPN() {
                                 id="datePicker"
                                 disabled={isSubmitted}
                                 name="datePicker"
+                                className="w-full pr-20 px-4 border-gray-300 py-2 border rounded"
                                 value={formatDateForInput(lpnRequest.date)}
                                 onChange={(e) => {
                                     const newDate = new Date(e.target.value);
-                                    setLpnResquest({...lpnRequest, date: newDate.toISOString()});
+                                    setLpnRequest({...lpnRequest, date: newDate.toISOString()});
                                 }}
                             />
                             <span
@@ -742,7 +684,7 @@ export default function NewLPN() {
                                     value={lpnRequest.date}
                                     onChange={(selectedDates) => {
                                         const newDate = selectedDates[0]?.toISOString() || "";
-                                        setLpnResquest({...lpnRequest, date: newDate});
+                                        setLpnRequest({...lpnRequest, date: newDate});
                                         setShowCalendar(false); // Hide calendar after selection
                                     }}
                                 />
@@ -761,28 +703,52 @@ export default function NewLPN() {
                             </div>
                         )}
                     </div>
-                    <div className="mt-4 flex space-x-4">
-                        {!isSubmitted ? (<>
-                                <Button size="sm"
-                                        variant="outline"
-                                        onClick={handleSubmit}>
+                    <div
+                        className={`mt-4 ${
+                            isMobile
+                                ? "fixed bottom-0 left-0 right-0 mt-20 w-full p-4  shadow-lg"
+                                : "flex space-x-4"
+                        }`}
+                    >
+                        {!isSubmitted ? (
+                            <>
+                                <Button
+                                    size="sm"
+                                    variant="primary"
+                                    className={isMobile ? "w-full" : ""} // Add full-width style when not in mobileOpen mode
+                                    onClick={handleSubmit}
+                                >
                                     Save
                                 </Button>
                                 <Button
                                     size="sm"
                                     variant="normal"
-                                    onClick={() => setLpnResquest(defaultLpnRequest)}>
-                                    Reset
+                                    className={isMobile ? "w-full mt-2" : ""} // Full-width and spacing on mobile
+                                    onClick={goBack}
+                                >
+                                    Back
                                 </Button>
-                            </>) :
-                            <Button
-                                size="sm"
-                                variant="primary"
-                                onClick={handlePrintLabel} // Print Label handler
-                            >
-                                Print
-                            </Button>
-                        }
+                            </>
+                        ) : (
+                            <>
+                                <Button
+                                    size="sm"
+                                    variant="primary"
+                                    className={isMobile ? "w-full" : ""} // Full-width style for mobile
+                                    onClick={handlePrintLabel} // Print Label handler
+                                >
+                                    Print
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant="normal"
+                                    className={isMobile ? "w-full mt-2" : ""} // Full-width with spacing on mobile
+                                    onClick={goBack}
+                                >
+                                    Close
+                                </Button>
+                            </>
+                        )}
                     </div>
                 </Form>
             </Loader>

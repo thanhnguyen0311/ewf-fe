@@ -4,6 +4,7 @@ type SidebarContextType = {
   isExpanded: boolean;
   isMobileOpen: boolean;
   isHovered: boolean;
+  isMobile:boolean;
   activeItem: string | null;
   openSubmenu: string | null;
   toggleSidebar: () => void;
@@ -36,7 +37,9 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth < 768;
+
       setIsMobile(mobile);
+
       if (!mobile) {
         setIsMobileOpen(false);
       }
@@ -69,6 +72,7 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
         isMobileOpen,
         isHovered,
         activeItem,
+        isMobile,
         openSubmenu,
         toggleSidebar,
         toggleMobileSidebar,
