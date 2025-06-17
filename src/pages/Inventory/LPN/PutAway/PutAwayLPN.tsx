@@ -6,6 +6,7 @@ import {getBayLocations} from "../../../../api/BayLocationApiService";
 import Loader from "../../../UiElements/Loader/Loader";
 import { editLpn} from "../../../../api/LpnApiService";
 import {useNotification} from "../../../../context/NotificationContext";
+import {useErrorHandler} from "../../../../hooks/useErrorHandler";
 
 
 interface PutAwayModalProps {
@@ -23,7 +24,6 @@ const PutAwayLPN: React.FC<PutAwayModalProps> = ({ visible, onCancel, lpnProps }
 
     const inputRef = useRef<HTMLInputElement | null>(null);
 
-
     const [loading, setLoading] = useState<boolean>(true);
     const debounceTimer = useRef<NodeJS.Timeout | null>(null); // For debouncing
 
@@ -35,6 +35,7 @@ const PutAwayLPN: React.FC<PutAwayModalProps> = ({ visible, onCancel, lpnProps }
     const [lpnRequest, setLpnRequest] = useState<LPNEditRequestProp | null>(null);
 
     const {sendNotification} = useNotification();
+    const handleError = useErrorHandler();
 
     useEffect(() => {
         if (!visible) {
@@ -203,13 +204,7 @@ const PutAwayLPN: React.FC<PutAwayModalProps> = ({ visible, onCancel, lpnProps }
 
 
         } catch (error) {
-            // Handle API request error
-            console.error("Error creating new LPN:", error);
-            sendNotification(
-                "error",
-                "Submission Failed",
-                "Failed to save the LPN Request. Please try again later."
-            );
+            handleError(error)
         } finally {
             setLoading(false);
             handleClose()
@@ -242,7 +237,7 @@ const PutAwayLPN: React.FC<PutAwayModalProps> = ({ visible, onCancel, lpnProps }
                                     onFocus={() => {
                                         setTagID("");
                                     }}
-                                    onChange={(e) => setTagID(e.target.value)}
+                                    onChange={(e) => setTagID(e.target.value.trim())}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") {
                                             handleTagIDNext(); // Trigger "Next" logic on Enter key press
@@ -273,7 +268,7 @@ const PutAwayLPN: React.FC<PutAwayModalProps> = ({ visible, onCancel, lpnProps }
                                     type="text"
                                     placeholder="Enter bay code"
                                     value={bayCode}
-                                    onChange={(e) => handleInputBayLocationChange(e.target.value)}
+                                    onChange={(e) => handleInputBayLocationChange(e.target.value.trim())}
 
                                     onFocus={() => {
                                         setBayCode("");
