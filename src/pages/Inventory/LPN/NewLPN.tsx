@@ -19,6 +19,7 @@ import {createNewLpn} from "../../../api/LpnApiService";
 import {useSidebar} from "../../../context/SidebarContext";
 import useGoBack from "../../../hooks/useGoBack";
 import {generateZplLpnLabel, generateZplSkuLabel} from "../../../utils/labelGenerator";
+import {useErrorHandler} from "../../../hooks/useErrorHandler";
 
 
 const defaultLpnRequest: LPNRequestProp = {
@@ -53,6 +54,7 @@ export default function NewLPN() {
     const [showCalendar, setShowCalendar] = useState(false); // State to toggle calendar visibility
 
     const {sendNotification} = useNotification();
+    const handleError = useErrorHandler();
 
     const [errors, setErrors] = useState<{ [key: string]: boolean }>({
         tagID: false,
@@ -337,13 +339,7 @@ export default function NewLPN() {
             setIsSubmitted(true);
 
         } catch (error) {
-            // Handle API request error
-            console.error("Error creating new LPN:", error);
-            sendNotification(
-                "error",
-                "Submission Failed",
-                "Failed to save the LPN Request. Please try again later."
-            );
+            handleError(error);
         } finally {
             setLoading(false);
         }
@@ -435,7 +431,7 @@ export default function NewLPN() {
                                     errors.tagID ? "border-red-500" : "border-gray-300"
                                 }`}
                                 onChange={(e) => {
-                                    handleInputTagIDChange(e.target.value)
+                                    handleInputTagIDChange(e.target.value.trim())
                                 }}
                                 onFocus={() => {
                                     setLpnRequest((prevState) => ({
@@ -482,7 +478,7 @@ export default function NewLPN() {
                                             sku: "",
                                         }));
                                     }}
-                                    onChange={(e) => handleInputSKUChange(e.target.value)}
+                                    onChange={(e) => handleInputSKUChange(e.target.value.trim())}
                                     disabled={isSubmitted}
                                 />
 
@@ -535,7 +531,7 @@ export default function NewLPN() {
                                 onChange={(e) =>
                                     setLpnRequest((prev) => ({
                                         ...prev,
-                                        quantity: parseInt(e.target.value) || 0,
+                                        quantity: parseInt(e.target.value.trim()) || 0,
                                     }))
                                 }
                                 disabled={isSubmitted}
@@ -560,7 +556,7 @@ export default function NewLPN() {
                                 className="w-full pr-20 px-4 border-gray-300 py-2 border rounded"
                                 onChange={(e) => setLpnRequest((prev) => ({
                                     ...prev,
-                                    containerNumber: e.target.value,
+                                    containerNumber: e.target.value.trim(),
                                 }))
                                 }
                                 onFocus={() => {
@@ -594,7 +590,7 @@ export default function NewLPN() {
                                     }));
                                 }}
 
-                                onChange={(e) => handleInputBayLocationChange(e.target.value)}
+                                onChange={(e) => handleInputBayLocationChange(e.target.value.trim())}
                             />
 
 

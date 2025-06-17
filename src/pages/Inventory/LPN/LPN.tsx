@@ -13,6 +13,7 @@ import {getAllLpn} from "../../../api/LpnApiService";
 
 import "./LPN.css"
 import PutAwayLPN from "./PutAway/PutAwayLPN";
+import {useNotification} from "../../../context/NotificationContext";
 
 export default function LPN() {
     const gridRef = useRef<AgGridReact>(null);
@@ -20,19 +21,15 @@ export default function LPN() {
     const navigate = useNavigate();
     const [lpns, setLpns] = useState<LPNProp[]>([]);
     const [showPutAwayModal, setShowPutAwayModal] = useState(false);
+    const {sendNotification} = useNotification();
 
 
     const columnDefs: (ColDef | ColGroupDef)[] = [
         {
-            headerName: "",
-            width: 50,
-
-        },
-        {
             headerName: "RFID Tag ID",
             field: "tagID",
             sortable: false,
-            width: 250,
+            width: 200,
             editable: false,
             filter: "agTextColumnFilter",
         },
@@ -122,6 +119,11 @@ export default function LPN() {
                 setLpns(data); // Set table row data
             } catch (error) {
                 console.error("Error fetching LPN data: ", error);
+                sendNotification(
+                    "error",
+                    "Error fetching LPN data",
+                    error instanceof Error ? error.message : String(error)
+                );
             } finally {
                 setLoading(false); // Hide loader
             }
