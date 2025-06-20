@@ -5,7 +5,7 @@ import {useNotification} from "../context/NotificationContext";
 export const useErrorHandler = () => {
     const {sendNotification} = useNotification();
 
-    const handleError = (error: Error | any) => {
+    return (error: Error | any) => {
         const errorMessage =
             error?.response?.data?.message || error?.message || "Unknown error";
 
@@ -14,7 +14,6 @@ export const useErrorHandler = () => {
 
         // Send a notification
         sendNotification("error", "Error", errorMessage);
+        return {"field" : error?.response?.data?.field, "message" : errorMessage};
     };
-
-    return handleError;
 };

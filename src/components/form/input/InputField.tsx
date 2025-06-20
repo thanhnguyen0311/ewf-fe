@@ -14,6 +14,7 @@ interface InputProps {
   disabled?: boolean;
   success?: boolean;
   onFocus?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: boolean;
   hint?: string; // Optional hint text
 }
@@ -26,6 +27,7 @@ const Input: FC<InputProps> = ({
   value,
   onChange,
                                  onFocus,
+    onBlur,
   className = "",
   min,
   max,
@@ -59,6 +61,7 @@ const Input: FC<InputProps> = ({
         value={value}
         onChange={onChange}
         onFocus={onFocus}
+        onBlur={onBlur}
         min={min}
         autoComplete = {type ? type : "off"}
         max={max}

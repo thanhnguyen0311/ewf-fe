@@ -12,16 +12,16 @@ import {LPNProp} from "../../../interfaces/LPN";
 import {getAllLpn} from "../../../api/LpnApiService";
 
 import "./LPN.css"
-import PutAwayLPN from "./PutAway/PutAwayLPN";
 import {useNotification} from "../../../context/NotificationContext";
+import FindLPN from "./Find/FindLPN";
 
 export default function LPN() {
     const gridRef = useRef<AgGridReact>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
     const [lpns, setLpns] = useState<LPNProp[]>([]);
-    const [showPutAwayModal, setShowPutAwayModal] = useState(false);
     const {sendNotification} = useNotification();
+    const [mode, setMode] = useState<"" | "putaway" | "edit" | "breakdown">("");
 
 
     const columnDefs: (ColDef | ColGroupDef)[] = [
@@ -130,7 +130,7 @@ export default function LPN() {
         };
 
         fetchData();
-    }, [showPutAwayModal]); // Empty dependency array ensures this runs once on mount
+    }, [mode]); // Empty dependency array ensures this runs once on mount
 
 
     return (
@@ -144,7 +144,7 @@ export default function LPN() {
             <div className="flex justify-start mb-4">
                 <Button size="sm"
                         variant="primary"
-                        className={"mr-2.5 flex items-center"}
+                        className={"mr-5 flex items-center"}
                         onClick={() => navigate("/inventory/lpn/add")}
                 >
                     New LPN
@@ -152,18 +152,20 @@ export default function LPN() {
                 <Button
                     size="sm"
                     variant="primary"
-                    onClick={() => setShowPutAwayModal(true)}
-                    className={"mr-2.5 flex items-center"}
+                    onClick={() => {
+                        setMode("putaway")}}
+                    className={"mr-5 flex items-center"}
                 >
                     Put away
                 </Button>
 
-                {/*<Button size="sm"*/}
-                {/*        variant="primary"*/}
-                {/*        className={"mr-2.5 flex items-center"}*/}
-                {/*>*/}
-                {/*    History*/}
-                {/*</Button>*/}
+                <Button size="sm"
+                        variant="primary"
+                        onClick={() => setMode("breakdown")}
+                        className={"mr-5 flex items-center"}
+                >
+                    Breakdown
+                </Button>
             </div>
 
             <Loader isLoading={loading}>
@@ -184,10 +186,9 @@ export default function LPN() {
                 </div>
             </Loader>
 
-            <PutAwayLPN
-                visible={showPutAwayModal}
-                onCancel={() => setShowPutAwayModal(false)}
-                lpnProps={lpns}
+            <FindLPN
+                onCancel={() => setMode("")}
+                mode={mode}
             />
 
         </>
