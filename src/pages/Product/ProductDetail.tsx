@@ -87,6 +87,8 @@ const ProductContainer: FC<ProductContainerProp> = ({ product}) => {
         setIsZoomed(!isZoomed);
     };
 
+
+
     return (<>
 
 

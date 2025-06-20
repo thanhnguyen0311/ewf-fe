@@ -14,9 +14,17 @@ import ProductSheet from "./pages/Product/ProductSheet";
 import Users from "./pages/User/Users";
 import Permissions from "./pages/AuthPages/Permissions";
 import LPN from "./pages/Inventory/./LPN/LPN";
-import NewLPN from "./pages/Inventory/LPN/NewLPN";
+import NewLPN from "./pages/Inventory/LPN/New/NewLPN";
 
 export default function App() {
+
+  // Mock function to check if user is authenticated
+  const isAuthenticated = () => {
+    // Replace with your actual authentication check logic, e.g., token validation
+    return !!localStorage.getItem('authToken'); // Assume token is stored in localStorage
+  };
+
+
   return (
     <>
       <Router>

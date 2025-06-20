@@ -20,6 +20,7 @@ axiosInstance.interceptors.request.use(
         return config;
     },
     (error) => {
+        console.log(error);
         return Promise.reject(error);
     }
 );
@@ -29,6 +30,8 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
+
+
         if (error.response && error.response.status === 401) {
 
             localStorage.removeItem("authToken");
