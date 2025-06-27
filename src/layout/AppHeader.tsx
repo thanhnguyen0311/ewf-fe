@@ -39,21 +39,21 @@ const AppHeader: React.FC = () => {
 
   // Fetch product data
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/product/search/all`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch product list.");
-        }
-        const data = await response.json();
-        setProducts(data); // Save fetched data
-        setLoading(false);
-      } catch (err: any) {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
+    // const fetchProducts = async () => {
+    //   try {
+    //     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/product/search/all`);
+    //     if (!response.ok) {
+    //       throw new Error("Failed to fetch product list.");
+    //     }
+    //     const data = await response.json();
+    //     setProducts(data); // Save fetched data
+    //     setLoading(false);
+    //   } catch (err: any) {
+    //     setLoading(false);
+    //   }
+    // };
+    //
+    // fetchProducts();
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +111,7 @@ const AppHeader: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 flex z-1 w-full bg-white border-gray-200 dark:border-gray-800 dark:bg-gray-900 lg:border-b">
+    <header className="sticky top-0 flex z-1 w-full bg-white border-gray-200 dark:border-gray-800 dark:bg-gray-900 lg:border-b ">
 
       <div className="flex flex-col items-center justify-between flex-grow lg:flex-row lg:px-6">
         <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 dark:border-gray-800 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4">
@@ -198,70 +198,70 @@ const AppHeader: React.FC = () => {
 
                 {/* Search Input */}
 
-                <div className="relative">
-                  <input
-                      type="text"
-                      value={inputValue}
-                      onChange={handleInputChange}
-                      placeholder="Search products..."
-                      className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[430px]"
-                  />
-                  {inputValue && (
-                      <button
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-white/50"
-                          aria-label="Clear search"
-                          onClick={() => {
-                            setInputValue("");
-                            setFilteredResults([]);
-                          }}
-                      >
-                        ✕
-                      </button>
-                  )}
+                {/*<div className="relative">*/}
+                {/*  <input*/}
+                {/*      type="text"*/}
+                {/*      value={inputValue}*/}
+                {/*      onChange={handleInputChange}*/}
+                {/*      placeholder="Search products..."*/}
+                {/*      className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[430px]"*/}
+                {/*  />*/}
+                {/*  {inputValue && (*/}
+                {/*      <button*/}
+                {/*          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-white/50"*/}
+                {/*          aria-label="Clear search"*/}
+                {/*          onClick={() => {*/}
+                {/*            setInputValue("");*/}
+                {/*            setFilteredResults([]);*/}
+                {/*          }}*/}
+                {/*      >*/}
+                {/*        ✕*/}
+                {/*      </button>*/}
+                {/*  )}*/}
 
-                  {/* Results Dropdown */}
-                  {isSearchActive && filteredResults.length > 0 && (
-                      <ul
-                          className="absolute z-50 mt-1 w-full max-h-60 overflow-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800"
-                          onScroll={handleScroll} // Bind scroll event for infinite scroll
-                      >
-                        {visibleProducts.map((product) => (
-                            <Link to={`/product/${product.sku}`}>
-                              <li
-                                key={product.sku}
-                                onClick={() => {
-                                  setIsSearchActive(false); // Close the dropdown
-                                  setFilteredResults([]);  // Optional: Clear the filtered results
-                                }}
-                                className="flex items-center gap-4 p-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                            >
-                                {/* Product Details */}
-                                  <img
-                                      src={product.image}
-                                      alt={product.sku}
-                                      className="w-12 h-12 object-cover rounded-md" // Resized to 12x12 pixels
-                                      loading="lazy"
-                                  />
-                                  <p className="font-medium">{product.sku}</p>
-                                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                                    {product.finish || ""}
-                                  </p>
-                                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                                    Price: ${product.price?.toFixed(2) || "0.00"}
-                                  </p>
-                              </li>
-                            </Link>
-                        ))}
-                      </ul>
-                  )}
+                {/*  /!* Results Dropdown *!/*/}
+                {/*  {isSearchActive && filteredResults.length > 0 && (*/}
+                {/*      <ul*/}
+                {/*          className="absolute z-50 mt-1 w-full max-h-60 overflow-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800"*/}
+                {/*          onScroll={handleScroll} // Bind scroll event for infinite scroll*/}
+                {/*      >*/}
+                {/*        {visibleProducts.map((product) => (*/}
+                {/*            <Link to={`/product/${product.sku}`}>*/}
+                {/*              <li*/}
+                {/*                key={product.sku}*/}
+                {/*                onClick={() => {*/}
+                {/*                  setIsSearchActive(false); // Close the dropdown*/}
+                {/*                  setFilteredResults([]);  // Optional: Clear the filtered results*/}
+                {/*                }}*/}
+                {/*                className="flex items-center gap-4 p-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"*/}
+                {/*            >*/}
+                {/*                /!* Product Details *!/*/}
+                {/*                  <img*/}
+                {/*                      src={product.image}*/}
+                {/*                      alt={product.sku}*/}
+                {/*                      className="w-12 h-12 object-cover rounded-md" // Resized to 12x12 pixels*/}
+                {/*                      loading="lazy"*/}
+                {/*                  />*/}
+                {/*                  <p className="font-medium">{product.sku}</p>*/}
+                {/*                  <p className="text-xs text-gray-500 dark:text-gray-400">*/}
+                {/*                    {product.finish || ""}*/}
+                {/*                  </p>*/}
+                {/*                  <p className="text-xs text-gray-500 dark:text-gray-400">*/}
+                {/*                    Price: ${product.price?.toFixed(2) || "0.00"}*/}
+                {/*                  </p>*/}
+                {/*              </li>*/}
+                {/*            </Link>*/}
+                {/*        ))}*/}
+                {/*      </ul>*/}
+                {/*  )}*/}
 
-                  {/* Empty State */}
-                  {isSearchActive && inputValue && filteredResults.length === 0 && (
-                      <div className="absolute z-50 mt-1 w-full rounded-lg border border-gray-200 bg-white p-2 text-sm text-gray-500 shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                        No matching products found.
-                      </div>
-                  )}
-                </div>
+                {/*  /!* Empty State *!/*/}
+                {/*  {isSearchActive && inputValue && filteredResults.length === 0 && (*/}
+                {/*      <div className="absolute z-50 mt-1 w-full rounded-lg border border-gray-200 bg-white p-2 text-sm text-gray-500 shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">*/}
+                {/*        No matching products found.*/}
+                {/*      </div>*/}
+                {/*  )}*/}
+                {/*</div>*/}
 
               </div>
             </form>

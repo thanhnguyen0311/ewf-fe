@@ -1,4 +1,5 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router";
+import History from "./pages/History/History"; // Replace with actual path of the History component
 import AppLayout from "./layout/AppLayout";
 import AuthLayout from "./layout/AuthLayout";
 import SignIn from "./pages/AuthPages/SignIn";
@@ -42,7 +43,9 @@ export default function App() {
             <Route path="/components" element={<CInventory />} />
             <Route path="/users" element={<Users />} />
             <Route path="/permissions" element={<Permissions />} />
+            <Route path="/permissions" element={<Permissions />} />
 
+            <Route path="/history" element={<History />} />
           </Route>
 
           {/* Auth Layout */}

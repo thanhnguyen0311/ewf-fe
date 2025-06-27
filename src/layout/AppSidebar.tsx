@@ -5,10 +5,10 @@ import { Link, useLocation } from "react-router";
 import { useSidebar } from "../context/SidebarContext";
 import {
   BoxIconLine,
-  ChevronDownIcon, PieChartIcon, FileIcon, FolderIcon,
+  ChevronDownIcon, PieChartIcon, FileIcon,
   GridIcon,
   HorizontaLDots,
-  PlugInIcon, PencilIcon, TableIcon
+  PlugInIcon, PencilIcon, TableIcon, TimeIcon
 } from "../icons";
 import SidebarWidget from "./SidebarWidget";
 import {AuthContext} from "../context/AuthContext";
@@ -46,13 +46,8 @@ const navItems: NavItem[] = [
         { name: "Add Product", path: "/product/new", pro: false, active: true },
         { name: "Product Details", path: "/products", pro: false, active: true },
         { name: "Inventory", path: "/inventory/products", pro: false, active: true },
-        // { name: "Dimensions", path: "/", pro: false, active: true },
         { name: "Components", path: "/components", pro: false, active: true },
     ],
-  },
-  {
-    name: "Customer",
-    icon: <FolderIcon />,
   },
   {
     icon: <PieChartIcon />,
@@ -62,6 +57,12 @@ const navItems: NavItem[] = [
 ];
 
 const othersItems: NavItem[] = [
+
+  {
+    icon: <TimeIcon />,
+    name: "History",
+    path: "/history",
+  },
   {
     icon: <PencilIcon />,
     name: "Settings",

@@ -1,13 +1,11 @@
 import React, {useEffect, useRef, useState} from "react";
 import Button from "../../../../components/ui/button/Button";
-import {LPNEditRequestProp, LPNProp, mapLPNToEditRequest} from "../../../../interfaces/LPN";
+import {LPNEditRequestProp} from "../../../../interfaces/LPN";
 import {BayLocationProp} from "../../../../interfaces/BayLocation";
 import {getBayLocations} from "../../../../api/BayLocationApiService";
-import Loader from "../../../UiElements/Loader/Loader";
-import {editLpn} from "../../../../api/LpnApiService";
+import {editLpn, putAwayLpn} from "../../../../api/LpnApiService";
 import {useNotification} from "../../../../context/NotificationContext";
 import {useErrorHandler} from "../../../../hooks/useErrorHandler";
-import Label from "../../../../components/form/Label";
 
 
 interface PutAwayModalProps {
@@ -111,7 +109,7 @@ const PutAwayLPN: React.FC<PutAwayModalProps> = ({onCancel, lpnProp, setLoading}
         try {
             if (lpnRequest) {
                 lpnRequest.bayCode = bayCode
-                await editLpn(lpnRequest);
+                await putAwayLpn(lpnRequest);
             }
             // Delay the filtering for better performance
             debounceTimer.current = setTimeout(() => {
@@ -151,17 +149,27 @@ const PutAwayLPN: React.FC<PutAwayModalProps> = ({onCancel, lpnProp, setLoading}
                             <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
                                 Tag ID
                             </p>
-                            <p className="text-sm font-semibold text-gray-800 dark:text-white/90">
+                            <p className="text-sm font-normal text-gray-800 dark:text-white/90">
                                 {lpnRequest.tagID}
                             </p>
                         </div>
+
+                        <div></div>
 
                         <div>
                             <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
                                 SKU
                             </p>
-                            <p className="text-sm font-semibold text-gray-800 dark:text-white/90">
+                            <p className="text-md font-semibold text-gray-800 dark:text-white/90">
                                 {lpnRequest.sku}
+                            </p>
+                        </div>
+                        <div>
+                            <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
+                                Qty
+                            </p>
+                            <p className="text-md font-semibold text-gray-800 dark:text-white/90">
+                                {lpnRequest.quantity}
                             </p>
                         </div>
 
@@ -169,7 +177,7 @@ const PutAwayLPN: React.FC<PutAwayModalProps> = ({onCancel, lpnProp, setLoading}
                             <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
                                 Current Location
                             </p>
-                            <p className="text-sm font-semibold text-gray-800 dark:text-white/90">
+                            <p className="text-md font-semibold text-gray-800 dark:text-white/90">
                                 {lpnRequest.bayCode}
                             </p>
                         </div>

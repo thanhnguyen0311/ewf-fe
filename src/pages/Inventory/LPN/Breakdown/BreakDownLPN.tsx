@@ -3,7 +3,7 @@ import Button from "../../../../components/ui/button/Button";
 import {LPNEditRequestProp } from "../../../../interfaces/LPN";
 import {BayLocationProp} from "../../../../interfaces/BayLocation";
 import {getBayLocations} from "../../../../api/BayLocationApiService";
-import {editLpn} from "../../../../api/LpnApiService";
+import {breakDownLpn, editLpn} from "../../../../api/LpnApiService";
 import {useNotification} from "../../../../context/NotificationContext";
 import {useErrorHandler} from "../../../../hooks/useErrorHandler";
 import {getComponentInbound} from "../../../../api/ComponentApiService";
@@ -47,7 +47,7 @@ const BreakDownLPN: React.FC<PutAwayModalProps> = ({onCancel, lpnProp, setLoadin
         try {
             if (lpnProp) {
                 lpnProp.status = "inactive"
-                await editLpn(lpnProp);
+                await breakDownLpn(lpnProp);
             }
             // Delay the filtering for better performance
             debounceTimer.current = setTimeout(() => {
@@ -64,7 +64,7 @@ const BreakDownLPN: React.FC<PutAwayModalProps> = ({onCancel, lpnProp, setLoadin
 
             }, 300); // Debounce time (e.g., 300ms)
         } catch (error) {
-            const response = handleError(error)
+            handleError(error)
         } finally {
             setLoading(false);
         }
