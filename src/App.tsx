@@ -1,4 +1,5 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router";
+import History from "./pages/History/History"; // Replace with actual path of the History component
 import AppLayout from "./layout/AppLayout";
 import AuthLayout from "./layout/AuthLayout";
 import SignIn from "./pages/AuthPages/SignIn";
@@ -15,6 +16,7 @@ import Users from "./pages/User/Users";
 import Permissions from "./pages/AuthPages/Permissions";
 import LPN from "./pages/Inventory/./LPN/LPN";
 import NewLPN from "./pages/Inventory/LPN/New/NewLPN";
+import SearchBySKU from "./pages/Count&Search/SearchBySKU";
 
 export default function App() {
 
@@ -42,7 +44,11 @@ export default function App() {
             <Route path="/components" element={<CInventory />} />
             <Route path="/users" element={<Users />} />
             <Route path="/permissions" element={<Permissions />} />
+            <Route path="/permissions" element={<Permissions />} />
 
+            <Route path="/history" element={<History />} />
+
+            <Route path="/counting/sku" element={<SearchBySKU />} />
           </Route>
 
           {/* Auth Layout */}

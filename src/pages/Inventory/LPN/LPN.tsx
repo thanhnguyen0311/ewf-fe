@@ -5,70 +5,72 @@ import 'flatpickr/dist/flatpickr.min.css';
 import Loader from "../../UiElements/Loader/Loader";
 import Button from "../../../components/ui/button/Button";
 import {AgGridReact} from "ag-grid-react";
-import { ColDef, ColGroupDef } from 'ag-grid-community';
+import {ColDef, ColGroupDef} from 'ag-grid-community';
 import "ag-grid-community/styles/ag-theme-balham.css";
 import {useNavigate} from "react-router";
 import {LPNProp} from "../../../interfaces/LPN";
 import {getAllLpn} from "../../../api/LpnApiService";
 
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faSearch, faPlus} from "@fortawesome/free-solid-svg-icons";
+
+
 import "./LPN.css"
 import {useNotification} from "../../../context/NotificationContext";
 import FindLPN from "./Find/FindLPN";
+import {useSidebar} from "../../../context/SidebarContext";
 
 export default function LPN() {
+    const {isMobile} = useSidebar();
     const gridRef = useRef<AgGridReact>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
     const [lpns, setLpns] = useState<LPNProp[]>([]);
     const {sendNotification} = useNotification();
-    const [mode, setMode] = useState<"" | "putaway" | "edit" | "breakdown">("");
+    const [mode, setMode] = useState<"" | "find" | "putaway" | "edit" | "breakdown">("");
 
 
     const columnDefs: (ColDef | ColGroupDef)[] = [
         {
-            headerName: "RFID Tag ID",
+            headerName: "Tag ID",
             field: "tagID",
             sortable: false,
-            width: 200,
-            editable: false,
+            width: 85,
+            editable: true,
             filter: "agTextColumnFilter",
+            valueFormatter: (params) => {
+                const tagId = params.value || ""; // Ensure the value exists
+                return "...." + tagId.slice(-5); // Display only the last three characters
+            },
         },
         {
             headerName: "SKU",
             field: "sku",
             sortable: false,
-            width: 220,
+            width: 130,
             editable: false,
             filter: "agTextColumnFilter",
         },
         {
-            headerName: "Qty",
+            headerName: "QTY",
             field: "quantity",
             sortable: false,
-            width: 100,
+            width: 60,
             editable: false,
         },
         {
-            headerName: "Location",
+            headerName: "BAY",
             field: "bayCode",
             sortable: true,
-            width: 150,
+            width: 80,
             editable: false,
             filter: "agTextColumnFilter",
         },
         {
-            headerName: "#Container",
-            field: "containerNumber",
-            sortable: true,
-            width: 250,
-            editable: false,
-            filter: "agTextColumnFilter",
-        },
-        {
-            headerName: "Status",
+            headerName: "STATUS",
             field: "status",
             sortable: true,
-            width: 150,
+            width: 100,
             editable: false,
             filter: "agTextColumnFilter",
             cellStyle: (params: any) => {
@@ -81,6 +83,15 @@ export default function LPN() {
                 };
             }
         },
+        {
+            headerName: "#Container",
+            field: "containerNumber",
+            sortable: true,
+            width: 150,
+            editable: false,
+            filter: "agTextColumnFilter",
+        },
+
         {
             headerName: "Zone",
             field: "zone",
@@ -114,6 +125,7 @@ export default function LPN() {
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
                 const data = await getAllLpn(); // Call API to fetch LPN data
                 setLpns(data); // Set table row data
@@ -129,8 +141,11 @@ export default function LPN() {
             }
         };
 
-        fetchData();
-    }, [mode]); // Empty dependency array ensures this runs once on mount
+        if (mode === "") {
+            fetchData(); // Fetch data only when mode changes to an empty string
+        }
+    }, [mode]); // Trigger when `mode` changes
+
 
 
     return (
@@ -141,47 +156,73 @@ export default function LPN() {
             />
             <PageBreadcrumb pageTitle="LPN Management"/>
 
-            <div className="flex justify-start mb-4">
-                <Button size="sm"
-                        variant="primary"
-                        className={"mr-5 flex items-center"}
-                        onClick={() => navigate("/inventory/lpn/add")}
-                >
-                    New LPN
-                </Button>
-                <Button
-                    size="sm"
-                    variant="primary"
-                    onClick={() => {
-                        setMode("putaway")}}
-                    className={"mr-5 flex items-center"}
-                >
-                    Put away
-                </Button>
+                {
+                    isMobile ? (
+                            <>
+                                <Button
+                                    size="sm"
+                                    variant="primary"
+                                    aria-label="Clear search"
+                                    className="fixed bottom-20 z-10 right-4 w-12 h-12 flex items-center justify-center shadow-lg bg-orange-400 text-white hover:bg-orange-500 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+                                    onClick={() => setMode("find")} // Replace with your search function or navigation
+                                >
+                                    <FontAwesomeIcon icon={faSearch} className="text-xl"/>
+                                </Button>
 
-                <Button size="sm"
-                        variant="primary"
-                        onClick={() => setMode("breakdown")}
-                        className={"mr-5 flex items-center"}
-                >
-                    Breakdown
-                </Button>
-            </div>
+                                <Button
+                                    size="sm"
+                                    variant="primary"
+                                    className="fixed bottom-4 z-1 right-4 w-12 h-12 rounded-full flex items-center justify-center shadow-lg bg-orange-400 text-white hover:bg-orange-500 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+                                    onClick={() => navigate("/inventory/lpn/add")}
+                                >
+                                    <FontAwesomeIcon icon={faPlus} className="text-2xl"/>
+                                </Button>
+                            </>
+                        ) :
+                        <div className="flex justify-start mb-4">
+                            <Button size="sm"
+                                    variant="primary"
+                                    className={"mr-5 flex items-center"}
+                                    onClick={() => navigate("/inventory/lpn/add")}
+                            >
+                                New LPN
+                            </Button>
+                            <Button
+                                size="sm"
+                                variant="primary"
+                                onClick={() => setMode("find")}
+                                className={"mr-5 flex items-center"}
+                            >
+                                Put away
+                            </Button>
+
+                            <Button size="sm"
+                                    variant="primary"
+                                    onClick={() => setMode("find")}
+                                    className={"mr-5 flex items-center"}
+                            >
+                                Breakdown
+                            </Button>
+
+                        </div>
+                }
+
 
             <Loader isLoading={loading}>
                 <div
-                    className="ag-theme-balham shadow rounded-xl "
-                    style={{height: "700px", width: "100%", marginTop: "20px"}}
+                    className="ag-theme-balham shadow rounded-xl"
+                    style={{height: "550px", width: "100%", marginTop: "20px"}}
                 >
                     {!loading ? (
                         <AgGridReact
-                        ref={gridRef}
-                        rowData={lpns}
-                        columnDefs={columnDefs}
-                        defaultColDef={defaultColDef}
-                        headerHeight={40}
-                        rowHeight={32}
-                    />) : <></>}
+                            ref={gridRef}
+                            suppressMovableColumns={true}
+                            rowData={lpns}
+                            columnDefs={columnDefs}
+                            defaultColDef={defaultColDef}
+                            headerHeight={40}
+                            rowHeight={32}
+                        />) : <></>}
 
                 </div>
             </Loader>
@@ -189,6 +230,7 @@ export default function LPN() {
             <FindLPN
                 onCancel={() => setMode("")}
                 mode={mode}
+                setMode={setMode}
             />
 
         </>

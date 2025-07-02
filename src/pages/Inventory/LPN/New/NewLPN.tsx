@@ -119,17 +119,24 @@ export default function NewLPN() {
         fetchComponentInboundData();
     }, []);
 
+    const validateTagID = (tagID: string): boolean => {
+        return !isNaN(parseInt(tagID[tagID.length - 1], 10)); // Additional check for the last digit
+    };
+
 
     const handleInputTagIDChange = (input: string) => {
+        const isValid = validateTagID(input);
+
         setLpnRequest((prevState) => ({
             ...prevState,
             tagID: input,
         }));
 
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            tagID: false,
+        setErrors((prevState) => ({
+            ...prevState,
+            tagID: !isValid, // Set error state to true if invalid
         }));
+
     }
 
 
@@ -137,6 +144,11 @@ export default function NewLPN() {
         setLpnRequest((prevState) => ({
             ...prevState,
             sku: value, // Replace "newSkuValue" with the desired value
+        }));
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            sku: false,
         }));
 
         if (debounceTimer.current) {
@@ -148,11 +160,24 @@ export default function NewLPN() {
             filterComponents(value);
         }, 300); // Debounce time (e.g., 300ms)
 
-        // Clear validation error immediately after fixing the field
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            sku: false,
-        }));
+
+        if (value.trim() !== "") {
+            const exactMatch = componentInboundData.find(
+                (c) =>
+                    c.sku.toLowerCase() === value.toLowerCase()
+            );
+
+            if (!exactMatch) {
+                // Clear validation error immediately after fixing the field
+                setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    sku: true,
+                }));
+            } else {
+                filterBayLocation(value);
+            }
+        }
+
     };
 
 
@@ -174,10 +199,6 @@ export default function NewLPN() {
 
 
         if (exactMatch) {
-            // Find the matching bay location based on the `defaultSku`
-            const matchingBayLocation = bayLocationData.find(
-                (location) => location.defaultSku === exactMatch.sku
-            );
 
             // If there's an exact match, preselect it
             setLpnRequest((prevState) => ({
@@ -185,8 +206,14 @@ export default function NewLPN() {
                 sku: exactMatch.sku, // Automatically set the SKU in state
                 quantity: exactMatch.palletCapacity || 12,
             }));
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                sku: false,
+            }));
 
+            filterBayLocation(exactMatch.sku);
             setFilteredComponents([]); // Clear the filteredComponents list since we autoselected
+
         } else {
             // Otherwise, set the filtered results normally
             setFilteredComponents(results);
@@ -195,11 +222,6 @@ export default function NewLPN() {
 
 
     const handleComponentSelect = (component: ComponentInboundProp) => {
-        // Find the matching bay location based on the `defaultSku`
-        const matchingBayLocation = bayLocationData.find(
-            (location) => location.defaultSku === component.sku
-        );
-
 
         setLpnRequest((prevState) => ({
             ...prevState,
@@ -207,6 +229,12 @@ export default function NewLPN() {
             quantity: component.palletCapacity || 12,
         }));
 
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            sku: false,
+        }));
+
+        filterBayLocation(component.sku);
         setFilteredComponents([]);
     };
 
@@ -227,10 +255,7 @@ export default function NewLPN() {
             clearTimeout(debounceTimer.current); // Clear previous timer
         }
 
-        // Delay the filtering for better performance
-        debounceTimer.current = setTimeout(() => {
-            filterBayLocation(value);
-        }, 300); // Debounce time (e.g., 300ms)
+
         // Check for an exact match
         if (value.trim() !== "") {
             const exactMatch = bayLocationData.find(
@@ -249,36 +274,11 @@ export default function NewLPN() {
 
     };
 
-    const filterBayLocation = (value: string) => {
-        if (value.trim() === "") {
-            setFilteredBayLocation([]); // Reset filtered results if input is empty
-            return;
-        }
-
-        const results = bayLocationData.filter((bay) =>
-            bay.bayCode.toLowerCase().includes(value.toLowerCase())
+    const filterBayLocation = (sku: string) => {
+        const matches = bayLocationData.filter(
+            (location) => location.defaultSku?.toLowerCase() === sku.toLowerCase()
         );
-
-
-        // Check for an exact match
-        const exactMatch = bayLocationData.find(
-            (bay) =>
-                bay.bayCode.toLowerCase() === value.toLowerCase()
-        );
-
-
-        if (exactMatch) {
-            // If there's an exact match, preselect it
-            setLpnRequest((prevState) => ({
-                ...prevState,
-                bayCode: exactMatch.bayCode, // Automatically set the SKU in state
-            }));
-
-            setFilteredBayLocation([]); // Clear the filteredComponents list since we autoselected
-        } else {
-            // Otherwise, set the filtered results normally
-            setFilteredBayLocation(results);
-        }
+        setFilteredBayLocation(matches);
     };
 
 
@@ -288,7 +288,6 @@ export default function NewLPN() {
             bayCode: bay.bayCode, // Replace "newSkuValue" with the desired value
         }));
 
-        setFilteredBayLocation([]);
     };
 
 
@@ -302,15 +301,15 @@ export default function NewLPN() {
     const handleSubmit = async () => {
 
         const newErrors: { [key: string]: boolean } = {
-            tagID: !lpnRequest.tagID || lpnRequest.tagID.trim() === "",
-            sku: !lpnRequest.sku || lpnRequest.sku.trim() === "",
+            tagID: !lpnRequest.tagID || !validateTagID(lpnRequest.tagID),
+            sku: !lpnRequest.sku,
             quantity: !lpnRequest.quantity || lpnRequest.quantity <= 0,
         };
 
         setErrors(newErrors);
 
         // Check if there are any errors
-        const hasErrors = Object.values(newErrors).some((error) => error);
+        const hasErrors = Object.values(errors).some((error) => error);
 
         if (hasErrors) {
             sendNotification(
@@ -338,7 +337,6 @@ export default function NewLPN() {
                 }
             );
             setIsSubmitted(true);
-            handlePrintLabel()
 
         } catch (error) {
             handleError(error);
@@ -364,7 +362,7 @@ export default function NewLPN() {
             reader.onloadend = function () {
                 const link = document.createElement("a");
                 link.href = reader.result as string;
-                link.download = "label.zpl";
+                link.download = component?.sku + ".zpl";
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -374,7 +372,7 @@ export default function NewLPN() {
             // For other browsers, use the usual method
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = "label.zpl";
+            link.download = component?.sku + ".zpl";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -420,8 +418,8 @@ export default function NewLPN() {
             <Loader isLoading={loading}>
                 <Form
                     onSubmit={() => {
-                }}
-                    className={`space-y-4 ${isMobile && "min-h-screen"}`}>
+                    }}
+                    className={`space-y-4 mb-20 ${isMobile && "min-h-screen"}`}>
                     <div>
                         <Label className="ml-1 font-semibold">RFID Tag ID</Label>
                         <div className="relative w-full max-w-xl ">
@@ -430,7 +428,7 @@ export default function NewLPN() {
                                 value={lpnRequest.tagID}
                                 placeholder="Enter or scan"
                                 className={`mt-1 block w-full bg-white pr-12 ${
-                                    errors.tagID ? "border-red-500" : "border-gray-300"
+                                    (errors.tagID ? "border-red-500" : lpnRequest.tagID === "" ? "border-gray-300" : "border-green-500")
                                 }`}
                                 onChange={(e) => {
                                     handleInputTagIDChange(e.target.value.trim())
@@ -472,7 +470,7 @@ export default function NewLPN() {
                                     value={lpnRequest.sku}
                                     placeholder="Enter or scan"
                                     className={`mt-1 block w-full bg-white ${
-                                        errors.sku ? "border-red-500" : "border-gray-300"
+                                        (errors.sku ? "border-red-500" : lpnRequest.sku === "" ? "border-gray-300" : "border-green-500")
                                     }`}
                                     onFocus={() => {
                                         setLpnRequest((prevState) => ({
@@ -576,14 +574,14 @@ export default function NewLPN() {
 
                     <div>
                         <Label className="ml-1 font-semibold">Bay Location</Label>
-                        <div className="relative w-full max-w-xl">
+                        <div className="w-full max-w-xl">
                             <Input
                                 type="text"
                                 value={lpnRequest.bayCode}
                                 placeholder="Enter or scan"
                                 disabled={isSubmitted}
                                 className={`mt-1 block bg-white w-full ${
-                                    errors.bayCode ? "border-red-500" : "border-gray-300"
+                                    lpnRequest.bayCode && (errors.bayCode ? "border-red-500" : "border-green-500")
                                 }`}
                                 onFocus={() => {
                                     setLpnRequest((prevState) => ({
@@ -596,50 +594,51 @@ export default function NewLPN() {
                             />
 
 
-
                             {errors.bayCode && (
                                 <p className="text-red-500 text-sm mt-1">
                                     Invalid Bay Code. Please select a valid Bay Code from the dropdown.
                                 </p>
                             )}
 
-                            {/* Dropdown List */}
-                            {filteredBayLocation.length > 0 && (
-                                <ul className="absolute z-10 w-full text-theme-xm bg-white border rounded shadow max-h-48 overflow-y-auto">
-                                    {filteredBayLocation.map((bay) => {
-                                            const available = Math.max(0, bay.maxPallets - bay.capacity);
-                                            const availabilityPercentage = (available / bay.maxPallets) * 100; // Calculate percentage
+                            {!isSubmitted && <div className="relative w-full overflow-x-auto whitespace-nowrap mt-2">
+                                {filteredBayLocation.map((bay) => {
+                                    const available = Math.max(0, bay.maxPallets - bay.capacity); // Available pallets
+                                    const availabilityPercentage = (available / bay.maxPallets) * 100; // Percentage calculation
 
-                                            // Determine color based on availability
-                                            const availabilityColor =
-                                                availabilityPercentage > 50
-                                                    ? "text-green-600"
-                                                    : availabilityPercentage > 0
-                                                        ? "text-yellow-600"
-                                                        : "text-red-600";
+                                    // Determine the color of text based on availability
+                                    const availabilityColor =
+                                        availabilityPercentage > 50
+                                            ? "text-green-600"
+                                            : availabilityPercentage > 0
+                                                ? "text-yellow-600"
+                                                : "text-red-600";
 
-
-                                            return (
-                                                <li
-                                                    key={bay.bayCode} // Or a unique identifier
-                                                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                                                    onClick={() => handleBayLocationSelect(bay)}
-                                                >
-                                                    <div
-                                                        className="flex flex-wrap text-sm items-center gap-4 text-gray-600">
-                                                        <span>Bay: <span
-                                                            className="font-semibold text-gray-800">{bay.bayCode}</span></span>
-                                                        <span>Max Pallets: <span
-                                                            className="font-semibold text-gray-800">{bay.maxPallets}</span></span>
-                                                        <span>Available: <span
-                                                            className={`font-semibold text-gray-800 ${availabilityColor}`}>{available}</span></span>
-                                                    </div>
-                                                </li>
-                                            )
-                                        }
-                                    )}
-                                </ul>
-                            )}
+                                    return (
+                                        <button
+                                            key={bay.bayCode} // Use a unique identifier (e.g., bayCode)
+                                            className="inline-block max-w-[200px] px-4 py-3 text-left border rounded-md shadow hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-2"
+                                            onClick={() => handleBayLocationSelect(bay)} // Click handler for selection
+                                        >
+                                            <div className="flex justify-between items-center text-gray-600">
+                                                <div className="text-xs">
+                                                  <span className="block font-semibold text-gray-800">
+                                                    Bay: {bay.bayCode}
+                                                  </span>
+                                                        <span className="block">
+                                                    Max Pallets: <span className="font-semibold">{bay.maxPallets}</span>
+                                                  </span>
+                                                        <span className="block">
+                                                    Available:{" "}
+                                                            <span className={`font-semibold ${availabilityColor}`}>
+                                                      {available}
+                                                    </span>
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    );
+                                })}
+                            </div>}
 
                         </div>
                     </div>

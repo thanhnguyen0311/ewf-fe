@@ -5,10 +5,10 @@ import { Link, useLocation } from "react-router";
 import { useSidebar } from "../context/SidebarContext";
 import {
   BoxIconLine,
-  ChevronDownIcon, PieChartIcon, FileIcon, FolderIcon,
+  ChevronDownIcon, PieChartIcon, FileIcon,
   GridIcon,
   HorizontaLDots,
-  PlugInIcon, PencilIcon, TableIcon
+  PlugInIcon, PencilIcon, TableIcon, TimeIcon
 } from "../icons";
 import SidebarWidget from "./SidebarWidget";
 import {AuthContext} from "../context/AuthContext";
@@ -46,22 +46,25 @@ const navItems: NavItem[] = [
         { name: "Add Product", path: "/product/new", pro: false, active: true },
         { name: "Product Details", path: "/products", pro: false, active: true },
         { name: "Inventory", path: "/inventory/products", pro: false, active: true },
-        // { name: "Dimensions", path: "/", pro: false, active: true },
         { name: "Components", path: "/components", pro: false, active: true },
     ],
   },
   {
-    name: "Customer",
-    icon: <FolderIcon />,
-  },
-  {
     icon: <PieChartIcon />,
-    name: "Analytics",
-    path: "/reports",
+    name: "Count & Search",
+    subItems: [
+      { name: "Count by SKU", path: "/counting/sku", pro: false, active: true },
+    ],
   },
 ];
 
 const othersItems: NavItem[] = [
+
+  {
+    icon: <TimeIcon />,
+    name: "History",
+    path: "/history",
+  },
   {
     icon: <PencilIcon />,
     name: "Settings",
@@ -295,7 +298,7 @@ const AppSidebar: React.FC = () => {
 
   return (
     <aside
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-stone-100 dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
+      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
         ${
           isExpanded || isMobileOpen
             ? "w-[250px]"

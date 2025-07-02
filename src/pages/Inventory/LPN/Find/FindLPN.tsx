@@ -1,53 +1,30 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import Button from "../../../../components/ui/button/Button";
-import {LPNEditRequestProp, LPNProp, mapLPNToEditRequest} from "../../../../interfaces/LPN";
+import {LPNEditRequestProp, mapLPNToEditRequest} from "../../../../interfaces/LPN";
 import Loader from "../../../UiElements/Loader/Loader";
-import {useNotification} from "../../../../context/NotificationContext";
-import {getAllLpn} from "../../../../api/LpnApiService";
 import PutAwayLPN from "../PutAway/PutAwayLPN";
 import BreakDownLPN from "../Breakdown/BreakDownLPN";
+import {findLpn, removeLpn} from "../../../../api/LpnApiService";
+import {useErrorHandler} from "../../../../hooks/useErrorHandler";
+import {useNotification} from "../../../../context/NotificationContext";
 
 
 interface FindLPNModalProps {
     onCancel: () => void;
-    mode: 'putaway' | 'edit' | 'breakdown' | "";
+    mode: 'find' | 'putaway' | 'edit' | 'breakdown' | "";
+    setMode: (mode: 'find' | 'putaway' | 'edit' | 'breakdown' | "") => void;
 }
 
-const FindLPN: React.FC<FindLPNModalProps> = ({onCancel, mode}) => {
+const FindLPN: React.FC<FindLPNModalProps> = ({onCancel, mode, setMode}) => {
     const [tagID, setTagID] = React.useState<string>("");
-    const [lpnProps, setLpns] = useState<LPNProp[] | []>([]);
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<boolean>(false);
-    const {sendNotification} = useNotification();
+    const handleError = useErrorHandler();
     const [lpnRequest, setLpnRequest] = useState<LPNEditRequestProp | null>(null);
+    const {sendNotification} = useNotification();
 
-    useEffect(() => {
-        if (mode === "") {
-            return;
-        }
-        setLoading(true);
-        const fetchData = async () => {
-            try {
-                const data = await getAllLpn(); // Call API to fetch LPN data
-                setLpns(data); // Set table row data
-            } catch (error) {
-                console.error("Error fetching LPN data: ", error);
-                sendNotification(
-                    "error",
-                    "Error fetching LPN data",
-                    error instanceof Error ? error.message : String(error)
-                );
-            } finally {
-                setLoading(false); // Hide loader
-                inputRef.current?.focus();
-            }
-        };
 
-        fetchData();
-    }, [mode]); // Empty dependency array ensures this runs once on mount
-
-    // Don't render the modal if it's not visible
     if (mode === "") {
         return null;
     }
@@ -59,37 +36,45 @@ const FindLPN: React.FC<FindLPNModalProps> = ({onCancel, mode}) => {
         onCancel();
     }
 
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const data = await findLpn(tagID); // Call API to fetch LPN data
+            setLpnRequest(mapLPNToEditRequest(data))
+            setError(false)
+        } catch (error) {
+            handleError(error);
+            setError(true)
+        } finally {
+            setLoading(false); // Hide loader
+        }
+    };
 
-    const handleTagIDNext = () => {
-        // Check for an exact match
-        const exactMatch = lpnProps.find(
-            (lpn) =>
-                lpn.tagID.toLowerCase() === tagID.toLowerCase()
-        );
 
-        if (exactMatch) {
-            setLpnRequest(mapLPNToEditRequest(exactMatch));
-            setError(false);
-        } else {
-            setError(true);
+    const handleDelete = async () => {
+        setLoading(true);
+        try {
+            await removeLpn(tagID);
             sendNotification(
-                "error",
-                "Error",
-                "Can't find LPN with this tag ID. Please check your tag ID and try again. !",
+                "success",
+                "Success",
+                "LPN has been removed successfully.",
                 {
                     showLink: false,
                     autoHideDuration: 3000, // Optional: 4 seconds timeout
                 }
             );
+            onCancel()
+        } catch (error) {
+            handleError(error);
+        } finally {
+            setLoading(false); // Hide loader
         }
     }
-
 
     return (
         <>
             {
-
-
                 <div
                     className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
                     onClick={handleClose}
@@ -97,10 +82,10 @@ const FindLPN: React.FC<FindLPNModalProps> = ({onCancel, mode}) => {
                     <Loader isLoading={loading} className={"max-w-xl w-full"}>
                         <div
                             className="relative bg-white rounded-lg w-full shadow-lg"
-                            onClick={(e) => e.stopPropagation()} // Prevent click from bubbling to the overlay
+                            onClick={(e) => e.stopPropagation()}
                         >
                             <div className="p-8 ">
-                                {!lpnRequest && (
+                                {(mode === "find") && ( !lpnRequest ? (
                                     <>
                                         <input
                                             type="text"
@@ -113,11 +98,14 @@ const FindLPN: React.FC<FindLPNModalProps> = ({onCancel, mode}) => {
                                             onChange={(e) => setTagID(e.target.value.trim())}
                                             onKeyDown={(e) => {
                                                 if (e.key === "Enter") {
-                                                    handleTagIDNext(); // Trigger "Next" logic on Enter key press
+                                                    fetchData();
                                                 }
                                             }}
-
-                                            className="w-full mt-4 px-3 py-2 border border-gray-300 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                                            className={`
+                                            w-full mt-4 px-3 py-2 border  rounded mb-4 focus:outline-none focus:ring-2 
+                                            focus:ring-orange-400
+                                            ${error ? "border-red-500" : "border-gray-300"}
+                                            `}
                                         />
                                         {error && (
                                             <p className="text-sm text-red-500 mt-1 mb-2">
@@ -128,12 +116,42 @@ const FindLPN: React.FC<FindLPNModalProps> = ({onCancel, mode}) => {
                                             <Button
                                                 size="sm"
                                                 variant="primary"
-                                                onClick={handleTagIDNext}
+                                                onClick={() => fetchData()}
                                             >
                                                 Search
                                             </Button>
                                         </div>
                                     </>
+                                ) :
+                                        <div className="flex flex-col justify-start space-y-4 mb-4">
+                                            <Button
+                                                size="sm"
+                                                variant="primary"
+                                                onClick={() => setMode("putaway")}
+                                                className="w-full flex items-center justify-center"
+                                            >
+                                                Put away
+                                            </Button>
+
+                                            <Button
+                                                size="sm"
+                                                variant="primary"
+                                                onClick={() => setMode("breakdown")}
+                                                className="w-full flex items-center justify-center"
+                                            >
+                                                Breakdown
+                                            </Button>
+
+                                            <Button
+                                                size="sm"
+                                                variant="danger" // Assuming 'danger' is a predefined variant for red buttons
+                                                onClick={handleDelete} // Replace with your delete functionality
+                                                className="w-full flex items-center justify-center bg-red-500 text-white hover:bg-red-600"
+                                            >
+                                                Remove
+                                            </Button>
+
+                                        </div>
                                 )}
                                 {
                                     lpnRequest && (mode === "putaway") && (
