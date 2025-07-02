@@ -16,6 +16,7 @@ import Users from "./pages/User/Users";
 import Permissions from "./pages/AuthPages/Permissions";
 import LPN from "./pages/Inventory/./LPN/LPN";
 import NewLPN from "./pages/Inventory/LPN/New/NewLPN";
+import SearchBySKU from "./pages/Count&Search/SearchBySKU";
 
 export default function App() {
 
@@ -46,6 +47,8 @@ export default function App() {
             <Route path="/permissions" element={<Permissions />} />
 
             <Route path="/history" element={<History />} />
+
+            <Route path="/counting/sku" element={<SearchBySKU />} />
           </Route>
 
           {/* Auth Layout */}

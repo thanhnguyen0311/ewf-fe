@@ -1,11 +1,11 @@
 import PageMeta from "../../components/common/PageMeta";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import Loader from "../UiElements/Loader/Loader";
-import {AgGridReact} from "ag-grid-react";
 import React, {useState} from "react";
+import LpnHistory from "./LpnHistory";
+import {set} from "ag-grid-enterprise/dist/types/src/charts/chartComp/utils/object";
 
 export default function History() {
-    const [loading, setLoading] = useState<boolean>(true);
 
 
     return (
@@ -14,15 +14,13 @@ export default function History() {
                 title="History | East West Furniture"
                 description=""
             />
-            <PageBreadcrumb pageTitle="LPN Management"/>
+            <PageBreadcrumb pageTitle="History activity"/>
 
             <div className="flex justify-start mb-4">
 
             </div>
 
-            <Loader isLoading={loading}>
-
-            </Loader>
+            <LpnHistory />
 
         </>
     )

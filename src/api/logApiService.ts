@@ -1,7 +1,7 @@
 import axiosInstance from "../utils/axiosInstance";
-import {LPNLogProp} from "../interfaces/Log";
+import {LPNLog} from "../interfaces/Log";
 
-export const getLPNLog = async (page: number | 0): Promise<LPNLogProp[]> => {
+export const getLPNLog = async (page: number | 0): Promise<LPNLog[]> => {
 
     const response = await axiosInstance.get(`/v1/history/lpn?page=${page}`, {
         headers: {

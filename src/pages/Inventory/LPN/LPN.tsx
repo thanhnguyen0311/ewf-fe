@@ -35,7 +35,7 @@ export default function LPN() {
             headerName: "Tag ID",
             field: "tagID",
             sortable: false,
-            width: 110,
+            width: 85,
             editable: true,
             filter: "agTextColumnFilter",
             valueFormatter: (params) => {
@@ -47,7 +47,7 @@ export default function LPN() {
             headerName: "SKU",
             field: "sku",
             sortable: false,
-            width: 150,
+            width: 130,
             editable: false,
             filter: "agTextColumnFilter",
         },
