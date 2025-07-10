@@ -27,11 +27,27 @@ jobs:
 
       # Step 3: Install dependencies
       - name: Install dependencies
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "package-lock.json found, using npm ci"
+            npm ci
+          elif [ -f yarn.lock ]; then
+            echo "yarn.lock found, using yarn install"
+            yarn install --frozen-lockfile
+          else
+            echo "No lock file found, using npm install"
+            npm install
+          fi
 
-      # Step 4: Run linting (optional but recommended)
+      # Step 4: Run linting (optional - only if lint script exists)
       - name: Run linting
-        run: npm run lint
+        run: |
+          if npm run | grep -q "lint"; then
+            echo "Lint script found, running linting..."
+            npm run lint
+          else
+            echo "No lint script found in package.json, skipping linting"
+          fi
         continue-on-error: true
 
       # Step 5: Run tests
