@@ -1,12 +1,12 @@
 import PageMeta from "../../components/common/PageMeta";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 
 import React, {FC, useEffect, useState} from "react";
 import axios from "axios";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import Loader from "../UiElements/Loader/Loader";
 import ImageModal from "../UiElements/Modals";
-import {Link} from "react-router-dom";
+import {Link} from "react-router";
 import ComponentCard from "../../components/common/ComponentCard";
 import {Table, TableBody, TableCell, TableHeader, TableRow} from "../../components/ui/table";
 import {componentsProductContainerTableColumns} from "../../config/tableColumns";

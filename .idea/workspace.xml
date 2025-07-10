@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Remove Babel configuration file&#10;&#10;The `.babelrc` file is deleted as it is no longer needed. This change suggests the project no longer relies on Babel for compilation, likely due to a migration to a different build tool or preset.">
+    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="change node version">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/__mocks__/svgMock.js" beforeDir="false" afterPath="$PROJECT_DIR$/__mocks__/svgMock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jest.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/jest.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jest.setup.js" beforeDir="false" afterPath="$PROJECT_DIR$/jest.setup.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
@@ -135,7 +139,7 @@
       <workItem from="1749745407633" duration="12921000" />
       <workItem from="1749826851764" duration="14971000" />
       <workItem from="1750088557059" duration="180459000" />
-      <workItem from="1752179952808" duration="3122000" />
+      <workItem from="1752179952808" duration="5343000" />
     </task>
     <task id="LOCAL-00001" summary="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency.">
       <option name="closed" value="true" />
@@ -481,7 +485,31 @@
       <option name="project" value="LOCAL" />
       <updated>1752182891954</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="Remove Babel configuration file&#10;&#10;The `.babelrc` file is deleted as it is no longer needed. This change suggests the project no longer relies on Babel for compilation, likely due to a migration to a different build tool or preset.">
+      <option name="closed" value="true" />
+      <created>1752183124934</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1752183124934</updated>
+    </task>
+    <task id="LOCAL-00045" summary="change node version">
+      <option name="closed" value="true" />
+      <created>1752183293865</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1752183293865</updated>
+    </task>
+    <task id="LOCAL-00046" summary="change node version">
+      <option name="closed" value="true" />
+      <created>1752183401678</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1752183401678</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -499,7 +527,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Refactor User API handling and implement user updates&#10;&#10;Moved User API logic to a dedicated service file for better modularity. Added functionality to update user details via API and handle potential errors. Adjusted components to integrate with the new structure and ensure only applicable users can be edited." />
     <MESSAGE value="Add image management and modal functionality to ProductSheet&#10;&#10;Introduced an &quot;Edit Images&quot; modal for managing product images, along with handlers for saving changes. Updated table styling, added image-related interfaces, and enhanced product data mapping to include images and components. Included Roboto font and related adjustments in `tailwind.config.js`." />
     <MESSAGE value="Refactor modals and update image handling logic&#10;&#10;Moved `ProductImageModal` to a dedicated folder and introduced a new `ComponentModal`. Enhanced image handling with reordering functionality and streamlined component structure. Added updates to dependencies and environment configuration." />
     <MESSAGE value="Add LPN Management page and Virtual Keyboard integration&#10;&#10;Implemented a new LPN Management page with a responsive data grid for LPN data. Introduced a virtual keyboard component for enhanced user input and added relevant CSS for styling. Refactored and removed unused Shopify components and updated dependencies for better functionality." />
@@ -524,6 +551,7 @@
     <MESSAGE value="Switch to Jest for testing and update dependencies&#10;&#10;Replaced React Scripts testing with Jest and added Jest configuration. Updated package dependencies to align with the changes and ensure compatibility. Introduced necessary Babel and Jest-related devDependencies for proper testing environment setup." />
     <MESSAGE value="Refactor Babel configuration and cleanup package.json.&#10;&#10;Moved `@babel/plugin-proposal-private-property-in-object` from dependencies to Babel plugins in `babel.config.js` to streamline configuration. Removed unnecessary dependency from package.json and updated associated files for consistency." />
     <MESSAGE value="Remove Babel configuration file&#10;&#10;The `.babelrc` file is deleted as it is no longer needed. This change suggests the project no longer relies on Babel for compilation, likely due to a migration to a different build tool or preset." />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove Babel configuration file&#10;&#10;The `.babelrc` file is deleted as it is no longer needed. This change suggests the project no longer relies on Babel for compilation, likely due to a migration to a different build tool or preset." />
+    <MESSAGE value="change node version" />
+    <option name="LAST_COMMIT_MESSAGE" value="change node version" />
   </component>
 </project>
