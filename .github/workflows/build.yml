@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - main
-    types: [opened, synchronize, reopened]
+    types: [ opened, synchronize, reopened ]
 
 jobs:
   install-dependencies:
@@ -32,6 +32,14 @@ jobs:
             npm install
           fi
 
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json', '**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
   run-linting:
     runs-on: ubuntu-latest
     needs: install-dependencies
@@ -50,6 +58,21 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json', '**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies if cache miss
+        run: |
+          if [ ! -d "node_modules" ]; then
+            echo "Cache miss - installing dependencies"
+            if [ -f package-lock.json ]; then
+              npm ci
+            elif [ -f yarn.lock ]; then
+              yarn install --frozen-lockfile
+            else
+              npm install
+            fi
+          fi
 
       - name: Run linting
         run: |
@@ -78,6 +101,21 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json', '**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies if cache miss
+        run: |
+          if [ ! -d "node_modules" ]; then
+            echo "Cache miss - installing dependencies"
+            if [ -f package-lock.json ]; then
+              npm ci
+            elif [ -f yarn.lock ]; then
+              yarn install --frozen-lockfile
+            else
+              npm install
+            fi
+          fi
 
       - name: Run tests
         run: |
@@ -92,7 +130,7 @@ jobs:
 
   generate-env:
     runs-on: ubuntu-latest
-    needs: [run-linting, run-tests]
+    needs: [ run-linting, run-tests ]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -102,6 +140,7 @@ jobs:
           echo "Generating .env file..."
           echo "REACT_APP_API_URL=/api" > .env
           echo "HOST=127.0.0.1" >> .env
+          echo "PORT=3000" >> .env
           echo "Generated .env file:"
           cat .env
 
@@ -122,7 +161,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs: [generate-env]
+    needs: [ generate-env ]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -131,6 +170,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
 
       - name: Download .env artifact
         uses: actions/download-artifact@v4
@@ -143,5 +183,135 @@ jobs:
           echo "Checking for .env:"
           cat .env || echo "Error: cannot find .env during build!"
 
+      - name: Install dependencies for build
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "Installing dependencies with npm ci"
+            npm ci
+          elif [ -f yarn.lock ]; then
+            echo "Installing dependencies with yarn"
+            yarn install --frozen-lockfile
+          else
+            echo "Installing dependencies with npm install"
+            npm install
+          fi
+
+      - name: Verify react-scripts installation
+        run: |
+          echo "Checking if react-scripts is available:"
+          npx react-scripts --version || echo "react-scripts not found"
+          echo "Checking npm scripts:"
+          npm run
+
       - name: Build the application
-        run: npm run build
+        run: |
+          echo "Starting build process..."
+          npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-files
+          path: |
+            build/
+            package.json
+            package-lock.json
+            .env
+
+  deploy-to-vps:
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-files
+          path: ./
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            # Stop existing application
+            pm2 stop ${{ secrets.APP_NAME }} || true
+            
+            # Create application directory
+            mkdir -p  ${{ secrets.VPS_DEPLOY_PATH }}
+            cd  ${{ secrets.VPS_DEPLOY_PATH }}
+            
+            # Backup current version
+            if [ -d "current" ]; then
+              mv current backup-$(date +%Y%m%d-%H%M%S)
+            fi
+            
+            # Create new deployment directory
+            mkdir -p current
+
+      - name: Copy files to VPS
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          source: "./*"
+          target: "/var/www/${{ secrets.APP_NAME }}/current/"
+
+      - name: Start application on VPS
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            cd ${{ secrets.VPS_DEPLOY_PATH }}/current
+            
+            # Install production dependencies
+            npm ci --only=production
+            
+            # Install PM2 globally if not already installed
+            npm install -g pm2
+            
+            # Create PM2 ecosystem file
+            cat > ecosystem.config.js << EOF
+            module.exports = {
+              apps: [{
+                name: '${{ secrets.APP_NAME }}',
+                script: 'npx',
+                args: 'serve -s build -l 3000',
+                cwd: '${{ secrets.VPS_DEPLOY_PATH }}/current',
+                instances: 1,
+                exec_mode: 'fork',
+                env: {
+                  NODE_ENV: 'production',
+                  PORT: 3000
+                },
+                error_file: '/var/log/pm2/${{ secrets.APP_NAME }}-error.log',
+                out_file: '/var/log/pm2/${{ secrets.APP_NAME }}-out.log',
+                log_file: '/var/log/pm2/${{ secrets.APP_NAME }}.log'
+              }]
+            }
+            EOF
+            
+            # Start application with PM2
+            pm2 start ecosystem.config.js
+            
+            # Save PM2 configuration
+            pm2 save
+            
+            # Setup PM2 to start on boot
+            pm2 startup || true
+            
+            # Verify application is running
+            sleep 5
+            if pm2 list | grep -q "${{ secrets.APP_NAME }}.*online"; then
+              echo "Application deployed successfully and running on port 3000"
+            else
+              echo "Deployment failed - application not running"
+              exit 1
+            fi
