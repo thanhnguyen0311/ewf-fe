@@ -112,6 +112,10 @@ jobs:
           echo "HOST=127.0.0.1" >> .env
           echo "Production .env file created:"
           cat .env
+          echo "Current directory contents:"
+          ls -la
+          echo "Verifying .env file exists:"
+          test -f .env && echo ".env file exists" || echo ".env file NOT found"
 
       - name: Upload .env artifact
         uses: actions/upload-artifact@v4
@@ -121,7 +125,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs: generate-env
+    needs: [run-linting, run-tests]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -138,11 +142,12 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json', '**/yarn.lock', '**/package.json') }}
 
-      - name: Download .env artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: production-env
-          path: .
+      - name: Generate production .env file
+        run: |
+          echo "REACT_APP_API_URL=/api" > .env
+          echo "HOST=127.0.0.1" >> .env
+          echo "Production .env file created:"
+          cat .env
 
       - name: Build the project
         run: npm run build
@@ -152,6 +157,12 @@ jobs:
         with:
           name: build-files
           path: build/
+
+      - name: Upload .env artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-env
+          path: .env
 
   deploy:
     runs-on: ubuntu-latest
