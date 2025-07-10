@@ -1,0 +1,133 @@
+name: Build and Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js with caching
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4: Run linting (optional but recommended)
+      - name: Run linting
+        run: npm run lint
+        continue-on-error: true
+
+      # Step 5: Run tests
+      - name: Run tests
+        run: npm test
+
+      # Step 6: Generate production .env file
+      - name: Generate production .env
+        run: |
+          echo "REACT_APP_API_URL=/api" > .env
+          echo "HOST=127.0.0.1" >> .env
+          echo "Production .env file created:"
+          cat .env
+
+      # Step 7: Build the project
+      - name: Build the project
+        run: npm run build
+
+      # Step 8: Deploy to VPS (only on main branch push or PR merge)
+      - name: Deploy to VPS
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+          VPS_PORT: ${{ secrets.VPS_PORT || '22' }}
+        run: |
+          # Set up SSH
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          
+          # Add VPS to known hosts
+          ssh-keyscan -p "$VPS_PORT" -H "$VPS_HOST" >> ~/.ssh/known_hosts
+          
+          # Test SSH connection
+          ssh -p "$VPS_PORT" "$VPS_USERNAME@$VPS_HOST" "echo 'SSH connection successful'"
+          
+          # Create backup of current deployment
+          ssh -p "$VPS_PORT" "$VPS_USERNAME@$VPS_HOST" "
+            if [ -d /var/www/ewf-fe ]; then
+              cp -r /var/www/ewf-fe /var/www/ewf-fe.backup.$(date +%Y%m%d_%H%M%S)
+              # Keep only last 3 backups
+              ls -dt /var/www/ewf-fe.backup.* | tail -n +4 | xargs rm -rf
+            fi
+          "
+          
+          # Copy build files to VPS
+          rsync -avz --delete-after -e "ssh -p $VPS_PORT" ./build/ "$VPS_USERNAME@$VPS_HOST:/var/www/ewf-fe/"
+          
+          # Copy production .env file to VPS
+          rsync -avz -e "ssh -p $VPS_PORT" ./.env "$VPS_USERNAME@$VPS_HOST:/var/www/ewf-fe/"
+          
+          # Kill existing process on port 3000 and restart the application
+          ssh -p "$VPS_PORT" "$VPS_USERNAME@$VPS_HOST" "
+            cd /var/www/ewf-fe && 
+          
+            # Kill any process running on port 3000
+            if lsof -ti:3000; then
+              echo 'Killing existing process on port 3000...'
+              kill -9 \$(lsof -ti:3000) || true
+              sleep 2
+            fi
+          
+            # Stop PM2 process if it exists
+            if pm2 list | grep -q 'ewf-fe'; then
+              echo 'Stopping existing PM2 process...'
+              pm2 stop ewf-fe
+              pm2 delete ewf-fe || true
+            fi
+          
+            # Start the application with PM2
+            echo 'Starting new application...'
+            pm2 start npm --name 'ewf-fe' -- start
+            pm2 save
+          
+            # Verify the application is running
+            sleep 5
+            if pm2 list | grep -q 'online.*ewf-fe'; then
+              echo 'Application started successfully!'
+            else
+              echo 'Application failed to start!'
+              exit 1
+            fi
+          "
+          
+          # Cleanup old SSH key
+          rm -f ~/.ssh/id_rsa
+
+      # Step 9: Deployment Status
+      - name: Deployment Status
+        if: always() && github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✅ Deployment to /var/www/ewf-fe successful!"
+          else
+            echo "❌ Deployment to /var/www/ewf-fe failed!"
+            exit 1
+          fi
