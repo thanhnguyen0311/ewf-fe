@@ -142,6 +142,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: production-env
+          path: .
 
       - name: Build the project
         run: npm run build
