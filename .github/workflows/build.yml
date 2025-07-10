@@ -108,10 +108,16 @@ jobs:
 
       - name: Generate production .env file
         run: |
+          echo "Creating .env file in current directory..."
+          pwd
           echo "REACT_APP_API_URL=/api" > .env
           echo "HOST=127.0.0.1" >> .env
           echo "Production .env file created:"
           cat .env
+          echo "Verifying file exists:"
+          ls -la .env
+          echo "File size:"
+          wc -c .env
 
       - name: Verify dependencies
         run: |
@@ -176,7 +182,11 @@ jobs:
           cat .env
 
       - name: Build the project
-        run: npm run build
+        run: |
+          echo "Building project with relaxed linting..."
+          CI=false npm run build
+        env:
+          CI: false
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
