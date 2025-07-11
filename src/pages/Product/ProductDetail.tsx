@@ -48,6 +48,10 @@ export default function ProductDetail() {
         return <p>No product found.</p>;
     }
 
+    if (error) {
+        return <p className="text-red-500 font-bold">{error}</p>;
+    }
+
     return (
         <>
             <PageMeta
@@ -106,7 +110,7 @@ const ProductContainer: FC<ProductContainerProp> = ({ product}) => {
                                     <div className="cursor-pointer">
                                         <img
                                             src={product.images.img[0]}
-                                            alt="Product image"
+                                            alt={`Product - ${product.sku}`}
                                             className="h-48 w-auto rounded shadow-sm"
                                             onClick={() => toggleZoom(product.images.img[0])}
                                         />
@@ -121,7 +125,7 @@ const ProductContainer: FC<ProductContainerProp> = ({ product}) => {
                                     <div className="cursor-pointer">
                                         <img
                                             src={product.images.dim[0]}
-                                            alt="Product image"
+                                            alt={`Product - ${product.sku}`}
                                             className="h-48 w-auto rounded shadow-sm"
                                             onClick={() => toggleZoom(product.images.dim[0])} // Open zoom modal
                                         />

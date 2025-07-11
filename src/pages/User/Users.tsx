@@ -94,7 +94,11 @@ export default function Users() {
                             <div className="min-w-[1102px]">
 
                                 <Loader isLoading={loading}>
-                                    <Table>
+                                    {error ? (
+                                        <div className="text-red-500 font-bold p-4">{error}</div> // Add this
+                                    ) : (
+
+                                        <Table>
                                         <TableHeader columns={usersTableColumns}/>
 
                                         {/* Table Body */}
@@ -152,6 +156,7 @@ export default function Users() {
                                         </TableBody>
 
                                     </Table>
+                                    )}
 
                                 </Loader>
 

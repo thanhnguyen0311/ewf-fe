@@ -21,7 +21,6 @@ export default function ProductSheet() {
     const [forceUpdate, setForceUpdate] = useState(0);
     const gridRef = useRef<AgGridReact<any>>(null);
     const [isImageModalVisible, setImageModalVisible] = useState(false);
-    const [isComponentsModalVisible, setComponentsModalVisible] = useState(false);
     const [selectedImages, setSelectedImages] = useState<ImageProp | null>(null);
     const [selectedRowId, setSelectedRowId] = useState<number | null>(null);
 
@@ -499,6 +498,10 @@ export default function ProductSheet() {
     const onExportCSV = () => {
         gridRef.current?.api.exportDataAsCsv(); // Trigger the CSV export
     };
+
+    if (error) {
+        return <div className="text-red-500 font-bold">{error}</div>;
+    }
 
 
     return (

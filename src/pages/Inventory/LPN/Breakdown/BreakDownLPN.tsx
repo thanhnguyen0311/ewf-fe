@@ -1,12 +1,9 @@
 import React, {useEffect, useRef, useState} from "react";
 import Button from "../../../../components/ui/button/Button";
 import {LPNEditRequestProp } from "../../../../interfaces/LPN";
-import {BayLocationProp} from "../../../../interfaces/BayLocation";
-import {getBayLocations} from "../../../../api/BayLocationApiService";
-import {breakDownLpn, editLpn} from "../../../../api/LpnApiService";
+import {breakDownLpn} from "../../../../api/LpnApiService";
 import {useNotification} from "../../../../context/NotificationContext";
 import {useErrorHandler} from "../../../../hooks/useErrorHandler";
-import {getComponentInbound} from "../../../../api/ComponentApiService";
 import {getLooseInventory} from "../../../../api/InventoryApiService";
 
 

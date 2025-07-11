@@ -1,5 +1,3 @@
-import {LPNRequestProp} from "./LPN";
-
 export interface UserProp {
     id: number;
     firstName: string;

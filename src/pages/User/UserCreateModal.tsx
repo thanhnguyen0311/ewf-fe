@@ -26,7 +26,7 @@ export default function UserCreateModal({ onClose }: UserCreateModalProps) {
     const [loading, setLoading] = useState<boolean>(false);
 
 
-    const fetchRoles = async () => {
+    const fetchRoles = React.useCallback(async () => {
         try {
             const role = await getRoles();
             setRoles(role);
@@ -37,12 +37,13 @@ export default function UserCreateModal({ onClose }: UserCreateModalProps) {
                 "Please fill all required fields before submitting."
             );
         }
-    }
+    }, [sendNotification]);
+
 
     // Sync state if a new user is selected
     React.useEffect(() => {
-        fetchRoles()
-    }, []);
+        fetchRoles();
+    }, [fetchRoles]);
 
 
     const handleSubmit = async (e: React.FormEvent) => {

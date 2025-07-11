@@ -20,13 +20,6 @@ import SearchBySKU from "./pages/Count&Search/SearchBySKU";
 
 export default function App() {
 
-  // Mock function to check if user is authenticated
-  const isAuthenticated = () => {
-    // Replace with your actual authentication check logic, e.g., token validation
-    return !!localStorage.getItem('authToken'); // Assume token is stored in localStorage
-  };
-
-
   return (
     <>
       <Router>
