@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Remove unused code and improve error handling across components&#10;&#10;Cleaned up unused states, imports, and functions for better readability and performance. Enhanced error handling in multiple components to display meaningful messages. Refactored role-fetching logic and fixed minor dependency issues in React hooks." />
+    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Simplify eslint rules and enhance error handling.&#10;&#10;Replaced `eslintConfig` extends with targeted rules for better maintainability. Cleaned up unused code and improved error handling across components, ensuring better readability, performance, and meaningful feedback in UI interactions.">
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -132,15 +134,7 @@
       <workItem from="1749745407633" duration="12921000" />
       <workItem from="1749826851764" duration="14971000" />
       <workItem from="1750088557059" duration="180459000" />
-      <workItem from="1752179952808" duration="14408000" />
-    </task>
-    <task id="LOCAL-00005" summary="Add authentication context and enhance product data support&#10;&#10;Introduced `AuthContext` to manage authentication state and wrapped the application in `AuthProvider`. Expanded product data structure and updated `ProductSheet` table with new fields and enhanced columns. Adjusted header and dropdown components to respond to authentication state.">
-      <option name="closed" value="true" />
-      <created>1743803021088</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1743803021088</updated>
+      <workItem from="1752179952808" duration="14719000" />
     </task>
     <task id="LOCAL-00006" summary="Make product sheet table editable and enhance state management&#10;&#10;Added support for inline editing of product sheet fields and updated the table column definitions to handle grouped components. Introduced value mapping functions, persistent login via localStorage, and API integration to update product details dynamically. Updated configurations and utility functions to support these changes.">
       <option name="closed" value="true" />
@@ -526,7 +520,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752271360510</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="Simplify eslint rules and enhance error handling.&#10;&#10;Replaced `eslintConfig` extends with targeted rules for better maintainability. Cleaned up unused code and improved error handling across components, ensuring better readability, performance, and meaningful feedback in UI interactions.">
+      <option name="closed" value="true" />
+      <created>1752271707509</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1752271707509</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -544,7 +546,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add ZPL label generation and printing functionality&#10;&#10;Implemented ZPL label creation for LPN requests and UPC-based SKU labels. Enhanced UI with print button and updated input focus handling to reset specific fields." />
     <MESSAGE value="Add user creation and LPN management features&#10;&#10;Implemented user creation modal with role selection and validation. Enhanced LPN management with location-based put away functionality and UI updates. Adjusted navigation structure and introduced new interfaces for improved state handling." />
     <MESSAGE value="Add `useErrorHandler` hook and enhance error handling&#10;&#10;Introduced a reusable `useErrorHandler` hook for consistent error management and notification handling across components. Updated LPN-related components to use this hook, simplifying error handling logic and improving code maintainability. Adjusted input fields to trim whitespace on user input for better data consistency." />
     <MESSAGE value="Add LPN search, putaway, and breakdown functionalities&#10;&#10;Introduced components for searching, putting away, and breaking down LPNs. Refactored LPN-related logic to improve modularity and maintainability, updated API services, and enhanced UI interactions. Minor layout adjustments and error handling improvements were also implemented." />
@@ -569,6 +570,7 @@
     <MESSAGE value="Update dependencies and Jest configuration.&#10;&#10;Upgraded &quot;react-router-dom&quot; to v7.6.3 and added &quot;@jest/core&quot; and &quot;jest-environment-jsdom&quot; for improved test framework compatibility. Adjusted Jest settings to better support TypeScript and React Testing Library. Commented out test execution in the CI workflow, potentially for future revision or optimization." />
     <MESSAGE value="Remove unused npm scripts and update workspace metadata&#10;&#10;Removed unused `lint` and `lint:fix` scripts from `package.json` for a cleaner build configuration. Updated `.idea/workspace.xml` to reflect changes in local tasks and metadata, ensuring accurate tracking of recent edits and project updates. These adjustments improve project organization and" />
     <MESSAGE value="Remove unused code and improve error handling across components&#10;&#10;Cleaned up unused states, imports, and functions for better readability and performance. Enhanced error handling in multiple components to display meaningful messages. Refactored role-fetching logic and fixed minor dependency issues in React hooks." />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove unused code and improve error handling across components&#10;&#10;Cleaned up unused states, imports, and functions for better readability and performance. Enhanced error handling in multiple components to display meaningful messages. Refactored role-fetching logic and fixed minor dependency issues in React hooks." />
+    <MESSAGE value="Simplify eslint rules and enhance error handling.&#10;&#10;Replaced `eslintConfig` extends with targeted rules for better maintainability. Cleaned up unused code and improved error handling across components, ensuring better readability, performance, and meaningful feedback in UI interactions." />
+    <option name="LAST_COMMIT_MESSAGE" value="Simplify eslint rules and enhance error handling.&#10;&#10;Replaced `eslintConfig` extends with targeted rules for better maintainability. Cleaned up unused code and improved error handling across components, ensuring better readability, performance, and meaningful feedback in UI interactions." />
   </component>
 </project>
