@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Update dependencies and Jest configuration.&#10;&#10;Upgraded &quot;react-router-dom&quot; to v7.6.3 and added &quot;@jest/core&quot; and &quot;jest-environment-jsdom&quot; for improved test framework compatibility. Adjusted Jest settings to better support TypeScript and React Testing Library. Commented out test execution in the CI workflow, potentially for future revision or optimization.">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/build.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/build.yml" afterDir="false" />
-    </list>
+    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Update dependencies and Jest configuration.&#10;&#10;Upgraded &quot;react-router-dom&quot; to v7.6.3 and added &quot;@jest/core&quot; and &quot;jest-environment-jsdom&quot; for improved test framework compatibility. Adjusted Jest settings to better support TypeScript and React Testing Library. Commented out test execution in the CI workflow, potentially for future revision or optimization." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -134,15 +132,7 @@
       <workItem from="1749745407633" duration="12921000" />
       <workItem from="1749826851764" duration="14971000" />
       <workItem from="1750088557059" duration="180459000" />
-      <workItem from="1752179952808" duration="8364000" />
-    </task>
-    <task id="LOCAL-00001" summary="Refactor and enhance orders functionality.&#10;&#10;Updated API URL handling with environment variables and added new orders and customer type configurations. Introduced the 'Orders' and 'New Order' pages, improved UI elements, adjusted chart coloring, and optimized table components. Removed unused pages, updated branding, and enhanced error and breadcrumb UX for better consistency.">
-      <option name="closed" value="true" />
-      <created>1740380729320</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1740380729320</updated>
+      <workItem from="1752179952808" duration="8741000" />
     </task>
     <task id="LOCAL-00002" summary="Refactor inventory and orders tables; remove unused components.&#10;&#10;Revised inventory and orders table components for improved reusability, including new configuration-driven headers and hover effects. Removed unused `BasicTableOne` and refactored sidebar for new inventory sections. Added pages for product and component inventory, refined loading UI, and updated configurations for consistency.">
       <option name="closed" value="true" />
@@ -520,7 +510,23 @@
       <option name="project" value="LOCAL" />
       <updated>1752265258278</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="Update dependencies and Jest configuration.&#10;&#10;Upgraded &quot;react-router-dom&quot; to v7.6.3 and added &quot;@jest/core&quot; and &quot;jest-environment-jsdom&quot; for improved test framework compatibility. Adjusted Jest settings to better support TypeScript and React Testing Library. Commented out test execution in the CI workflow, potentially for future revision or optimization.">
+      <option name="closed" value="true" />
+      <created>1752265599148</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1752265599148</updated>
+    </task>
+    <task id="LOCAL-00050" summary="Update dependencies and Jest configuration.&#10;&#10;Upgraded &quot;react-router-dom&quot; to v7.6.3 and added &quot;@jest/core&quot; and &quot;jest-environment-jsdom&quot; for improved test framework compatibility. Adjusted Jest settings to better support TypeScript and React Testing Library. Commented out test execution in the CI workflow, potentially for future revision or optimization.">
+      <option name="closed" value="true" />
+      <created>1752265908955</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1752265908956</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
