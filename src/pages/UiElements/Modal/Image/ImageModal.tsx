@@ -12,12 +12,10 @@ interface ProductImageModalProps {
 }
 
 const ProductImageModal: React.FC<ProductImageModalProps> = ({ isVisible, onClose, imagesData, onSave }) => {
-    const [images, setImages] = useState<ImageProp>(imagesData || { cgi: [], img: [], dim: []});
     const [editImages, setEditImages] = useState<ImageProp>(imagesData || { cgi: [], img: [], dim: []});
 
     useEffect(() => {
         if (isVisible && imagesData) {
-            setImages(imagesData);
             setEditImages(imagesData);
         }
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -31,7 +29,7 @@ const ProductImageModal: React.FC<ProductImageModalProps> = ({ isVisible, onClos
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [isVisible, imagesData]);
+    }, [isVisible, imagesData, onClose]);
 
 
     if (!isVisible || !imagesData) return null;

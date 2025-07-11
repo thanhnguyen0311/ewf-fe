@@ -3,7 +3,7 @@ import Button from "../../../../components/ui/button/Button";
 import {LPNEditRequestProp} from "../../../../interfaces/LPN";
 import {BayLocationProp} from "../../../../interfaces/BayLocation";
 import {getBayLocations} from "../../../../api/BayLocationApiService";
-import {editLpn, putAwayLpn} from "../../../../api/LpnApiService";
+import {putAwayLpn} from "../../../../api/LpnApiService";
 import {useNotification} from "../../../../context/NotificationContext";
 import {useErrorHandler} from "../../../../hooks/useErrorHandler";
 
@@ -49,7 +49,7 @@ const PutAwayLPN: React.FC<PutAwayModalProps> = ({onCancel, lpnProp, setLoading}
             inputRef.current?.focus();
         }, 1000);
 
-    }, []);
+    }, [setLoading]);
 
 
     const filterBayLocation = (value: string) => {

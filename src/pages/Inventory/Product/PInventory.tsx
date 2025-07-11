@@ -16,9 +16,6 @@ export default function PInventory() {
     const [error, setError] = useState<string | null>(null);
     const [forceUpdate, setForceUpdate] = useState(0);
     const gridRef = useRef<AgGridReact<any>>(null);
-    const [isZoomed, setIsZoomed] = useState(false);
-    const [zoomImage, setZoomImage] = useState<string | null>(null);
-
     const fetchProducts = async () => {
         try {
             setLoading(true);

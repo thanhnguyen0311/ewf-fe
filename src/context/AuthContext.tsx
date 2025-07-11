@@ -1,5 +1,4 @@
 import React, { createContext, useState, useEffect } from "react";
-import axios from "axios";
 import {getUserInfo} from "../services/authService";
 
 // Define the shape of the context data

@@ -1,4 +1,4 @@
-import React, {ReactNode, useState} from "react";
+import React, { useState} from "react";
 
 // Props for Table
 interface PageProps {

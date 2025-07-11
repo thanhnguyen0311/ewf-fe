@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PageMeta from "../../components/common/PageMeta";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import ComponentCard from "../../components/common/ComponentCard";
