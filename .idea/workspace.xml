@@ -4,23 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Remove unused npm scripts and update workspace metadata&#10;&#10;Removed unused `lint` and `lint:fix` scripts from `package.json` for a cleaner build configuration. Updated `.idea/workspace.xml` to reflect changes in local tasks and metadata, ensuring accurate tracking of recent edits and project updates. These adjustments improve project organization and">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/paging/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/paging/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/context/AuthContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/AuthContext.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/User.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/User.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/AppHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppHeader.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/AuthPages/Permissions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/AuthPages/Permissions.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Inventory/LPN/Breakdown/BreakDownLPN.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Inventory/LPN/Breakdown/BreakDownLPN.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Inventory/LPN/PutAway/PutAwayLPN.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Inventory/LPN/PutAway/PutAwayLPN.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Inventory/Product/PInventory.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Inventory/Product/PInventory.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Product/ProductDetail.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Product/ProductDetail.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Product/ProductSheet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Product/ProductSheet.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/UiElements/Modal/Image/ImageModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/UiElements/Modal/Image/ImageModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/User/UserCreateModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/User/UserCreateModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/User/Users.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/User/Users.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Remove unused code and improve error handling across components&#10;&#10;Cleaned up unused states, imports, and functions for better readability and performance. Enhanced error handling in multiple components to display meaningful messages. Refactored role-fetching logic and fixed minor dependency issues in React hooks." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -148,15 +132,7 @@
       <workItem from="1749745407633" duration="12921000" />
       <workItem from="1749826851764" duration="14971000" />
       <workItem from="1750088557059" duration="180459000" />
-      <workItem from="1752179952808" duration="14098000" />
-    </task>
-    <task id="LOCAL-00004" summary="Refactor product and inventory views; enhance auth handling.&#10;&#10;Introduces `ProductSheet` and refactors `PInventory` for improved data handling and UI. Updates authentication flow with explicit `logout` and `signin` functionality, removes redundant auto-login, and adjusts navigation. Sidebar structure and API services are updated for better consistency across components.">
-      <option name="closed" value="true" />
-      <created>1743197572193</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1743197572193</updated>
+      <workItem from="1752179952808" duration="14408000" />
     </task>
     <task id="LOCAL-00005" summary="Add authentication context and enhance product data support&#10;&#10;Introduced `AuthContext` to manage authentication state and wrapped the application in `AuthProvider`. Expanded product data structure and updated `ProductSheet` table with new fields and enhanced columns. Adjusted header and dropdown components to respond to authentication state.">
       <option name="closed" value="true" />
@@ -542,7 +518,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752266775534</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="Remove unused code and improve error handling across components&#10;&#10;Cleaned up unused states, imports, and functions for better readability and performance. Enhanced error handling in multiple components to display meaningful messages. Refactored role-fetching logic and fixed minor dependency issues in React hooks.">
+      <option name="closed" value="true" />
+      <created>1752271360510</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1752271360510</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -560,7 +544,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add new features for LPN requests and label printing&#10;&#10;Updated NewLPN.tsx to include PDF generation and label printing functionality. Introduced a new button variant &quot;normal&quot; and adjusted UI elements to support submission state and VirtualKeyboard integration. Minor style changes were also applied to the virtual keyboard and container layout." />
     <MESSAGE value="Add ZPL label generation and printing functionality&#10;&#10;Implemented ZPL label creation for LPN requests and UPC-based SKU labels. Enhanced UI with print button and updated input focus handling to reset specific fields." />
     <MESSAGE value="Add user creation and LPN management features&#10;&#10;Implemented user creation modal with role selection and validation. Enhanced LPN management with location-based put away functionality and UI updates. Adjusted navigation structure and introduced new interfaces for improved state handling." />
     <MESSAGE value="Add `useErrorHandler` hook and enhance error handling&#10;&#10;Introduced a reusable `useErrorHandler` hook for consistent error management and notification handling across components. Updated LPN-related components to use this hook, simplifying error handling logic and improving code maintainability. Adjusted input fields to trim whitespace on user input for better data consistency." />
@@ -585,6 +568,7 @@
     <MESSAGE value="Update dependencies and Jest configuration for compatibility&#10;&#10;Upgraded &quot;react-router-dom&quot; to version 7.6.3 and added &quot;@jest/core&quot; and &quot;jest-environment-jsdom&quot; to align with the new test framework updates. Adjusted Jest configuration to better support TypeScript and React Testing Library. This ensures improved compatibility and stability with the latest library versions." />
     <MESSAGE value="Update dependencies and Jest configuration.&#10;&#10;Upgraded &quot;react-router-dom&quot; to v7.6.3 and added &quot;@jest/core&quot; and &quot;jest-environment-jsdom&quot; for improved test framework compatibility. Adjusted Jest settings to better support TypeScript and React Testing Library. Commented out test execution in the CI workflow, potentially for future revision or optimization." />
     <MESSAGE value="Remove unused npm scripts and update workspace metadata&#10;&#10;Removed unused `lint` and `lint:fix` scripts from `package.json` for a cleaner build configuration. Updated `.idea/workspace.xml` to reflect changes in local tasks and metadata, ensuring accurate tracking of recent edits and project updates. These adjustments improve project organization and" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove unused npm scripts and update workspace metadata&#10;&#10;Removed unused `lint` and `lint:fix` scripts from `package.json` for a cleaner build configuration. Updated `.idea/workspace.xml` to reflect changes in local tasks and metadata, ensuring accurate tracking of recent edits and project updates. These adjustments improve project organization and" />
+    <MESSAGE value="Remove unused code and improve error handling across components&#10;&#10;Cleaned up unused states, imports, and functions for better readability and performance. Enhanced error handling in multiple components to display meaningful messages. Refactored role-fetching logic and fixed minor dependency issues in React hooks." />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove unused code and improve error handling across components&#10;&#10;Cleaned up unused states, imports, and functions for better readability and performance. Enhanced error handling in multiple components to display meaningful messages. Refactored role-fetching logic and fixed minor dependency issues in React hooks." />
   </component>
 </project>
