@@ -417,8 +417,7 @@ export default function NewLPN() {
         <>
             <Loader isLoading={loading}>
                 <Form
-                    onSubmit={() => {
-                    }}
+                    onSubmit={() => {console.log("submit")}}
                     className={`space-y-4 mb-20 ${isMobile && "min-h-screen"}`}>
                     <div>
                         <Label className="ml-1 font-semibold">RFID Tag ID</Label>
