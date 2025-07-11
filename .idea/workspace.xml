@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Update dependencies and Jest configuration.&#10;&#10;Upgraded &quot;react-router-dom&quot; to v7.6.3 and added &quot;@jest/core&quot; and &quot;jest-environment-jsdom&quot; for improved test framework compatibility. Adjusted Jest settings to better support TypeScript and React Testing Library. Commented out test execution in the CI workflow, potentially for future revision or optimization." />
+    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Update dependencies and Jest configuration.&#10;&#10;Upgraded &quot;react-router-dom&quot; to v7.6.3 and added &quot;@jest/core&quot; and &quot;jest-environment-jsdom&quot; for improved test framework compatibility. Adjusted Jest settings to better support TypeScript and React Testing Library. Commented out test execution in the CI workflow, potentially for future revision or optimization.">
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -132,15 +134,7 @@
       <workItem from="1749745407633" duration="12921000" />
       <workItem from="1749826851764" duration="14971000" />
       <workItem from="1750088557059" duration="180459000" />
-      <workItem from="1752179952808" duration="8741000" />
-    </task>
-    <task id="LOCAL-00002" summary="Refactor inventory and orders tables; remove unused components.&#10;&#10;Revised inventory and orders table components for improved reusability, including new configuration-driven headers and hover effects. Removed unused `BasicTableOne` and refactored sidebar for new inventory sections. Added pages for product and component inventory, refined loading UI, and updated configurations for consistency.">
-      <option name="closed" value="true" />
-      <created>1740630620900</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1740630620900</updated>
+      <workItem from="1752179952808" duration="9566000" />
     </task>
     <task id="LOCAL-00003" summary="Add sorting and enhancements to inventory components view&#10;&#10;This update introduces sorting of components based on a predefined SKU order and improves the table layout with better column styling. Additional changes include handling checkbox functionality, adding error handling, and enabling forced updates for re-fetching components.">
       <option name="closed" value="true" />
@@ -526,7 +520,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752265908956</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="Update dependencies and Jest configuration.&#10;&#10;Upgraded &quot;react-router-dom&quot; to v7.6.3 and added &quot;@jest/core&quot; and &quot;jest-environment-jsdom&quot; for improved test framework compatibility. Adjusted Jest settings to better support TypeScript and React Testing Library. Commented out test execution in the CI workflow, potentially for future revision or optimization.">
+      <option name="closed" value="true" />
+      <created>1752266092011</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1752266092011</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
