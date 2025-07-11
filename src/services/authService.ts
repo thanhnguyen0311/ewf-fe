@@ -12,8 +12,6 @@ export const login = async (email: any, password: any) => {
 
         return true;
     } catch (err) {
-        // @ts-ignore
-        throw new Error(err.response.data.message || "Failed to log in");
     }
 };
 
