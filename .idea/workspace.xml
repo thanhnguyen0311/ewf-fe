@@ -4,22 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Update workspace and tasks metadata in `.idea` and workflows  &#10;&#10;Removed outdated task entries and adjusted local tasks counter for consistency in `.idea/workspace.xml`. Minor formatting update in `.github/workflows/build.yml`.">
-      <change afterPath="$PROJECT_DIR$/src/interfaces/Order.ts" afterDir="false" />
+    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Refactor type handling and clean up unused state&#10;&#10;Replaced `any` with specific types for better type safety and readability across multiple components. Removed unused error state in `PInventory` and constant reassignment in `PutAwayLPN`. Simplified import paths and fixed redundant typing in error handling logic.">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/build.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/build.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/AuthPages/SignIn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/AuthPages/SignIn.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Count&amp;Search/SearchBySKU.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Count&amp;Search/SearchBySKU.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/History/History.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/History/History.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/History/LpnHistory.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/History/LpnHistory.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Inventory/Components/CInventory.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Inventory/Components/CInventory.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Inventory/LPN/Breakdown/BreakDownLPN.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Inventory/LPN/Breakdown/BreakDownLPN.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Inventory/LPN/LPN.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Inventory/LPN/LPN.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Inventory/LPN/New/NewLPN.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Inventory/LPN/New/NewLPN.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Order/Orders.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Order/Orders.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Product/ProductSheet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Product/ProductSheet.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/User/Users.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/User/Users.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/authService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/authService.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,23 +135,7 @@
       <workItem from="1749745407633" duration="12921000" />
       <workItem from="1749826851764" duration="14971000" />
       <workItem from="1750088557059" duration="180459000" />
-      <workItem from="1752179952808" duration="25735000" />
-    </task>
-    <task id="LOCAL-00011" summary="Refactor modals and update image handling logic&#10;&#10;Moved `ProductImageModal` to a dedicated folder and introduced a new `ComponentModal`. Enhanced image handling with reordering functionality and streamlined component structure. Added updates to dependencies and environment configuration.">
-      <option name="closed" value="true" />
-      <created>1746258451340</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1746258451340</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Add LPN Management page and Virtual Keyboard integration&#10;&#10;Implemented a new LPN Management page with a responsive data grid for LPN data. Introduced a virtual keyboard component for enhanced user input and added relevant CSS for styling. Refactored and removed unused Shopify components and updated dependencies for better functionality.">
-      <option name="closed" value="true" />
-      <created>1749242950401</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1749242950401</updated>
+      <workItem from="1752179952808" duration="27271000" />
     </task>
     <task id="LOCAL-00013" summary="Add new features for LPN requests and label printing&#10;&#10;Updated NewLPN.tsx to include PDF generation and label printing functionality. Introduced a new button variant &quot;normal&quot; and adjusted UI elements to support submission state and VirtualKeyboard integration. Minor style changes were also applied to the virtual keyboard and container layout.">
       <option name="closed" value="true" />
@@ -542,7 +513,23 @@
       <option name="project" value="LOCAL" />
       <updated>1752505729403</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <task id="LOCAL-00060" summary="Refactor type usage and enhance error handling.&#10;&#10;Updated type definitions for `OrderListResponseDto` and replaced `any` with proper types in several components to improve type safety. Optimized error handling in `SignIn` and `Orders` components. Removed unused state and properties for cleaner, more maintainable code.">
+      <option name="closed" value="true" />
+      <created>1752516680463</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1752516680463</updated>
+    </task>
+    <task id="LOCAL-00061" summary="Refactor type handling and clean up unused state&#10;&#10;Replaced `any` with specific types for better type safety and readability across multiple components. Removed unused error state in `PInventory` and constant reassignment in `PutAwayLPN`. Simplified import paths and fixed redundant typing in error handling logic.">
+      <option name="closed" value="true" />
+      <created>1752518053226</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1752518053226</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -560,8 +547,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add `useErrorHandler` hook and enhance error handling&#10;&#10;Introduced a reusable `useErrorHandler` hook for consistent error management and notification handling across components. Updated LPN-related components to use this hook, simplifying error handling logic and improving code maintainability. Adjusted input fields to trim whitespace on user input for better data consistency." />
-    <MESSAGE value="Add LPN search, putaway, and breakdown functionalities&#10;&#10;Introduced components for searching, putting away, and breaking down LPNs. Refactored LPN-related logic to improve modularity and maintainability, updated API services, and enhanced UI interactions. Minor layout adjustments and error handling improvements were also implemented." />
     <MESSAGE value="Add LPN search, removal, and history tracking functionality&#10;&#10;Integrated LPN search and deletion features to enhance inventory management. Deprecated unused product search in AppHeader and streamlined the sidebar with a new &quot;History&quot; section. Includes UI adjustments and API integration for improved data handling." />
     <MESSAGE value="Refactor History and Count &amp; Search modules&#10;&#10;Reorganized and optimized the History module by replacing `LPNLog` with `LpnHistory`. Added a new Count &amp; Search feature with functionality to search by SKU. Adjusted routing, sidebar navigation, and reused the API to improve maintainability." />
     <MESSAGE value="Add CI/CD workflow for build and deploy to VPS&#10;&#10;This commit introduces a GitHub Actions workflow for automating build and deployment processes to a VPS. It includes steps for testing, building, and deploying the application while also updating the `.gitignore` to exclude `.env` files. Additionally, `.env` configuration was adjusted for a local environment setup." />
@@ -585,6 +570,8 @@
     <MESSAGE value="Remove unused code and improve error handling across components&#10;&#10;Cleaned up unused states, imports, and functions for better readability and performance. Enhanced error handling in multiple components to display meaningful messages. Refactored role-fetching logic and fixed minor dependency issues in React hooks." />
     <MESSAGE value="Simplify eslint rules and enhance error handling.&#10;&#10;Replaced `eslintConfig` extends with targeted rules for better maintainability. Cleaned up unused code and improved error handling across components, ensuring better readability, performance, and meaningful feedback in UI interactions." />
     <MESSAGE value="Update workspace and tasks metadata in `.idea` and workflows  &#10;&#10;Removed outdated task entries and adjusted local tasks counter for consistency in `.idea/workspace.xml`. Minor formatting update in `.github/workflows/build.yml`." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update workspace and tasks metadata in `.idea` and workflows  &#10;&#10;Removed outdated task entries and adjusted local tasks counter for consistency in `.idea/workspace.xml`. Minor formatting update in `.github/workflows/build.yml`." />
+    <MESSAGE value="Refactor type usage and enhance error handling.&#10;&#10;Updated type definitions for `OrderListResponseDto` and replaced `any` with proper types in several components to improve type safety. Optimized error handling in `SignIn` and `Orders` components. Removed unused state and properties for cleaner, more maintainable code." />
+    <MESSAGE value="Refactor type handling and clean up unused state&#10;&#10;Replaced `any` with specific types for better type safety and readability across multiple components. Removed unused error state in `PInventory` and constant reassignment in `PutAwayLPN`. Simplified import paths and fixed redundant typing in error handling logic." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor type handling and clean up unused state&#10;&#10;Replaced `any` with specific types for better type safety and readability across multiple components. Removed unused error state in `PInventory` and constant reassignment in `PutAwayLPN`. Simplified import paths and fixed redundant typing in error handling logic." />
   </component>
 </project>
