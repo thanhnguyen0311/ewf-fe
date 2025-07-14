@@ -151,26 +151,13 @@ jobs:
           name: build-files
           path: ./
 
-      - name: Test SSH Connection
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.VPS_PORT || 22 }}
-          script: |
-            echo "SSH connection successful!"
-            whoami
-            pwd
-            echo "Current date: $(date)"
-
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
-          username: root
+          username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.VPS_PORT || 22 }}
+          port: 22
           script: |
             # Stop existing application
             pm2 stop ${{ secrets.APP_NAME }} || true
