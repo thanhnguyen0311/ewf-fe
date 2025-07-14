@@ -151,11 +151,24 @@ jobs:
           name: build-files
           path: ./
 
+      - name: Test SSH Connection
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            echo "SSH connection successful!"
+            whoami
+            pwd
+            echo "Current date: $(date)"
+
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
+          username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
           script: |
@@ -178,39 +191,36 @@ jobs:
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
+          username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
           source: "./*"
-          target: "${{ secrets.VPS_DEPLOY_PATH }}"
+          target: "${{ secrets.VPS_DEPLOY_PATH }}/current/"
 
       - name: Start application on VPS
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
+          username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
           script: |
-            cd ${{ secrets.VPS_DEPLOY_PATH }}
+            cd ${{ secrets.VPS_DEPLOY_PATH }}/current
             
             # Install production dependencies
             npm ci --only=production
             
-            # Install serve globally if not already installed
-            npm install -g serve
-            
-            # Install PM2 globally if not already installed
-            npm install -g pm2
+            # Install serve and PM2 globally if not already installed
+            npm install -g serve pm2
             
             # Create PM2 ecosystem file
-            cat > ecosystem.config.js << EOF
+            cat > ecosystem.config.js << 'EOF'
             module.exports = {
               apps: [{
                 name: '${{ secrets.APP_NAME }}',
                 script: 'npx',
                 args: 'serve -s build -l 3000',
-                cwd: '${{ secrets.VPS_DEPLOY_PATH }}',
+                cwd: '${{ secrets.VPS_DEPLOY_PATH }}/current',
                 instances: 1,
                 exec_mode: 'fork',
                 env: {
@@ -223,19 +233,19 @@ jobs:
               }]
             }
             EOF
-            
+          
             # Create log directory
             mkdir -p /var/log/pm2
-            
+          
             # Start application with PM2
             pm2 start ecosystem.config.js
-            
+          
             # Save PM2 configuration
             pm2 save
-            
+          
             # Setup PM2 to start on boot
             pm2 startup || true
-            
+          
             # Verify application is running
             sleep 5
             if pm2 list | grep -q "${{ secrets.APP_NAME }}.*online"; then
