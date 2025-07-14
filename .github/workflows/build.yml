@@ -206,8 +206,8 @@ jobs:
             module.exports = {
               apps: [{
                 name: '${{ secrets.APP_NAME }}',
-                script: 'npx',
-                args: 'serve -s build -l 3000',
+                script: 'serve',
+                args: '-s build -l 3000',
                 cwd: '${{ secrets.VPS_DEPLOY_PATH }}/current',
                 instances: 1,
                 exec_mode: 'fork',
