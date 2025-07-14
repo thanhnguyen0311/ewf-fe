@@ -5,7 +5,7 @@ import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import Loader from "../UiElements/Loader/Loader";
 import {getProductDetails, updateProductDetail} from "../../api/apiService";
 
-import { ColDef, ColGroupDef } from 'ag-grid-community';
+import { ColDef, ColGroupDef, ValueGetterParams, CellClassParams, CellDoubleClickedEvent, CellValueChangedEvent   } from 'ag-grid-community';
 import {mapProductDetailPropToRequest} from "../../utils/mapFunctions";
 import {ProductDetailProp} from "../../interfaces/Product";
 import {ImageProp} from "../../interfaces/Image";
@@ -19,7 +19,7 @@ export default function ProductSheet() {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [forceUpdate, setForceUpdate] = useState(0);
-    const gridRef = useRef<AgGridReact<any>>(null);
+    const gridRef = useRef<AgGridReact>(null);
     const [isImageModalVisible, setImageModalVisible] = useState(false);
     const [selectedImages, setSelectedImages] = useState<ImageProp | null>(null);
     const [selectedRowId, setSelectedRowId] = useState<number | null>(null);
@@ -222,7 +222,7 @@ export default function ProductSheet() {
             field: "images",
             sortable: true,
             width: 120,
-            valueGetter: (params: any) => countTotalImages(params.data.images),
+            valueGetter: (params: ValueGetterParams) => countTotalImages(params.data.images),
             filter: "agTextColumnFilter",
             cellStyle: { cursor: "pointer", border: "1px solid #ccc",textAlign: "center",fontWeight: '500',
                 fontSize: '13px' },
@@ -428,31 +428,31 @@ export default function ProductSheet() {
     const defaultColDef = {
         resizable: true,
         floatingFilter: true,
-        cellStyle: (params: any) => {
+        cellStyle: (params: CellClassParams) => {
             return {
                 fontSize: "14px",
                 fontWeight: "500",
                 textAlign: "center",
-                textDecoration: params.data.discontinue ? "line-through" : "none",
+                textDecoration: params.data?.discontinue ? "line-through" : "none",
                 border: "1px solid #ccc",
                 fontFamily: '"Times New Roman", Times, serif',
             };
         }
     };
 
-    const handleCellValueChanged = async (event: any) => {
+    const handleCellValueChanged = async (event: CellValueChangedEvent) => {
         const productProp = event.data;
         const productDetailRequestDto = mapProductDetailPropToRequest(productProp)
         try {
             const updateProduct: ProductDetailProp = await updateProductDetail(productDetailRequestDto);
             event.node.setData(updateProduct);
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Error updating product details:", error);
         }
     };
 
-    const handleCellDoubleClick = (params: any) => {
+    const handleCellDoubleClick = (params: CellDoubleClickedEvent) => {
         // Trigger modal ONLY if the double-clicked column is "Images"
         if (params.colDef.field === "images") {
             setSelectedImages(params.data.images); // Pass the selected cell's images

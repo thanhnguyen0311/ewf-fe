@@ -15,12 +15,10 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
 
   const handleSignIn = async () => {
     setLoading(true);
-    setError(null);
     try {
       const userData = await login(email, password);
       if (userData) {
@@ -34,10 +32,9 @@ export default function SignIn() {
         window.location.href = "/";
 
       } else {
-        setError("Failed to retrieve user data. Please try again.");
       }
-    } catch (error: any){
-      setError(error.response?.data?.message || "Something went wrong.");
+    }  catch (error: unknown) {
+
     } finally {
       setLoading(false); // Reset loading state
     }

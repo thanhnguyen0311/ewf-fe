@@ -2,7 +2,7 @@ import axiosInstance from "../utils/axiosInstance";
 import {UserDto} from "../context/AuthContext";
 
 
-export const login = async (email: any, password: any) => {
+export const login = async (email: string, password: string) => {
 
     try {
         const response = await axiosInstance.post(`/v1/auth/login`, { email, password });

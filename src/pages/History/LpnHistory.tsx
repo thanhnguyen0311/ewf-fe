@@ -30,10 +30,7 @@ const LpnHistory = () => {
         };
 
         fetchData();
-    }, [currentPage, setLoading, sendNotification]); // Re-fetch when `currentPage` changes
-
-
-
+    }, [currentPage, setLoading, sendNotification, handleError]); // Re-fetch when `currentPage` changes
 
     // Handle pagination
     const handleNext = () => {

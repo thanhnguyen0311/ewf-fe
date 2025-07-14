@@ -4,7 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Simplify eslint rules and enhance error handling.&#10;&#10;Replaced `eslintConfig` extends with targeted rules for better maintainability. Cleaned up unused code and improved error handling across components, ensuring better readability, performance, and meaningful feedback in UI interactions." />
+    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Update workspace and tasks metadata in `.idea` and workflows  &#10;&#10;Removed outdated task entries and adjusted local tasks counter for consistency in `.idea/workspace.xml`. Minor formatting update in `.github/workflows/build.yml`.">
+      <change afterPath="$PROJECT_DIR$/src/interfaces/Order.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/AuthPages/SignIn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/AuthPages/SignIn.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Count&amp;Search/SearchBySKU.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Count&amp;Search/SearchBySKU.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/History/History.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/History/History.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/History/LpnHistory.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/History/LpnHistory.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Inventory/Components/CInventory.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Inventory/Components/CInventory.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Inventory/LPN/Breakdown/BreakDownLPN.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Inventory/LPN/Breakdown/BreakDownLPN.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Inventory/LPN/LPN.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Inventory/LPN/LPN.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Inventory/LPN/New/NewLPN.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Inventory/LPN/New/NewLPN.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Order/NewOrder.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Order/Orders.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Order/Orders.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Product/ProductSheet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Product/ProductSheet.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/User/Users.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/User/Users.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/authService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/authService.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -132,15 +148,7 @@
       <workItem from="1749745407633" duration="12921000" />
       <workItem from="1749826851764" duration="14971000" />
       <workItem from="1750088557059" duration="180459000" />
-      <workItem from="1752179952808" duration="17136000" />
-    </task>
-    <task id="LOCAL-00010" summary="Add image management and modal functionality to ProductSheet&#10;&#10;Introduced an &quot;Edit Images&quot; modal for managing product images, along with handlers for saving changes. Updated table styling, added image-related interfaces, and enhanced product data mapping to include images and components. Included Roboto font and related adjustments in `tailwind.config.js`.">
-      <option name="closed" value="true" />
-      <created>1745963060558</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1745963060558</updated>
+      <workItem from="1752179952808" duration="25735000" />
     </task>
     <task id="LOCAL-00011" summary="Refactor modals and update image handling logic&#10;&#10;Moved `ProductImageModal` to a dedicated folder and introduced a new `ComponentModal`. Enhanced image handling with reordering functionality and streamlined component structure. Added updates to dependencies and environment configuration.">
       <option name="closed" value="true" />
@@ -526,7 +534,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752273217208</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="Update workspace and tasks metadata in `.idea` and workflows  &#10;&#10;Removed outdated task entries and adjusted local tasks counter for consistency in `.idea/workspace.xml`. Minor formatting update in `.github/workflows/build.yml`.">
+      <option name="closed" value="true" />
+      <created>1752505729403</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1752505729403</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -544,7 +560,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add user creation and LPN management features&#10;&#10;Implemented user creation modal with role selection and validation. Enhanced LPN management with location-based put away functionality and UI updates. Adjusted navigation structure and introduced new interfaces for improved state handling." />
     <MESSAGE value="Add `useErrorHandler` hook and enhance error handling&#10;&#10;Introduced a reusable `useErrorHandler` hook for consistent error management and notification handling across components. Updated LPN-related components to use this hook, simplifying error handling logic and improving code maintainability. Adjusted input fields to trim whitespace on user input for better data consistency." />
     <MESSAGE value="Add LPN search, putaway, and breakdown functionalities&#10;&#10;Introduced components for searching, putting away, and breaking down LPNs. Refactored LPN-related logic to improve modularity and maintainability, updated API services, and enhanced UI interactions. Minor layout adjustments and error handling improvements were also implemented." />
     <MESSAGE value="Add LPN search, removal, and history tracking functionality&#10;&#10;Integrated LPN search and deletion features to enhance inventory management. Deprecated unused product search in AppHeader and streamlined the sidebar with a new &quot;History&quot; section. Includes UI adjustments and API integration for improved data handling." />
@@ -569,6 +584,7 @@
     <MESSAGE value="Remove unused npm scripts and update workspace metadata&#10;&#10;Removed unused `lint` and `lint:fix` scripts from `package.json` for a cleaner build configuration. Updated `.idea/workspace.xml` to reflect changes in local tasks and metadata, ensuring accurate tracking of recent edits and project updates. These adjustments improve project organization and" />
     <MESSAGE value="Remove unused code and improve error handling across components&#10;&#10;Cleaned up unused states, imports, and functions for better readability and performance. Enhanced error handling in multiple components to display meaningful messages. Refactored role-fetching logic and fixed minor dependency issues in React hooks." />
     <MESSAGE value="Simplify eslint rules and enhance error handling.&#10;&#10;Replaced `eslintConfig` extends with targeted rules for better maintainability. Cleaned up unused code and improved error handling across components, ensuring better readability, performance, and meaningful feedback in UI interactions." />
-    <option name="LAST_COMMIT_MESSAGE" value="Simplify eslint rules and enhance error handling.&#10;&#10;Replaced `eslintConfig` extends with targeted rules for better maintainability. Cleaned up unused code and improved error handling across components, ensuring better readability, performance, and meaningful feedback in UI interactions." />
+    <MESSAGE value="Update workspace and tasks metadata in `.idea` and workflows  &#10;&#10;Removed outdated task entries and adjusted local tasks counter for consistency in `.idea/workspace.xml`. Minor formatting update in `.github/workflows/build.yml`." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update workspace and tasks metadata in `.idea` and workflows  &#10;&#10;Removed outdated task entries and adjusted local tasks counter for consistency in `.idea/workspace.xml`. Minor formatting update in `.github/workflows/build.yml`." />
   </component>
 </project>
