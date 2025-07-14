@@ -54,6 +54,7 @@ const navItems: NavItem[] = [
     name: "Count & Search",
     subItems: [
       { name: "Count by SKU", path: "/counting/sku", pro: false, active: true },
+      { name: "Count by Location", path: "/counting/location", pro: false, active: true },
     ],
   },
 ];
