@@ -5,7 +5,7 @@ import {getProductsInventory} from "../../../api/apiService";
 import {AgGridReact} from "ag-grid-react";
 import Loader from "../../UiElements/Loader/Loader";
 
-import {ColDef} from 'ag-grid-community';
+import {CellClassParams, ColDef} from 'ag-grid-community';
 import {ProductInventoryProp} from "../../../interfaces/Product";
 
 
@@ -13,9 +13,8 @@ import {ProductInventoryProp} from "../../../interfaces/Product";
 export default function PInventory() {
     const [products, setProducts] = useState<ProductInventoryProp[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
     const [forceUpdate, setForceUpdate] = useState(0);
-    const gridRef = useRef<AgGridReact<any>>(null);
+    const gridRef = useRef<AgGridReact>(null);
     const fetchProducts = async () => {
         try {
             setLoading(true);
@@ -23,7 +22,6 @@ export default function PInventory() {
             setProducts(products);
             setLoading(false);
         } catch (error) {
-            setError("Failed to fetch components. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -70,7 +68,7 @@ export default function PInventory() {
             field: "quantity",
             width: 120,
             filter: true,
-            cellStyle: (params: any) => {
+            cellStyle: (params: CellClassParams) => {
                 return {
                     textAlign: "center",
                     fontWeight: "500",
@@ -125,7 +123,7 @@ export default function PInventory() {
     const defaultColDef = {
         resizable: true,
         floatingFilter: true,
-        cellStyle: (params: any) => {
+        cellStyle: (params: CellClassParams) => {
             return {
                 fontSize: "15px",
                 fontWeight: "500",

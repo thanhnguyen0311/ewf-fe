@@ -25,7 +25,7 @@ const PutAwayLPN: React.FC<PutAwayModalProps> = ({onCancel, lpnProp, setLoading}
 
     const [error, setError] = useState<boolean>(false);
     const [errorMsg, setErrorMsg] = useState<string>("Bay location is not valid.");
-    const [lpnRequest, setLpnRequest] = useState<LPNEditRequestProp>(lpnProp);
+    const [lpnRequest] = useState<LPNEditRequestProp>(lpnProp);
 
     const {sendNotification} = useNotification();
     const handleError = useErrorHandler();
