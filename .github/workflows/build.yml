@@ -182,7 +182,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
           source: "./*"
-          target: "${{ secrets.VPS_DEPLOY_PATH }}/current/"
+          target: "${{ secrets.VPS_DEPLOY_PATH }}"
 
       - name: Start application on VPS
         uses: appleboy/ssh-action@v1.0.0
@@ -192,7 +192,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
           script: |
-            cd ${{ secrets.VPS_DEPLOY_PATH }}/current
+            cd ${{ secrets.VPS_DEPLOY_PATH }}
             
             # Install production dependencies
             npm ci --only=production
@@ -210,7 +210,7 @@ jobs:
                 name: '${{ secrets.APP_NAME }}',
                 script: 'npx',
                 args: 'serve -s build -l 3000',
-                cwd: '${{ secrets.VPS_DEPLOY_PATH }}/current',
+                cwd: '${{ secrets.VPS_DEPLOY_PATH }}',
                 instances: 1,
                 exec_mode: 'fork',
                 env: {
