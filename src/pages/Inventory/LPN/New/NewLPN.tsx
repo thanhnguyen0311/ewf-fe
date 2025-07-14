@@ -65,10 +65,10 @@ export default function NewLPN() {
     });
 
     // A debounce hook to limit state updates
-    const useDebounce = (callback: (...args: any[]) => void, delay: number) => {
+    const useDebounce = (callback: (...args: string[]) => void, delay: number) => {
         const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
-        return (...args: any[]) => {
+        return (...args: string[]) => {
             if (debounceRef.current) clearTimeout(debounceRef.current);
 
             debounceRef.current = setTimeout(() => {
@@ -77,17 +77,18 @@ export default function NewLPN() {
         };
     };
 
-    const handleKeyboardChange = useDebounce((input: string, type: string) => {
-        if (type === "tagID") handleInputTagIDChange(input)
-        if (type === "sku") handleInputSKUChange(input)
+    const handleKeyboardChange = useDebounce((input, type) => {
+        if (type === "tagID") handleInputTagIDChange(input);
+        if (type === "sku") handleInputSKUChange(input);
         if (type === "containerNumber") {
             setLpnRequest((prevState) => ({
                 ...prevState,
                 containerNumber: input,
             }));
         }
-        if (type === "bayCode") handleInputBayLocationChange(input)
+        if (type === "bayCode") handleInputBayLocationChange(input);
     }, 200);
+
 
     useEffect(() => {
         setLoading(true)
@@ -692,7 +693,7 @@ export default function NewLPN() {
                                 <VirtualKeyboard
                                     input={lpnRequest.tagID}
                                     onChange={(input) => {
-                                        if (showKeyboard) handleKeyboardChange(input, showKeyboard)
+                                        if (showKeyboard) handleKeyboardChange(input as string, showKeyboard)
                                     }}
                                     onClose={() => setShowKeyboard("")} // Close keyboard modal
                                 />

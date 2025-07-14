@@ -1,14 +1,14 @@
 import React, {useEffect, useRef, useState} from "react";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PageMeta from "../../components/common/PageMeta";
-import {LPNProp, LPNRequestProp} from "../../interfaces/LPN";
+import {LPNProp} from "../../interfaces/LPN";
 import {findLpnFromTagIDs} from "../../api/CountApiService";
 import {useErrorHandler} from "../../hooks/useErrorHandler";
 import {useSidebar} from "../../context/SidebarContext";
 import {getComponentInbound} from "../../api/ComponentApiService";
-import {getBayLocations} from "../../api/BayLocationApiService";
 import {ComponentInboundProp} from "../../interfaces/Component";
 import Input from "../../components/form/input/InputField";
+import Loader from "../UiElements/Loader/Loader";
 
 export interface CountBySKUProp {
     tagIDs: string;
@@ -116,7 +116,7 @@ export default function SearchBySKU() {
         };
 
         fetchLPNData();
-    }, [isIdle]);
+    }, [handleError, isIdle, request, typedText]);
 
 
     const handleStartScan = () => {
@@ -203,146 +203,149 @@ export default function SearchBySKU() {
             />
             <PageBreadcrumb pageTitle="Count by SKU"/>
             {/* Buttons Section */}
-            <div className="flex flex-col items-center mt-8 space-y-4">
-                {/* Input Field */}
-                <div className=" ">
-                    <div className="relative">
-                        <Input
-                            type="text"
-                            value={request.sku}
-                            placeholder="Enter or scan"
-                            className={`mt-1 block w-full px-4 py-2 text-base rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed`}
-                            onFocus={() => {
-                                setRequest((prevState) => ({
-                                    ...prevState,
-                                    sku: "",
-                                }));
-                            }}
-                            onChange={(e) => handleInputSKUChange(e.target.value.trim())}
-                            disabled={isScanning}
-                        />
+            <Loader isLoading={loading}>
+                <div className="flex flex-col items-center mt-8 space-y-4">
+                    {/* Input Field */}
+                    <div className=" ">
+                        <div className="relative">
+                            <Input
+                                type="text"
+                                value={request.sku}
+                                placeholder="Enter or scan"
+                                className={`mt-1 block w-full px-4 py-2 text-base rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed`}
+                                onFocus={() => {
+                                    setRequest((prevState) => ({
+                                        ...prevState,
+                                        sku: "",
+                                    }));
+                                }}
+                                onChange={(e) => handleInputSKUChange(e.target.value.trim())}
+                                disabled={isScanning}
+                            />
 
-                        {/* Dropdown List */}
-                        {filteredComponents.length > 0 && (
-                            <ul className="absolute z-10 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto">
-                                {filteredComponents.map((component) => (
-                                    <li
-                                        key={component.sku} // Or a unique identifier
-                                        className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200"
-                                        onClick={() => handleComponentSelect(component)}
-                                    >
-                                        <p className="text-sm text-gray-700 dark:text-gray-300">
-                                            {component.sku} ({component.upc})
-                                        </p>
-                                    </li>
-                                ))}
-                            </ul>
+                            {/* Dropdown List */}
+                            {filteredComponents.length > 0 && (
+                                <ul className="absolute z-10 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto">
+                                    {filteredComponents.map((component) => (
+                                        <li
+                                            key={component.sku} // Or a unique identifier
+                                            className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200"
+                                            onClick={() => handleComponentSelect(component)}
+                                        >
+                                            <p className="text-sm text-gray-700 dark:text-gray-300">
+                                                {component.sku} ({component.upc})
+                                            </p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                    </div>
+                    <button
+                        onClick={handleStartScan}
+                        disabled={isScanning} // Disable if already scanning
+                        className={`px-6 py-3 text-white font-semibold rounded-lg ${
+                            isScanning
+                                ? "bg-gray-300 cursor-not-allowed"
+                                : "bg-blue-500 hover:bg-blue-600"
+                        }`}
+                    >
+                        Start Scan
+                    </button>
+
+                    {/* Stop Button */}
+                    <button
+                        onClick={handleStopScan}
+                        disabled={!isScanning} // Disable if not currently scanning
+                        className={`px-6 py-3 text-white font-semibold rounded-lg ${
+                            !isScanning
+                                ? "bg-gray-300 cursor-not-allowed"
+                                : "bg-red-500 hover:bg-red-600"
+                        }`}
+                    >
+                        Stop
+                    </button>
+
+                    {/* Display Typed Text */}
+                    <div className="mt-4 text-lg font-medium">
+                        {/*{typedText && (*/}
+                        {/*    <p>Typed Text: <span className="text-blue-500">{typedText}</span></p>*/}
+                        {/*)}*/}
+
+                        {/* Display LPN List */}
+                        {lpnList.length > 0 && (
+                            <div className="mt-8 w-full">
+                                {/* Total Quantity */}
+                                <p className="font-semibold text-lg text-center mb-4">
+                                    Total Quantity:{" "}
+                                    <span className="text-blue-600">
+                                  {lpnList.reduce((sum, lpn) => sum + (lpn.quantity || 0), 0)}
+                                </span>
+                                </p>
+
+                                {!isMobile ? (
+                                    // Desktop Table View
+                                    <table className="table-auto w-full border-collapse border border-gray-200">
+                                        <thead>
+                                        <tr className="bg-gray-100">
+                                            <th className="border border-gray-300 px-4 py-2"></th>
+                                            <th className="border border-gray-300 px-4 py-2">SKU</th>
+                                            <th className="border border-gray-300 px-4 py-2">Qty</th>
+                                            <th className="border border-gray-300 px-4 py-2">Bay</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {lpnList.map((lpn, index) => (
+                                            <tr key={index} className="text-center">
+                                                <td className="border border-gray-300 px-4 py-2">{lpn.tagID}</td>
+                                                <td className="border border-gray-300 px-4 py-2">{lpn.sku}</td>
+                                                <td className="border border-gray-300 px-4 py-2">{lpn.quantity}</td>
+                                                <td className="border border-gray-300 px-4 py-2">{lpn.bayCode}</td>
+                                            </tr>
+                                        ))}
+                                        </tbody>
+                                    </table>
+                                ) : (
+                                    // Mobile View (Responsive Cards)
+                                    <div className="space-y-4">
+                                        {lpnList.map((lpn, index) => (
+                                            <div
+                                                key={index}
+                                                className="bg-gray-100 shadow-md p-4 rounded-lg border border-gray-200 text-sm"
+                                            >
+                                                <p>
+                                                    <strong>TagID:</strong> {lpn.tagID}
+                                                </p>
+                                                <p>
+                                                    <strong>SKU:</strong> {lpn.sku}
+                                                </p>
+                                                <p>
+                                                    <strong>Qty:</strong> {lpn.quantity}
+                                                </p>
+                                                <p>
+                                                    <strong>Bay:</strong> {lpn.bayCode}
+                                                </p>
+                                                <p>
+                                                    <strong>Status:</strong>{" "}
+                                                    <span
+                                                        className={`font-bold ${
+                                                            lpn.status === "active" ? "text-green-500" : "text-red-500"
+                                                        }`}
+                                                    >
+                                                    {lpn.status}
+                                                </span>
+                                                </p>
+
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         )}
                     </div>
                 </div>
-                <button
-                    onClick={handleStartScan}
-                    disabled={isScanning} // Disable if already scanning
-                    className={`px-6 py-3 text-white font-semibold rounded-lg ${
-                        isScanning
-                            ? "bg-gray-300 cursor-not-allowed"
-                            : "bg-blue-500 hover:bg-blue-600"
-                    }`}
-                >
-                    Start Scan
-                </button>
+            </Loader>
 
-                {/* Stop Button */}
-                <button
-                    onClick={handleStopScan}
-                    disabled={!isScanning} // Disable if not currently scanning
-                    className={`px-6 py-3 text-white font-semibold rounded-lg ${
-                        !isScanning
-                            ? "bg-gray-300 cursor-not-allowed"
-                            : "bg-red-500 hover:bg-red-600"
-                    }`}
-                >
-                    Stop
-                </button>
-
-                {/* Display Typed Text */}
-                <div className="mt-4 text-lg font-medium">
-                    {/*{typedText && (*/}
-                    {/*    <p>Typed Text: <span className="text-blue-500">{typedText}</span></p>*/}
-                    {/*)}*/}
-
-                    {/* Display LPN List */}
-                    {lpnList.length > 0 && (
-                        <div className="mt-8 w-full">
-                            {/* Total Quantity */}
-                            <p className="font-semibold text-lg text-center mb-4">
-                                Total Quantity:{" "}
-                                <span className="text-blue-600">
-                                  {lpnList.reduce((sum, lpn) => sum + (lpn.quantity || 0), 0)}
-                                </span>
-                            </p>
-
-                            {!isMobile ? (
-                                // Desktop Table View
-                                <table className="table-auto w-full border-collapse border border-gray-200">
-                                    <thead>
-                                    <tr className="bg-gray-100">
-                                        <th className="border border-gray-300 px-4 py-2"></th>
-                                        <th className="border border-gray-300 px-4 py-2">SKU</th>
-                                        <th className="border border-gray-300 px-4 py-2">Qty</th>
-                                        <th className="border border-gray-300 px-4 py-2">Bay</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {lpnList.map((lpn, index) => (
-                                        <tr key={index} className="text-center">
-                                            <td className="border border-gray-300 px-4 py-2">{lpn.tagID}</td>
-                                            <td className="border border-gray-300 px-4 py-2">{lpn.sku}</td>
-                                            <td className="border border-gray-300 px-4 py-2">{lpn.quantity}</td>
-                                            <td className="border border-gray-300 px-4 py-2">{lpn.bayCode}</td>
-                                        </tr>
-                                    ))}
-                                    </tbody>
-                                </table>
-                            ) : (
-                                // Mobile View (Responsive Cards)
-                                <div className="space-y-4">
-                                    {lpnList.map((lpn, index) => (
-                                        <div
-                                            key={index}
-                                            className="bg-gray-100 shadow-md p-4 rounded-lg border border-gray-200 text-sm"
-                                        >
-                                            <p>
-                                                <strong>TagID:</strong> {lpn.tagID}
-                                            </p>
-                                            <p>
-                                                <strong>SKU:</strong> {lpn.sku}
-                                            </p>
-                                            <p>
-                                                <strong>Qty:</strong> {lpn.quantity}
-                                            </p>
-                                            <p>
-                                                <strong>Bay:</strong> {lpn.bayCode}
-                                            </p>
-                                            <p>
-                                                <strong>Status:</strong>{" "}
-                                                <span
-                                                    className={`font-bold ${
-                                                        lpn.status === "active" ? "text-green-500" : "text-red-500"
-                                                    }`}
-                                                >
-                                                    {lpn.status}
-                                                </span>
-                                            </p>
-
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            </div>
 
         </>
     );

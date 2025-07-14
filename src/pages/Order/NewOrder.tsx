@@ -11,7 +11,6 @@ import Form from "../../components/form/Form";
 import Loader from "../UiElements/Loader/Loader";
 
 export default function NewOrder() {
-    const [isLoading, setIsLoading] = useState(false);
     const countries = [
         {code: "US", label: "+1"},
         {code: "GB", label: "+44"},
@@ -38,7 +37,7 @@ export default function NewOrder() {
         console.log("Updated phone number:", phoneNumber);
     };
     return (
-        <Loader isLoading={isLoading}>
+        <Loader isLoading={false}>
             <PageMeta
                 title="New Order | East West Furniture"
                 description=""

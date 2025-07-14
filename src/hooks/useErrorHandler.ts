@@ -3,17 +3,34 @@ import {useNotification} from "../context/NotificationContext";
 
 // Option 1: Hook-based approach (use inside React components)
 export const useErrorHandler = () => {
-    const {sendNotification} = useNotification();
+    const { sendNotification } = useNotification();
 
-    return (error: Error | any) => {
-        const errorMessage =
-            error?.response?.data?.message || error?.message || "Unknown error";
+    return (error: unknown): { field: string; message: string } => {
+        let errorMessage = "Unknown error";
+        let field = "";
 
-        // Log the error details
-        console.error(error?.response?.data || error);
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
 
-        // Send a notification
+        if (
+            typeof error === "object" &&
+            error !== null &&
+            "response" in error &&
+            typeof (error as any).response === "object"
+        ) {
+            const response = (error as any).response;
+            errorMessage = response?.data?.message ?? errorMessage;
+            field = response?.data?.field ?? "";
+        }
+
+        console.error((error as any)?.response?.data || error);
+
         sendNotification("error", "Error", errorMessage);
-        return {"field" : error?.response?.data?.field, "message" : errorMessage};
+
+        return {
+            field,
+            message: errorMessage,
+        };
     };
 };

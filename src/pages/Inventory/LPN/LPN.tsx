@@ -5,7 +5,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import Loader from "../../UiElements/Loader/Loader";
 import Button from "../../../components/ui/button/Button";
 import {AgGridReact} from "ag-grid-react";
-import {ColDef, ColGroupDef} from 'ag-grid-community';
+import {CellClassParams, ColDef, ColGroupDef} from 'ag-grid-community';
 import "ag-grid-community/styles/ag-theme-balham.css";
 import {useNavigate} from "react-router";
 import {LPNProp} from "../../../interfaces/LPN";
@@ -73,7 +73,7 @@ export default function LPN() {
             width: 100,
             editable: false,
             filter: "agTextColumnFilter",
-            cellStyle: (params: any) => {
+            cellStyle: (params: CellClassParams) => {
                 return {
                     fontSize: "14px",
                     fontWeight: "700",
@@ -113,7 +113,7 @@ export default function LPN() {
     const defaultColDef = {
         resizable: true,
         floatingFilter: true,
-        cellStyle: (params: any) => {
+        cellStyle: (params: CellClassParams) => {
             return {
                 fontSize: "14px",
                 fontWeight: "500",
@@ -144,7 +144,7 @@ export default function LPN() {
         if (mode === "") {
             fetchData(); // Fetch data only when mode changes to an empty string
         }
-    }, [mode]); // Trigger when `mode` changes
+    }, [mode, sendNotification]); // Trigger when `mode` changes
 
 
 

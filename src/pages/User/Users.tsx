@@ -42,7 +42,7 @@ export default function Users() {
         const userRequestDto = mapUserPropToDto(editedUser)
         try {
             await updateUser(userRequestDto);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Error updating product details:", error);
         }
     };

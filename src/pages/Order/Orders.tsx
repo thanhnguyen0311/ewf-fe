@@ -8,11 +8,12 @@ import {ordersTableColumns} from "../../config/tableColumns";
 import {CustomerType} from "../../config/customerType";
 import Loader from "../UiElements/Loader/Loader";
 import {Paging} from "../../components/ui/paging";
+import {OrderListResponseDto} from "../../interfaces/Order";
 
 
 export default function Orders() {
     const [loading, setLoading] = useState(true);
-    const [orders, setOrders] = useState<any[]>([]); // Store product list
+    const [orders, setOrders] = useState<OrderListResponseDto[]>([]); // Store product list
     const [currentPage, setCurrentPage] = useState(1);
     const [allPages, setAllPages] = useState(0);
 
@@ -30,7 +31,7 @@ export default function Orders() {
                 setOrders(data.data); // Save fetched data
                 await new Promise((resolve) => setTimeout(resolve, 1000));
                 setLoading(false);
-            } catch (err: any) {
+            } catch (err: unknown) {
                 setLoading(false);
             }
         };
@@ -68,10 +69,10 @@ export default function Orders() {
                                                                 className="block font-bold text-gray-800 text-theme-sm dark:text-white/90">
                                                             #{order.invoiceNumber}
                                                             </span>
-                                                                {order.ponumber &&
+                                                                {order.PONumber &&
                                                                     <span
                                                                         className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                                                                     PO:{order.ponumber}
+                                                                     PO:{order.PONumber}
                                                                 </span>
                                                                 }
                                                             </div>
@@ -94,7 +95,7 @@ export default function Orders() {
                                                               className="block font-medium text-gray-800 text-theme-sm dark:text-white/90 truncate overflow-hidden">
                                                                 {order.customerName}
                                                           </span>
-                                                                {order.ponumber &&
+                                                                {order.PONumber &&
                                                                     <span
                                                                         className="block text-gray-500 text-theme-xs dark:text-gray-400">
                                                                      {order.customerPhone}
