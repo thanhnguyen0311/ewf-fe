@@ -17,14 +17,14 @@ export const useErrorHandler = () => {
             typeof error === "object" &&
             error !== null &&
             "response" in error &&
-            typeof (error as any).response === "object"
+            typeof (error as { response?: unknown }).response === "object"
         ) {
-            const response = (error as any).response;
+            const response = (error as { response: { data?: { message?: string; field?: string } } }).response;
             errorMessage = response?.data?.message ?? errorMessage;
             field = response?.data?.field ?? "";
         }
 
-        console.error((error as any)?.response?.data || error);
+        console.error((error as { response?: { data?: unknown } })?.response?.data || error);
 
         sendNotification("error", "Error", errorMessage);
 
