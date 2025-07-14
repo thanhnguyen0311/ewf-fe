@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Refactor type handling and clean up unused state&#10;&#10;Replaced `any` with specific types for better type safety and readability across multiple components. Removed unused error state in `PInventory` and constant reassignment in `PutAwayLPN`. Simplified import paths and fixed redundant typing in error handling logic.">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/build.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/build.yml" afterDir="false" />
+    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Refactor types and update SSH key reference in workflows&#10;&#10;Improved type safety by replacing `any` with specific types and cleaning up unused states in multiple components. Simplified import paths and optimized error handling logic for better maintainability. Updated GitHub Actions workflow to use `SSH_PRIVATE_KEY` for deployment.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -135,23 +134,7 @@
       <workItem from="1749745407633" duration="12921000" />
       <workItem from="1749826851764" duration="14971000" />
       <workItem from="1750088557059" duration="180459000" />
-      <workItem from="1752179952808" duration="27271000" />
-    </task>
-    <task id="LOCAL-00013" summary="Add new features for LPN requests and label printing&#10;&#10;Updated NewLPN.tsx to include PDF generation and label printing functionality. Introduced a new button variant &quot;normal&quot; and adjusted UI elements to support submission state and VirtualKeyboard integration. Minor style changes were also applied to the virtual keyboard and container layout.">
-      <option name="closed" value="true" />
-      <created>1749496010805</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1749496010805</updated>
-    </task>
-    <task id="LOCAL-00014" summary="Add ZPL label generation and printing functionality&#10;&#10;Implemented ZPL label creation for LPN requests and UPC-based SKU labels. Enhanced UI with print button and updated input focus handling to reset specific fields.">
-      <option name="closed" value="true" />
-      <created>1749587906185</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1749587906185</updated>
+      <workItem from="1752179952808" duration="28650000" />
     </task>
     <task id="LOCAL-00015" summary="Add user creation and LPN management features&#10;&#10;Implemented user creation modal with role selection and validation. Enhanced LPN management with location-based put away functionality and UI updates. Adjusted navigation structure and introduced new interfaces for improved state handling.">
       <option name="closed" value="true" />
@@ -529,7 +512,23 @@
       <option name="project" value="LOCAL" />
       <updated>1752518053226</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL-00062" summary="Refactor types and update SSH key reference in workflows&#10;&#10;Improved type safety by replacing `any` with specific types and cleaning up unused states in multiple components. Simplified import paths and optimized error handling logic for better maintainability. Updated GitHub Actions workflow to use `SSH_PRIVATE_KEY` for deployment.">
+      <option name="closed" value="true" />
+      <created>1752518362142</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1752518362142</updated>
+    </task>
+    <task id="LOCAL-00063" summary="Refactor types and update SSH key reference in workflows&#10;&#10;Improved type safety by replacing `any` with specific types and cleaning up unused states in multiple components. Simplified import paths and optimized error handling logic for better maintainability. Updated GitHub Actions workflow to use `SSH_PRIVATE_KEY` for deployment.">
+      <option name="closed" value="true" />
+      <created>1752519190431</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1752519190431</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -547,7 +546,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add LPN search, removal, and history tracking functionality&#10;&#10;Integrated LPN search and deletion features to enhance inventory management. Deprecated unused product search in AppHeader and streamlined the sidebar with a new &quot;History&quot; section. Includes UI adjustments and API integration for improved data handling." />
     <MESSAGE value="Refactor History and Count &amp; Search modules&#10;&#10;Reorganized and optimized the History module by replacing `LPNLog` with `LpnHistory`. Added a new Count &amp; Search feature with functionality to search by SKU. Adjusted routing, sidebar navigation, and reused the API to improve maintainability." />
     <MESSAGE value="Add CI/CD workflow for build and deploy to VPS&#10;&#10;This commit introduces a GitHub Actions workflow for automating build and deployment processes to a VPS. It includes steps for testing, building, and deploying the application while also updating the `.gitignore` to exclude `.env` files. Additionally, `.env` configuration was adjusted for a local environment setup." />
     <MESSAGE value="Remove package-lock.json from .gitignore&#10;&#10;The exclusion of package-lock.json ensures it is tracked in the repository. This change aligns with the use of npm as the package manager, improving dependency consistency." />
@@ -572,6 +570,7 @@
     <MESSAGE value="Update workspace and tasks metadata in `.idea` and workflows  &#10;&#10;Removed outdated task entries and adjusted local tasks counter for consistency in `.idea/workspace.xml`. Minor formatting update in `.github/workflows/build.yml`." />
     <MESSAGE value="Refactor type usage and enhance error handling.&#10;&#10;Updated type definitions for `OrderListResponseDto` and replaced `any` with proper types in several components to improve type safety. Optimized error handling in `SignIn` and `Orders` components. Removed unused state and properties for cleaner, more maintainable code." />
     <MESSAGE value="Refactor type handling and clean up unused state&#10;&#10;Replaced `any` with specific types for better type safety and readability across multiple components. Removed unused error state in `PInventory` and constant reassignment in `PutAwayLPN`. Simplified import paths and fixed redundant typing in error handling logic." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor type handling and clean up unused state&#10;&#10;Replaced `any` with specific types for better type safety and readability across multiple components. Removed unused error state in `PInventory` and constant reassignment in `PutAwayLPN`. Simplified import paths and fixed redundant typing in error handling logic." />
+    <MESSAGE value="Refactor types and update SSH key reference in workflows&#10;&#10;Improved type safety by replacing `any` with specific types and cleaning up unused states in multiple components. Simplified import paths and optimized error handling logic for better maintainability. Updated GitHub Actions workflow to use `SSH_PRIVATE_KEY` for deployment." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor types and update SSH key reference in workflows&#10;&#10;Improved type safety by replacing `any` with specific types and cleaning up unused states in multiple components. Simplified import paths and optimized error handling logic for better maintainability. Updated GitHub Actions workflow to use `SSH_PRIVATE_KEY` for deployment." />
   </component>
 </project>
