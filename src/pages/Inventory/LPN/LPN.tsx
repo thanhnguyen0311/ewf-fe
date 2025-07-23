@@ -17,17 +17,20 @@ import {faSearch, faPlus} from "@fortawesome/free-solid-svg-icons";
 
 import "./LPN.css"
 import {useNotification} from "../../../context/NotificationContext";
-import FindLPN from "./Find/FindLPN";
+import FindLPN from "./FindLPN";
 import {useSidebar} from "../../../context/SidebarContext";
+import {EditLPN} from "./EditLPN";
 
 export default function LPN() {
     const {isMobile} = useSidebar();
     const gridRef = useRef<AgGridReact>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
     const navigate = useNavigate();
     const [lpns, setLpns] = useState<LPNProp[]>([]);
     const {sendNotification} = useNotification();
     const [mode, setMode] = useState<"" | "find" | "putaway" | "edit" | "breakdown">("");
+    const [selectedLpn, setSelectedLpn] = useState<LPNProp | null>(null);
 
 
     const columnDefs: (ColDef | ColGroupDef)[] = [
@@ -123,6 +126,12 @@ export default function LPN() {
         }
     };
 
+    const handleRowDoubleClick = (params: { data: LPNProp }) => {
+        setSelectedLpn(params?.data);
+        setIsEditModalOpen(true);
+
+    }
+    
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -163,7 +172,7 @@ export default function LPN() {
                                     size="sm"
                                     variant="primary"
                                     aria-label="Clear search"
-                                    className="fixed bottom-20 z-10 right-4 w-12 h-12 flex items-center justify-center shadow-lg bg-orange-400 text-white hover:bg-orange-500 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+                                    className="fixed bottom-20 z-10 right-12 w-12 h-12 flex items-center justify-center shadow-lg bg-orange-400 text-white hover:bg-orange-500 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
                                     onClick={() => setMode("find")} // Replace with your search function or navigation
                                 >
                                     <FontAwesomeIcon icon={faSearch} className="text-xl"/>
@@ -172,7 +181,7 @@ export default function LPN() {
                                 <Button
                                     size="sm"
                                     variant="primary"
-                                    className="fixed bottom-4 z-1 right-4 w-12 h-12 rounded-full flex items-center justify-center shadow-lg bg-orange-400 text-white hover:bg-orange-500 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+                                    className="fixed bottom-4 z-10 right-12 w-12 h-12 rounded-full flex items-center justify-center shadow-lg bg-orange-400 text-white hover:bg-orange-500 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
                                     onClick={() => navigate("/inventory/lpn/add")}
                                 >
                                     <FontAwesomeIcon icon={faPlus} className="text-2xl"/>
@@ -218,11 +227,14 @@ export default function LPN() {
                             ref={gridRef}
                             suppressMovableColumns={true}
                             rowData={lpns}
+                            onRowDoubleClicked={handleRowDoubleClick}
                             columnDefs={columnDefs}
                             defaultColDef={defaultColDef}
                             headerHeight={40}
                             rowHeight={32}
-                        />) : <></>}
+                        />) :
+                        <></>
+                    }
 
                 </div>
             </Loader>
@@ -232,6 +244,15 @@ export default function LPN() {
                 mode={mode}
                 setMode={setMode}
             />
+
+            {
+                isEditModalOpen && selectedLpn && (
+                    <EditLPN
+                        onCancel={() => setIsEditModalOpen(false)}
+                        lpn={selectedLpn}
+                    />
+                )
+            }
 
         </>
     )

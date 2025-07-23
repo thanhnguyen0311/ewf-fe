@@ -1,12 +1,12 @@
 import React, {useRef, useState} from "react";
-import Button from "../../../../components/ui/button/Button";
-import {LPNEditRequestProp, mapLPNToEditRequest} from "../../../../interfaces/LPN";
-import Loader from "../../../UiElements/Loader/Loader";
-import PutAwayLPN from "../PutAway/PutAwayLPN";
-import BreakDownLPN from "../Breakdown/BreakDownLPN";
-import {findLpn, removeLpn} from "../../../../api/LpnApiService";
-import {useErrorHandler} from "../../../../hooks/useErrorHandler";
-import {useNotification} from "../../../../context/NotificationContext";
+import Button from "../../../components/ui/button/Button";
+import {LPNEditRequestProp, mapLPNToEditRequest} from "../../../interfaces/LPN";
+import Loader from "../../UiElements/Loader/Loader";
+import PutAwayLPN from "./PutAwayLPN";
+import BreakDownLPN from "./BreakDownLPN";
+import {findLpn, removeLpn} from "../../../api/LpnApiService";
+import {useErrorHandler} from "../../../hooks/useErrorHandler";
+import {useNotification} from "../../../context/NotificationContext";
 
 
 interface FindLPNModalProps {
@@ -153,6 +153,7 @@ const FindLPN: React.FC<FindLPNModalProps> = ({onCancel, mode, setMode}) => {
 
                                         </div>
                                 )}
+
                                 {
                                     lpnRequest && (mode === "putaway") && (
                                         <>
@@ -168,6 +169,7 @@ const FindLPN: React.FC<FindLPNModalProps> = ({onCancel, mode, setMode}) => {
                                         </>
                                     )
                                 }
+
                             </div>
                         </div>
                     </Loader>

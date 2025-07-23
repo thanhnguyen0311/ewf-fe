@@ -15,7 +15,7 @@ import ProductSheet from "./pages/Product/ProductSheet";
 import Users from "./pages/User/Users";
 import Permissions from "./pages/AuthPages/Permissions";
 import LPN from "./pages/Inventory/./LPN/LPN";
-import NewLPN from "./pages/Inventory/LPN/New/NewLPN";
+import NewLPN from "./pages/Inventory/LPN/NewLPN";
 import SearchBySKU from "./pages/Count&Search/SearchBySKU";
 
 export default function App() {
