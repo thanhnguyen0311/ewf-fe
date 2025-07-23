@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {LPNProp, mapLPNToEditRequest} from "../../../interfaces/LPN";
+import {LPNProp} from "../../../interfaces/LPN";
 import {useErrorHandler} from "../../../hooks/useErrorHandler";
 import {useNotification} from "../../../context/NotificationContext";
 import Loader from "../../UiElements/Loader/Loader";
@@ -8,8 +8,6 @@ import Input from "../../../components/form/input/InputField";
 import {ComponentInboundProp} from "../../../interfaces/Component";
 import {getComponentInbound} from "../../../api/ComponentApiService";
 import Button from "../../../components/ui/button/Button";
-import {useSidebar} from "../../../context/SidebarContext";
-import {createNewLpn} from "../../../api/LpnApiService";
 
 
 interface EditLPNModalProps {
@@ -20,7 +18,7 @@ interface EditLPNModalProps {
 export const EditLPN: React.FC<EditLPNModalProps> = ({onCancel, lpn}) => {
     const [loading, setLoading] = useState<boolean>(false);
 
-    const {isMobile} = useSidebar();
+    // const {isMobile} = useSidebar();
     const handleError = useErrorHandler();
     const {sendNotification} = useNotification();
 
@@ -56,7 +54,7 @@ export const EditLPN: React.FC<EditLPNModalProps> = ({onCancel, lpn}) => {
 
     const handleSubmit = async () => {
         setLoading(true);
-        const lpnRequest = mapLPNToEditRequest(lpnProp)
+        // const lpnRequest = mapLPNToEditRequest(lpnProp)
         try {
 
 
