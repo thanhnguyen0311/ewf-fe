@@ -1,11 +1,11 @@
 import React, {useEffect, useRef, useState} from "react";
-import Button from "../../../../components/ui/button/Button";
-import {LPNEditRequestProp} from "../../../../interfaces/LPN";
-import {BayLocationProp} from "../../../../interfaces/BayLocation";
-import {getBayLocations} from "../../../../api/BayLocationApiService";
-import {putAwayLpn} from "../../../../api/LpnApiService";
-import {useNotification} from "../../../../context/NotificationContext";
-import {useErrorHandler} from "../../../../hooks/useErrorHandler";
+import Button from "../../../components/ui/button/Button";
+import {LPNEditRequestProp} from "../../../interfaces/LPN";
+import {BayLocationProp} from "../../../interfaces/BayLocation";
+import {getBayLocations} from "../../../api/BayLocationApiService";
+import {putAwayLpn} from "../../../api/LpnApiService";
+import {useNotification} from "../../../context/NotificationContext";
+import {useErrorHandler} from "../../../hooks/useErrorHandler";
 
 
 interface PutAwayModalProps {

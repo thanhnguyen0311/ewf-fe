@@ -1,25 +1,25 @@
 import React, {useEffect, useRef, useState} from 'react';
-import Form from "../../../../components/form/Form";
-import Label from "../../../../components/form/Label";
-import Input from "../../../../components/form/input/InputField";
-import {ComponentInboundProp} from "../../../../interfaces/Component";
-import {getComponentInbound} from "../../../../api/ComponentApiService";
-import {LPNRequestProp} from "../../../../interfaces/LPN";
-import {CalenderIcon} from "../../../../icons";
+import Form from "../../../components/form/Form";
+import Label from "../../../components/form/Label";
+import Input from "../../../components/form/input/InputField";
+import {ComponentInboundProp} from "../../../interfaces/Component";
+import {getComponentInbound} from "../../../api/ComponentApiService";
+import {LPNRequestProp} from "../../../interfaces/LPN";
+import {CalenderIcon} from "../../../icons";
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import Button from "../../../../components/ui/button/Button";
-import {useNotification} from "../../../../context/NotificationContext";
-import Loader from "../../../UiElements/Loader/Loader";
-import {BayLocationProp} from "../../../../interfaces/BayLocation";
-import {getBayLocations} from "../../../../api/BayLocationApiService";
-import VirtualKeyboard from "../../../UiElements/VirtualKeyBoard/VirtualKeyboard";
-import {createNewLpn} from "../../../../api/LpnApiService";
+import Button from "../../../components/ui/button/Button";
+import {useNotification} from "../../../context/NotificationContext";
+import Loader from "../../UiElements/Loader/Loader";
+import {BayLocationProp} from "../../../interfaces/BayLocation";
+import {getBayLocations} from "../../../api/BayLocationApiService";
+import VirtualKeyboard from "../../UiElements/VirtualKeyBoard/VirtualKeyboard";
+import {createNewLpn} from "../../../api/LpnApiService";
 
-import {useSidebar} from "../../../../context/SidebarContext";
-import useGoBack from "../../../../hooks/useGoBack";
-import {generateZplLpnLabel, generateZplSkuLabel} from "../../../../utils/labelGenerator";
-import {useErrorHandler} from "../../../../hooks/useErrorHandler";
+import {useSidebar} from "../../../context/SidebarContext";
+import useGoBack from "../../../hooks/useGoBack";
+import {generateZplLpnLabel, generateZplSkuLabel} from "../../../utils/labelGenerator";
+import {useErrorHandler} from "../../../hooks/useErrorHandler";
 
 
 const defaultLpnRequest: LPNRequestProp = {
@@ -338,6 +338,7 @@ export default function NewLPN() {
                 }
             );
             setIsSubmitted(true);
+            handlePrintLabel();
 
         } catch (error) {
             handleError(error);

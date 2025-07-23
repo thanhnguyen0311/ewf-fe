@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
-import Button from "../../../../components/ui/button/Button";
-import {LPNEditRequestProp } from "../../../../interfaces/LPN";
-import {breakDownLpn} from "../../../../api/LpnApiService";
-import {useNotification} from "../../../../context/NotificationContext";
-import {useErrorHandler} from "../../../../hooks/useErrorHandler";
-import {getLooseInventory} from "../../../../api/InventoryApiService";
+import Button from "../../../components/ui/button/Button";
+import {LPNEditRequestProp } from "../../../interfaces/LPN";
+import {breakDownLpn} from "../../../api/LpnApiService";
+import {useNotification} from "../../../context/NotificationContext";
+import {useErrorHandler} from "../../../hooks/useErrorHandler";
+import {getLooseInventory} from "../../../api/InventoryApiService";
 
 
 interface PutAwayModalProps {
