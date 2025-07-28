@@ -19,18 +19,15 @@ import "./LPN.css"
 import {useNotification} from "../../../context/NotificationContext";
 import FindLPN from "./FindLPN";
 import {useSidebar} from "../../../context/SidebarContext";
-import {EditLPN} from "./EditLPN";
 
 export default function LPN() {
     const {isMobile} = useSidebar();
     const gridRef = useRef<AgGridReact>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
     const navigate = useNavigate();
     const [lpns, setLpns] = useState<LPNProp[]>([]);
     const {sendNotification} = useNotification();
     const [mode, setMode] = useState<"" | "find" | "putaway" | "edit" | "breakdown">("");
-    const [selectedLpn, setSelectedLpn] = useState<LPNProp | null>(null);
 
 
     const columnDefs: (ColDef | ColGroupDef)[] = [
@@ -43,7 +40,7 @@ export default function LPN() {
             filter: "agTextColumnFilter",
             valueFormatter: (params) => {
                 const tagId = params.value || ""; // Ensure the value exists
-                return "...." + tagId.slice(-5); // Display only the last three characters
+                return "...." + tagId.slice(-6);
             },
         },
         {
@@ -126,11 +123,6 @@ export default function LPN() {
         }
     };
 
-    const handleRowDoubleClick = (params: { data: LPNProp }) => {
-        setSelectedLpn(params?.data);
-        setIsEditModalOpen(true);
-
-    }
     
     useEffect(() => {
         const fetchData = async () => {
@@ -227,12 +219,12 @@ export default function LPN() {
                             ref={gridRef}
                             suppressMovableColumns={true}
                             rowData={lpns}
-                            onRowDoubleClicked={handleRowDoubleClick}
                             columnDefs={columnDefs}
                             defaultColDef={defaultColDef}
                             headerHeight={40}
                             rowHeight={32}
-                        />) :
+                        />
+                        ) :
                         <></>
                     }
 
@@ -245,14 +237,6 @@ export default function LPN() {
                 setMode={setMode}
             />
 
-            {
-                isEditModalOpen && selectedLpn && (
-                    <EditLPN
-                        onCancel={() => setIsEditModalOpen(false)}
-                        lpn={selectedLpn}
-                    />
-                )
-            }
 
         </>
     )

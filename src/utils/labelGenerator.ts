@@ -1,6 +1,6 @@
-import {LPNRequestProp} from "../interfaces/LPN";
+import {LPNEditRequestProp, LPNRequestProp} from "../interfaces/LPN";
 
-export const generateZplLpnLabel = (lpnRequest: LPNRequestProp, upc: string): string => {
+export const generateZplLpnLabel = (lpnRequest: LPNRequestProp | LPNEditRequestProp, upc: string): string => {
     return `
         ^XA
         ^PW576          ; Set label width to 576 dots (2.84 inches)
@@ -63,3 +63,38 @@ export const generateZplSkuLabel = (upc: string, sku: string) => {
             ^XZ
         `;
 }
+
+export const handlePrintLabel = (lpnRequest: LPNRequestProp | LPNEditRequestProp, upc : string) => {
+    if (!lpnRequest.sku) {
+        return;
+    }
+
+    const zpl = generateZplLpnLabel(lpnRequest, upc);
+
+    // Create a Blob object with the ZPL data
+    const blob = new Blob([zpl], {type: "application/octet-stream"});
+
+    // If the browser is Safari, use a different approach
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    if (isSafari) {
+        // Create a file URL and open it in a new tab
+        const reader = new FileReader();
+        reader.onloadend = function () {
+            const link = document.createElement("a");
+            link.href = reader.result as string;
+            link.download = lpnRequest?.sku + ".zpl";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+        reader.readAsDataURL(blob);
+    } else {
+        // For other browsers, use the usual method
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = lpnRequest?.sku + ".zpl";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+};
