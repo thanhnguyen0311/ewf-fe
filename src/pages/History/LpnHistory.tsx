@@ -1,6 +1,5 @@
 
 import React, {useEffect, useState} from "react";
-import {useNotification} from "../../context/NotificationContext";
 import {getLPNLog} from "../../api/logApiService";
 import {useErrorHandler} from "../../hooks/useErrorHandler";
 import {LPNLog} from "../../interfaces/Log";
