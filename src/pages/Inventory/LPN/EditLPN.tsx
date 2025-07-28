@@ -1,42 +1,49 @@
-import React, {useEffect, useState} from "react";
-import {LPNProp} from "../../../interfaces/LPN";
+import React, {useEffect, useRef, useState} from "react";
+import {LPNEditRequestProp} from "../../../interfaces/LPN";
 import {useErrorHandler} from "../../../hooks/useErrorHandler";
 import {useNotification} from "../../../context/NotificationContext";
-import Loader from "../../UiElements/Loader/Loader";
-import Label from "../../../components/form/Label";
-import Input from "../../../components/form/input/InputField";
 import {ComponentInboundProp} from "../../../interfaces/Component";
 import {getComponentInbound} from "../../../api/ComponentApiService";
+import Input from "../../../components/form/input/InputField";
+import Label from "../../../components/form/Label";
+import {handlePrintLabel} from "../../../utils/labelGenerator";
 import Button from "../../../components/ui/button/Button";
+import {editLpn} from "../../../api/LpnApiService";
 
 
 interface EditLPNModalProps {
     onCancel: () => void;
-    lpn: LPNProp
+    lpnProp: LPNEditRequestProp;
+    setLoading: (e: boolean) => void;
 }
 
-export const EditLPN: React.FC<EditLPNModalProps> = ({onCancel, lpn}) => {
-    const [loading, setLoading] = useState<boolean>(false);
+export const EditLPN: React.FC<EditLPNModalProps> = ({onCancel, lpnProp, setLoading}) => {
 
-    // const {isMobile} = useSidebar();
     const handleError = useErrorHandler();
     const {sendNotification} = useNotification();
+    const debounceTimer = useRef<NodeJS.Timeout | null>(null); // For debouncing
 
     const [componentInboundData, setComponentInboundData] = useState<ComponentInboundProp[]>([]);
+    const [filteredComponents, setFilteredComponents] = useState<ComponentInboundProp[]>([]);
 
-    const [lpnProp, setLpnProp] = useState<LPNProp>(lpn);
+    const [lpnRequest, setLpnRequest] = useState<LPNEditRequestProp>(lpnProp);
 
 
-    const handleClose = () => {
-        onCancel();
-    }
 
     const handleInputSKUChange = (value: string) => {
-        setLpnProp((prevState) => ({
+        setLpnRequest((prevState) => ({
             ...prevState,
             sku: value,
         }));
 
+        if (debounceTimer.current) {
+            clearTimeout(debounceTimer.current); // Clear previous timer
+        }
+
+        // Delay the filtering for better performance
+        debounceTimer.current = setTimeout(() => {
+            filterComponents(value);
+        }, 300); // Debounce time (e.g., 300ms)
 
         const exactMatch = componentInboundData.find(
             (component) =>
@@ -44,7 +51,7 @@ export const EditLPN: React.FC<EditLPNModalProps> = ({onCancel, lpn}) => {
         );
 
         if (exactMatch) {
-            setLpnProp((prevState) => ({
+            setLpnRequest((prevState) => ({
                 ...prevState,
                 sku: exactMatch.sku,
             }));
@@ -52,12 +59,56 @@ export const EditLPN: React.FC<EditLPNModalProps> = ({onCancel, lpn}) => {
 
     }
 
+    const filterComponents = (value: string) => {
+        if (value.trim() === "") {
+            setFilteredComponents([]); // Reset filtered results if input is empty
+            return;
+        }
+
+        const results = componentInboundData.filter((component) =>
+            component.sku.toLowerCase().includes(value.toLowerCase()) || component.upc.includes(value)
+        );
+
+        // Check for an exact match
+        const exactMatch = componentInboundData.find(
+            (component) =>
+                component.sku.toLowerCase() === value.toLowerCase() || component.upc === value
+        );
+
+
+        if (exactMatch) {
+
+            // If there's an exact match, preselect it
+            setLpnRequest((prevState) => ({
+                ...prevState,
+                sku: exactMatch.sku, // Automatically set the SKU in state
+            }));
+
+            setFilteredComponents([]); // Clear the filteredComponents list since we autoselected
+
+        } else {
+            // Otherwise, set the filtered results normally
+            setFilteredComponents(results);
+        }
+    };
+
+    const handleComponentSelect = (component: ComponentInboundProp) => {
+
+        setLpnRequest((prevState) => ({
+            ...prevState,
+            sku: component.sku, // Replace "newSkuValue" with the desired value
+            quantity: component.palletCapacity || 12,
+        }));
+
+        setFilteredComponents([]);
+    };
+
+
     const handleSubmit = async () => {
         setLoading(true);
         // const lpnRequest = mapLPNToEditRequest(lpnProp)
         try {
-
-
+            await editLpn(lpnRequest)
             // Notify user of success
             sendNotification(
                 "success",
@@ -96,129 +147,141 @@ export const EditLPN: React.FC<EditLPNModalProps> = ({onCancel, lpn}) => {
         fetchComponentInboundData();
     }, []);
 
-
     return (
         <>
-            <div
-                className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
-                onClick={handleClose}
-            >
-                <Loader isLoading={loading} className={"max-w-xl w-full"}>
-                    <div
-                        className="relative bg-white rounded-lg w-full shadow-lg"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div className="p-8 ">
-                            <div className="flex flex-col gap-6 lg:flex-row mb-8 lg:items-start lg:justify-between">
-                                <div className="w-full p-4">
-                                    <h4 className="text-lg font-semibold mb-5 text-gray-800 dark:text-white/90 lg:mb-6">
-                                        Edit LPN
-                                    </h4>
-                                    <div>
-                                        <Label className="ml-1 font-semibold">RFID Tag ID</Label>
-                                        <div className="relative w-full max-w-xl ">
-                                            <Input
-                                                type="text"
-                                                value={lpnProp.tagID}
-                                                placeholder="Enter or scan"
-                                                className={`mt-3 block w-full bg-white border-gray-300`}
-                                                onChange={(e) => {
-                                                    setLpnProp((prevState) => ({
-                                                        ...prevState,
-                                                        tagID: e.target.value.trim(),
-                                                    }));
-                                                }}
-                                                onFocus={() => {
-                                                    setLpnProp((prevState) => ({
-                                                        ...prevState,
-                                                        tagID: "",
-                                                    }));
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
+            <div className="flex mb-8 flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+                <div className="w-full">
+                    <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
+                        {lpnProp.tagID}
+                    </h4>
 
-                                    <div>
-                                        <Label className="ml-1 mt-5 font-semibold">SKU</Label>
-                                        <div className="relative w-full max-w-xl ">
-                                            <Input
-                                                type="text"
-                                                value={lpnProp.sku}
-                                                placeholder="Enter or scan"
-                                                className={`mt-3 block w-full bg-white border-gray-300`}
-                                                onFocus={() => {
-                                                    setLpnProp((prevState) => ({
-                                                        ...prevState,
-                                                        sku: "",
-                                                    }));
-                                                }}
-                                                onChange={(e) => handleInputSKUChange(e.target.value.trim())}
-                                            />
-                                        </div>
-                                    </div>
+                    <div className="grid mt-4 grid-cols-2 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
+                        <div>
+                            <Label className="ml-1 font-semibold">SKU</Label>
+                            <Input
+                                type="text"
+                                value={lpnRequest.sku}
+                                placeholder="Enter or scan"
+                                className={`mt-1 block w-full bg-white border-gray-300`}
+                                onChange={(e) => handleInputSKUChange(e.target.value.trim())}
+                                onFocus={() => {
+                                    setLpnRequest((prevState) => ({
+                                        ...prevState,
+                                        sku: "",
+                                    }));
+                                }}
+                            />
 
-                                    <div>
-                                        <Label className="ml-1 mt-5 font-semibold">Quantity</Label>
-                                        <div className=" flex w-full max-w-xl">
-                                            <Input
-                                                type="number"
-                                                value={lpnProp.quantity}
-                                                placeholder="Enter number of items"
-                                                className={` mt-3 w-full text-theme-sm bg-white font-semibold text-center border-gray-300`}
-                                                onChange={(e) =>
-                                                    setLpnProp((prev) => ({
-                                                        ...prev,
-                                                        quantity: parseInt(e.target.value.trim()) || 0,
-                                                    }))
-                                                }
-                                            />
-                                        </div>
-                                    </div>
-
-
-                                    <div>
-                                        <Label className="ml-1 mt-5 font-semibold">Bay Location</Label>
-                                        <div className=" flex w-full max-w-xl">
-                                            <Input
-                                                type="text"
-                                                value={lpnProp.bayCode}
-                                                placeholder=""
-                                                className={` mt-3 w-full text-theme-sm bg-white font-semibold text-center border-gray-300`}
-                                                onChange={(e) =>
-                                                    setLpnProp((prev) => ({
-                                                        ...prev,
-                                                        bayCode: e.target.value.trim(),
-                                                    }))
-                                                }
-                                            />
-                                        </div>
-                                    </div>
-
-
-                                    <div
-                                        className={`mt-5`}
-                                    >
-                                        <Button
-                                            size="sm"
-                                            variant="primary"
-                                            onClick={handleSubmit}
-                                            className={"mr-10"}
+                            {/* Dropdown List */}
+                            {filteredComponents.length > 0 && (
+                                <ul className="absolute z-10 w-full text-theme-xm bg-white dark:bg-white border rounded shadow max-h-48 overflow-y-auto">
+                                    {filteredComponents.map((component) => (
+                                        <li
+                                            key={component.sku} // Or a unique identifier
+                                            className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                                            onClick={() => handleComponentSelect(component)}
                                         >
-                                            Save
-                                        </Button>
-                                        <Button
-                                            size="sm"
-                                            variant="normal"
-                                            onClick={onCancel}
-                                        >
-                                            Close
-                                        </Button>
-                                    </div>
-                                </div>
+                                            <p className="text-sm">{component.sku} ({component.upc})</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+
+
+                        <div>
+                            <Label className="ml-1 font-semibold">Quantity</Label>
+                            <div className=" flex w-full max-w-xl">
+                                <Input
+                                    type="number"
+                                    value={lpnRequest.quantity}
+                                    placeholder="Enter number of items"
+                                    className={`w-full text-theme-sm bg-white font-semibold text-center border-gray-300`}
+                                    onChange={(e) =>
+                                        setLpnRequest((prev) => ({
+                                            ...prev,
+                                            quantity: parseInt(e.target.value.trim()) || 0,
+                                        }))
+                                    }
+                                />
                             </div>
                         </div>
+
+
+                        <div>
+                            <Label className="ml-1 font-semibold">Bay Location</Label>
+                            <div className="w-full max-w-xl">
+                                <Input
+                                    type="text"
+                                    value={lpnRequest.bayCode}
+                                    placeholder="Enter or scan"
+                                    className={`mt-1 block bg-white w-full border-gray-500`}
+                                    onChange={(e) =>
+                                        setLpnRequest((prev) => ({
+                                            ...prev,
+                                            bayCode: e.target.value.trim(),
+                                        }))
+                                }
+                                />
+
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <Label className="ml-1 font-semibold">Container Number</Label>
+                            <div className="relative w-full bg-white max-w-xl">
+                                <Input
+                                    type="text"
+                                    value={lpnRequest.containerNumber}
+                                    placeholder=""
+                                    className="w-full pr-20 px-4 border-gray-300 py-2 border rounded"
+                                    onChange={(e) => setLpnRequest((prev) => ({
+                                        ...prev,
+                                        containerNumber: e.target.value.trim(),
+                                    }))
+                                    }
+                                />
+
+                            </div>
+                        </div>
+
                     </div>
-                </Loader>
+
+                </div>
+            </div>
+
+            <div className="flex justify-center mt-5">
+                <Button
+                    size="sm"
+                    variant="primary"
+                    onClick={handleSubmit}
+                    className={"mr-5 flex items-center"}
+                >
+                    Save
+                </Button>
+
+                <Button
+                    size="sm"
+                    variant="primary"
+                    onClick={() => {
+                        const component = componentInboundData.find((item) => item.sku === lpnRequest.sku);
+                        const upc = component ? component.upc : "";
+                        handlePrintLabel(lpnRequest, upc)
+                    }}
+                    className={"mr-5 flex items-center"}
+                >
+                    Print
+                </Button>
+
+                <Button
+                    size="sm"
+                    variant="normal"
+                    onClick={onCancel}
+                    className={"mr-5 flex items-center"}
+                >
+                    Cancel
+                </Button>
             </div>
         </>
     )

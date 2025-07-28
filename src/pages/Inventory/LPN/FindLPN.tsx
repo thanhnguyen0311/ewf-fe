@@ -7,6 +7,7 @@ import BreakDownLPN from "./BreakDownLPN";
 import {findLpn, removeLpn} from "../../../api/LpnApiService";
 import {useErrorHandler} from "../../../hooks/useErrorHandler";
 import {useNotification} from "../../../context/NotificationContext";
+import {EditLPN} from "./EditLPN";
 
 
 interface FindLPNModalProps {
@@ -127,6 +128,15 @@ const FindLPN: React.FC<FindLPNModalProps> = ({onCancel, mode, setMode}) => {
                                             <Button
                                                 size="sm"
                                                 variant="primary"
+                                                onClick={() => setMode("edit")}
+                                                className="w-full flex items-center justify-center"
+                                            >
+                                                Edit
+                                            </Button>
+
+                                            <Button
+                                                size="sm"
+                                                variant="primary"
                                                 onClick={() => setMode("putaway")}
                                                 className="w-full flex items-center justify-center"
                                             >
@@ -166,6 +176,14 @@ const FindLPN: React.FC<FindLPNModalProps> = ({onCancel, mode, setMode}) => {
                                     lpnRequest && (mode === "breakdown") && (
                                         <>
                                             <BreakDownLPN onCancel={handleClose} lpnProp={lpnRequest} setLoading={setLoading}/>
+                                        </>
+                                    )
+                                }
+
+                                {
+                                    lpnRequest && (mode === "edit") && (
+                                        <>
+                                            <EditLPN onCancel={handleClose} lpnProp={lpnRequest} setLoading={setLoading}/>
                                         </>
                                     )
                                 }

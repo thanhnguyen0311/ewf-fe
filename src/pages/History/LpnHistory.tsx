@@ -9,7 +9,6 @@ import Loader from "../UiElements/Loader/Loader";
 
 const LpnHistory = () => {
 
-    const { sendNotification } = useNotification();
     const [logs, setLogs] = useState<LPNLog[]>([]); // State to store fetched logs
     const [currentPage, setCurrentPage] = useState(0); // Current page for pagination
     const handleError = useErrorHandler();
@@ -30,7 +29,7 @@ const LpnHistory = () => {
         };
 
         fetchData();
-    }, [currentPage, setLoading, sendNotification, handleError]); // Re-fetch when `currentPage` changes
+    }, [currentPage]); // Re-fetch when `currentPage` changes
 
     // Handle pagination
     const handleNext = () => {
@@ -54,8 +53,8 @@ const LpnHistory = () => {
                         <th className="border border-gray-300 px-4 py-2">User</th>
                         <th className="border border-gray-300 px-4 py-2">Tag ID</th>
                         <th className="border border-gray-300 px-4 py-2">SKU</th>
-                        <th className="border border-gray-300 px-4 py-2">Message</th>
                         <th className="border border-gray-300 px-4 py-2">Method</th>
+                        <th className="border border-gray-300 px-4 py-2">Message</th>
                         <th className="border border-gray-300 px-4 py-2">Date</th>
                     </tr>
                     </thead>
@@ -65,8 +64,8 @@ const LpnHistory = () => {
                             <td className="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-800 dark:text-white/90">{log.user}</td>
                             <td className="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-800 dark:text-white/90">{log.tagID}</td>
                             <td className="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-800 dark:text-white/90">{log.sku}</td>
-                            <td className="border border-gray-300 px-4 py- text-sm font-medium text-gray-800 dark:text-white/902">{log.message}</td>
                             <td className="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-800 dark:text-white/90">{log.method}</td>
+                            <td className="border border-gray-300 px-4 py- text-sm font-medium text-gray-800 dark:text-white/902">{log.message}</td>
                             <td className="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-800 dark:text-white/90">{log.logDate}</td>
                         </tr>
                     ))}

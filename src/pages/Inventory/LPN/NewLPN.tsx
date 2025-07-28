@@ -18,7 +18,7 @@ import {createNewLpn} from "../../../api/LpnApiService";
 
 import {useSidebar} from "../../../context/SidebarContext";
 import useGoBack from "../../../hooks/useGoBack";
-import {generateZplLpnLabel, generateZplSkuLabel} from "../../../utils/labelGenerator";
+import {generateZplSkuLabel, handlePrintLabel} from "../../../utils/labelGenerator";
 import {useErrorHandler} from "../../../hooks/useErrorHandler";
 
 
@@ -338,7 +338,9 @@ export default function NewLPN() {
                 }
             );
             setIsSubmitted(true);
-            handlePrintLabel();
+            const component = componentInboundData.find((item) => item.sku === lpnRequest.sku);
+            const upc = component ? component.upc : "";
+            handlePrintLabel(lpnRequest, upc)
 
         } catch (error) {
             handleError(error);
@@ -347,39 +349,6 @@ export default function NewLPN() {
         }
     };
 
-
-    const handlePrintLabel = () => {
-        const component = componentInboundData.find((item) => item.sku === lpnRequest.sku);
-        const upc = component ? component.upc : "";
-        const zpl = generateZplLpnLabel(lpnRequest, upc);
-
-        // Create a Blob object with the ZPL data
-        const blob = new Blob([zpl], {type: "application/octet-stream"});
-
-        // If the browser is Safari, use a different approach
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        if (isSafari) {
-            // Create a file URL and open it in a new tab
-            const reader = new FileReader();
-            reader.onloadend = function () {
-                const link = document.createElement("a");
-                link.href = reader.result as string;
-                link.download = component?.sku + ".zpl";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            };
-            reader.readAsDataURL(blob);
-        } else {
-            // For other browsers, use the usual method
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = component?.sku + ".zpl";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    };
 
     const handlePrintSKULabel = () => {
         if (!lpnRequest.sku) {
@@ -499,6 +468,7 @@ export default function NewLPN() {
                                 )}
 
                             </div>
+
                             <div className="p-2">
                                 <Button
                                     size="xs"
@@ -733,7 +703,11 @@ export default function NewLPN() {
                                     size="sm"
                                     variant="primary"
                                     className={isMobile ? "w-full" : ""} // Full-width style for mobile
-                                    onClick={handlePrintLabel} // Print Label handler
+                                    onClick={() => {
+                                        const component = componentInboundData.find((item) => item.sku === lpnRequest.sku);
+                                        const upc = component ? component.upc : "";
+                                        handlePrintLabel(lpnRequest, upc)
+                                    }}
                                 >
                                     Print
                                 </Button>

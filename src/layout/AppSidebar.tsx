@@ -85,7 +85,7 @@ const othersItems: NavItem[] = [
 ];
 
 const AppSidebar: React.FC = () => {
-  const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+  const { isExpanded, isMobileOpen, isHovered, setIsHovered, setIsMobileOpen } = useSidebar();
   const location = useLocation();
   const auth = useContext(AuthContext);
   const [openSubmenu, setOpenSubmenu] = useState<{
@@ -148,14 +148,16 @@ const AppSidebar: React.FC = () => {
         prevOpenSubmenu.type === menuType &&
         prevOpenSubmenu.index === index
       ) {
+
         return null;
       }
+
       return { type: menuType, index };
     });
   };
 
   const renderMenuItems = (items: NavItem[], menuType: "main" | "others") => (
-      
+
       <ul className="flex flex-col gap-4">
       {items.map((nav, index) => (
         <li key={nav.name}>
@@ -213,7 +215,8 @@ const AppSidebar: React.FC = () => {
                   {nav.icon}
                 </span>
                 {(isExpanded || isHovered || isMobileOpen) && (
-                  <span className="menu-item-text">{nav.name}</span>
+                  <span className="menu-item-text"
+                        onClick={() => {setIsMobileOpen(false)}}>{nav.name}</span>
                 )}
               </Link>
             )
@@ -254,6 +257,7 @@ const AppSidebar: React.FC = () => {
                     <li key={subItem.name}>
                       <Link
                         to={subItem.path}
+                        onClick={() => {setIsMobileOpen(false)}}
                         className={`menu-dropdown-item ${
                           isActive(subItem.path)
                             ? "menu-dropdown-item-active"

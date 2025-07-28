@@ -26,6 +26,7 @@ export interface LPNEditRequestProp {
     quantity: number;
     bayCode: string;
     status: string;
+    date: string;
 }
 
 export function mapLPNToEditRequest(lpn: LPNProp): LPNEditRequestProp {
@@ -36,5 +37,6 @@ export function mapLPNToEditRequest(lpn: LPNProp): LPNEditRequestProp {
         quantity: lpn.quantity,
         bayCode: lpn.bayCode,
         status: lpn.status,
+        date: lpn.date
     };
 }
