@@ -119,7 +119,7 @@ export const EditLPN: React.FC<EditLPNModalProps> = ({onCancel, lpnProp, setLoad
                     autoHideDuration: 4000, // Optional: 4 seconds timeout
                 }
             );
-
+            onCancel()
         } catch (error) {
             handleError(error);
         } finally {
