@@ -28,7 +28,7 @@ const LpnHistory = () => {
         };
 
         fetchData();
-    }, [currentPage]); // Re-fetch when `currentPage` changes
+    }, [currentPage, handleError]); // Re-fetch when `currentPage` changes
 
     // Handle pagination
     const handleNext = () => {
