@@ -145,7 +145,7 @@ export const EditLPN: React.FC<EditLPNModalProps> = ({onCancel, lpnProp, setLoad
         }, 1000);
 
         fetchComponentInboundData();
-    }, []);
+    }, [setLoading]);
 
     return (
         <>
