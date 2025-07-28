@@ -1,7 +1,6 @@
 
 import React, {useEffect, useState} from "react";
 import {getLPNLog} from "../../api/logApiService";
-import {useErrorHandler} from "../../hooks/useErrorHandler";
 import {LPNLog} from "../../interfaces/Log";
 import Loader from "../UiElements/Loader/Loader";
 
@@ -10,7 +9,6 @@ const LpnHistory = () => {
 
     const [logs, setLogs] = useState<LPNLog[]>([]); // State to store fetched logs
     const [currentPage, setCurrentPage] = useState(0); // Current page for pagination
-    const handleError = useErrorHandler();
     const [loading, setLoading] = useState<boolean>(false);
 
     // Fetch logs for the current page.
@@ -21,14 +19,14 @@ const LpnHistory = () => {
                 const data = await getLPNLog(currentPage);
                 setLogs(data);
             } catch (error) {
-                handleError(error);
+                console.log(error)
             } finally {
                 setLoading(false);
             }
         };
 
         fetchData();
-    }, [currentPage, handleError]); // Re-fetch when `currentPage` changes
+    }, [currentPage]); // Re-fetch when `currentPage` changes
 
     // Handle pagination
     const handleNext = () => {
