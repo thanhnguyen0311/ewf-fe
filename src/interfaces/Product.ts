@@ -30,6 +30,9 @@ export type ProductDetailProp = {
     ewfmain: boolean | false;
     components: {id: number;componentId: number; sku: string; quantity: number; pos: number }[],
     images: ImageProp | { cgi: [], img: [], dim: []};
+    ewfdirectPrice: number;
+    ewfdirectManualPrice: number;
+    promotion: number;
 };
 export type ProductProp = {
     id: number;
@@ -71,6 +74,8 @@ export type ProductDetailRequestProp = {
     houstondirect: boolean;
     ewfmain: boolean;
     images: ImageProp;
+    ewfdirectManualPrice: number;
+    promotion: number;
 }
 
 export type ProductInventoryProp = {

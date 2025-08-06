@@ -65,6 +65,8 @@ export const mapProductDetailPropToRequest = (
         ewfmain,
         images,
         components, // Include components from the input object
+        ewfdirectManualPrice,
+        promotion,
     } = product;
 
     return {
@@ -93,5 +95,7 @@ export const mapProductDetailPropToRequest = (
         houstondirect,
         ewfmain,
         components: mapComponentsToMinimalFormat(components), // Apply mapping to components
+        ewfdirectManualPrice,
+        promotion,
     };
 };

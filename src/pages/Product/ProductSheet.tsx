@@ -228,6 +228,48 @@ export default function ProductSheet() {
                 fontSize: '13px' },
         },
         {
+            headerName: "Prices",
+            children: [
+                {
+                    headerName: "Sale",
+                    columnGroupShow: "open",
+                    field: "ewfdirectPrice",
+                    width: 100,
+                    cellStyle: {
+                        fontWeight: '500',
+                        textAlign: 'start',
+                        fontSize: '13px' ,
+                        border: "1px solid #ccc"},
+                },
+                {
+                    headerName: "Manual",
+                    columnGroupShow: "open",
+                    field: "ewfdirectManualPrice",
+                    editable: true,
+                    width: 100,
+                    cellStyle: {
+                        fontWeight: '500',
+                        textAlign: 'start',
+                        fontSize: '13px' ,
+                        border: "1px solid #ccc"},
+
+                },
+                {
+                    headerName: "Promotion",
+                    columnGroupShow: "open",
+                    field: "promotion",
+                    editable: true,
+                    width: 100,
+                    cellStyle: {
+                        fontWeight: '500',
+                        textAlign: 'start',
+                        fontSize: '13px' ,
+                        border: "1px solid #ccc"},
+                },
+            ],
+            tooltipField: "Price",
+        },
+        {
             headerName: "UPC",
             field: "upc",
             sortable: true,
