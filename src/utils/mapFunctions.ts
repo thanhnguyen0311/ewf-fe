@@ -67,6 +67,7 @@ export const mapProductDetailPropToRequest = (
         components, // Include components from the input object
         ewfdirectManualPrice,
         promotion,
+        dimension
     } = product;
 
     return {
@@ -97,5 +98,6 @@ export const mapProductDetailPropToRequest = (
         components: mapComponentsToMinimalFormat(components), // Apply mapping to components
         ewfdirectManualPrice,
         promotion,
+        dimension
     };
 };
