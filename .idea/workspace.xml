@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Add pricing fields and columns for product sheet&#10;&#10;Introduced new fields `ewfdirectPrice`, `ewfdirectManualPrice`, and `promotion` to support additional pricing details. Updated the ProductSheet table to include corresponding columns and enhanced mapping functions to handle these new fields.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/Product.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/Product.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Product/ProductSheet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Product/ProductSheet.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/mapFunctions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/mapFunctions.ts" afterDir="false" />
-    </list>
+    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Add pricing fields and columns for product sheet&#10;&#10;Introduced new fields `ewfdirectPrice`, `ewfdirectManualPrice`, and `promotion` to support additional pricing details. Updated the ProductSheet table to include corresponding columns and enhanced mapping functions to handle these new fields." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -143,23 +138,7 @@
       <workItem from="1753717728680" duration="29922000" />
       <workItem from="1755202110861" duration="9784000" />
       <workItem from="1756827596430" duration="324000" />
-      <workItem from="1757009707330" duration="1249000" />
-    </task>
-    <task id="LOCAL-00029" summary="Update artifact paths in GitHub Actions workflow&#10;&#10;Modified the upload and download artifact paths to explicitly handle the `.env` file. This change ensures the correct environment file is transferred during the CI/CD process. No other workflow steps were affected.">
-      <option name="closed" value="true" />
-      <created>1752173270049</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1752173270049</updated>
-    </task>
-    <task id="LOCAL-00030" summary="Update CI workflow to streamline .env management and dependencies&#10;&#10;Reorganized .env generation by integrating it directly into relevant steps and added directory content verification for debugging. Adjusted build dependencies to include linting and tests, ensuring pre-build checks are complete. Enhanced artifact handling for better workflow clarity and reliability.">
-      <option name="closed" value="true" />
-      <created>1752173510175</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1752173510175</updated>
+      <workItem from="1757009707330" duration="1937000" />
     </task>
     <task id="LOCAL-00031" summary="Add dependency verification and fallback installation steps&#10;&#10;This update ensures `react-scripts` is verified before the build process and logs available npm scripts for debugging purposes. It also adds a fallback mechanism to install dependencies if `node_modules` is missing or incomplete, improving the workflow's reliability.">
       <option name="closed" value="true" />
@@ -537,7 +516,23 @@
       <option name="project" value="LOCAL" />
       <updated>1754497862824</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="Add pricing fields and columns for product sheet&#10;&#10;Introduced new fields `ewfdirectPrice`, `ewfdirectManualPrice`, and `promotion` to support additional pricing details. Updated the ProductSheet table to include corresponding columns and enhanced mapping functions to handle these new fields.">
+      <option name="closed" value="true" />
+      <created>1757010999399</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1757010999399</updated>
+    </task>
+    <task id="LOCAL-00079" summary="Add pricing fields and columns for product sheet&#10;&#10;Introduced new fields `ewfdirectPrice`, `ewfdirectManualPrice`, and `promotion` to support additional pricing details. Updated the ProductSheet table to include corresponding columns and enhanced mapping functions to handle these new fields.">
+      <option name="closed" value="true" />
+      <created>1757011111883</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1757011111883</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
