@@ -33,6 +33,7 @@ export type ProductDetailProp = {
     ewfdirectPrice: number;
     ewfdirectManualPrice: number;
     promotion: number;
+    dimension: string;
 };
 export type ProductProp = {
     id: number;
@@ -76,6 +77,7 @@ export type ProductDetailRequestProp = {
     images: ImageProp;
     ewfdirectManualPrice: number;
     promotion: number;
+    dimension: string;
 }
 
 export type ProductInventoryProp = {

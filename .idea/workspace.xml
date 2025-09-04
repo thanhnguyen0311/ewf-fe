@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Add &quot;Count by Location&quot; option to AppSidebar menu&#10;&#10;This update introduces a new sub-item &quot;Count by Location&quot; under the &quot;Count &amp; Search&quot; menu in the sidebar. It follows the same path as &quot;Count by SKU&quot; and is non-pro and active by default.">
+    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Add pricing fields and columns for product sheet&#10;&#10;Introduced new fields `ewfdirectPrice`, `ewfdirectManualPrice`, and `promotion` to support additional pricing details. Updated the ProductSheet table to include corresponding columns and enhanced mapping functions to handle these new fields.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/interfaces/Product.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/Product.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Product/ProductSheet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Product/ProductSheet.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/mapFunctions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/mapFunctions.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +60,7 @@
     &quot;WebServerToolWindowPanel.toolwindow.show.permissions&quot;: &quot;false&quot;,
     &quot;WebServerToolWindowPanel.toolwindow.show.size&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;thanh-ewf&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/ewf-app/ewf-fe/src/pages/UiElements/Modal/Image&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/ewf-app/wms_webapp&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -134,87 +137,13 @@
       <workItem from="1749745407633" duration="12921000" />
       <workItem from="1749826851764" duration="14971000" />
       <workItem from="1750088557059" duration="180459000" />
-      <workItem from="1752179952808" duration="31092000" />
-    </task>
-    <task id="LOCAL-00019" summary="Refactor History and Count &amp; Search modules&#10;&#10;Reorganized and optimized the History module by replacing `LPNLog` with `LpnHistory`. Added a new Count &amp; Search feature with functionality to search by SKU. Adjusted routing, sidebar navigation, and reused the API to improve maintainability.">
-      <option name="closed" value="true" />
-      <created>1751494147117</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1751494147117</updated>
-    </task>
-    <task id="LOCAL-00020" summary="Add CI/CD workflow for build and deploy to VPS&#10;&#10;This commit introduces a GitHub Actions workflow for automating build and deployment processes to a VPS. It includes steps for testing, building, and deploying the application while also updating the `.gitignore` to exclude `.env` files. Additionally, `.env` configuration was adjusted for a local environment setup.">
-      <option name="closed" value="true" />
-      <created>1752170074008</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1752170074008</updated>
-    </task>
-    <task id="LOCAL-00021" summary="Remove package-lock.json from .gitignore&#10;&#10;The exclusion of package-lock.json ensures it is tracked in the repository. This change aligns with the use of npm as the package manager, improving dependency consistency.">
-      <option name="closed" value="true" />
-      <created>1752170224245</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1752170224245</updated>
-    </task>
-    <task id="LOCAL-00022" summary="Remove package-lock.json from .gitignore&#10;&#10;The exclusion of package-lock.json ensures it is tracked in the repository. This change aligns with the use of npm as the package manager, improving dependency consistency.">
-      <option name="closed" value="true" />
-      <created>1752170238019</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1752170238019</updated>
-    </task>
-    <task id="LOCAL-00023" summary="Add lint scripts, improve CI setup, and fix test environment&#10;&#10;Added lint and lint:fix npm scripts for better code quality management. Enhanced CI workflow to handle multiple lock files and conditionally run linting. Fixed test environment by adding global TextEncoder and TextDecoder to setupTests.ts.">
-      <option name="closed" value="true" />
-      <created>1752170801466</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1752170801466</updated>
-    </task>
-    <task id="LOCAL-00024" summary="Refactor CI/CD workflow to modular job structure&#10;&#10;Split the build pipeline into modular jobs for better readability and maintainability. Introduced caching for `node_modules` and cleaned up redundant steps. Added artifact uploads and cleanups to optimize deploy and post-deploy processes.">
-      <option name="closed" value="true" />
-      <created>1752170999382</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1752170999382</updated>
-    </task>
-    <task id="LOCAL-00025" summary="Update workflow to trigger only on pull requests and upgrade action&#10;&#10;The workflow no longer triggers on direct pushes to the main branch, reducing unnecessary runs. Additionally, the upload-artifact action was upgraded to version 4 for improved performance and compatibility.">
-      <option name="closed" value="true" />
-      <created>1752171467164</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1752171467164</updated>
-    </task>
-    <task id="LOCAL-00026" summary="Update GitHub Actions to use v4 of artifact actions&#10;&#10;Upgraded `actions/download-artifact` and `actions/upload-artifact` from v3 to v4 in the workflow file. This ensures compatibility with the latest features and improvements in these actions.">
-      <option name="closed" value="true" />
-      <created>1752171613113</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1752171613113</updated>
-    </task>
-    <task id="LOCAL-00027" summary="Update GitHub Actions to use v4 of artifact actions&#10;&#10;Upgraded `actions/download-artifact` and `actions/upload-artifact` from v3 to v4 in the workflow file. This ensures compatibility with the latest features and improvements in these actions.">
-      <option name="closed" value="true" />
-      <created>1752171934695</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1752171934695</updated>
-    </task>
-    <task id="LOCAL-00028" summary="Update GitHub Actions to use v4 of artifact actions&#10;&#10;Upgraded `actions/download-artifact` and `actions/upload-artifact` from v3 to v4 in the workflow file. This ensures compatibility with the latest features and improvements in these actions.">
-      <option name="closed" value="true" />
-      <created>1752172123909</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1752172123909</updated>
+      <workItem from="1752179952808" duration="38219000" />
+      <workItem from="1753301892626" duration="9326000" />
+      <workItem from="1753455157192" duration="12212000" />
+      <workItem from="1753717728680" duration="29922000" />
+      <workItem from="1755202110861" duration="9784000" />
+      <workItem from="1756827596430" duration="324000" />
+      <workItem from="1757009707330" duration="1249000" />
     </task>
     <task id="LOCAL-00029" summary="Update artifact paths in GitHub Actions workflow&#10;&#10;Modified the upload and download artifact paths to explicitly handle the `.env` file. This change ensures the correct environment file is transferred during the CI/CD process. No other workflow steps were affected.">
       <option name="closed" value="true" />
@@ -528,7 +457,87 @@
       <option name="project" value="LOCAL" />
       <updated>1752521425798</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="Add &quot;Count by Location&quot; option to AppSidebar menu&#10;&#10;This update introduces a new sub-item &quot;Count by Location&quot; under the &quot;Count &amp; Search&quot; menu in the sidebar. It follows the same path as &quot;Count by SKU&quot; and is non-pro and active by default.">
+      <option name="closed" value="true" />
+      <created>1752522767860</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1752522767860</updated>
+    </task>
+    <task id="LOCAL-00069" summary="Update script configuration in build workflow&#10;&#10;Replaced 'npx serve' with 'serve' to streamline execution and avoid dependency on npx. This ensures better reliability and alignment with the deployment environment.">
+      <option name="closed" value="true" />
+      <created>1752523189386</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1752523189386</updated>
+    </task>
+    <task id="LOCAL-00070" summary="Refactor LPN module imports and add EditLPN functionality&#10;&#10;Updated import paths for cleaner structure and added a new EditLPN modal to enable inline LPN editing. Improved UI interaction by enabling double-click to edit and adjusted button positions for better usability.">
+      <option name="closed" value="true" />
+      <created>1753303328669</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1753303328669</updated>
+    </task>
+    <task id="LOCAL-00071" summary="Refactor LPN module imports and add EditLPN functionality&#10;&#10;Updated import paths for cleaner structure and added a new EditLPN modal to enable inline LPN editing. Improved UI interaction by enabling double-click to edit and adjusted button positions for better usability.">
+      <option name="closed" value="true" />
+      <created>1753303556503</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1753303556503</updated>
+    </task>
+    <task id="LOCAL-00072" summary="Add LPN edit functionality with enhanced component filtering&#10;&#10;Implemented LPN editing capabilities, including input debouncing and component filtering for better SKU handling. Enhanced print label utility to support changes in LPN properties. Adjusted layout and removed unused code for improved readability and performance.">
+      <option name="closed" value="true" />
+      <created>1753723017521</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1753723017522</updated>
+    </task>
+    <task id="LOCAL-00073" summary="Add LPN edit functionality with enhanced component filtering&#10;&#10;Implemented LPN editing capabilities, including input debouncing and component filtering for better SKU handling. Enhanced print label utility to support changes in LPN properties. Adjusted layout and removed unused code for improved readability and performance.">
+      <option name="closed" value="true" />
+      <created>1753724547438</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1753724547438</updated>
+    </task>
+    <task id="LOCAL-00074" summary="Add LPN edit functionality with enhanced component filtering&#10;&#10;Implemented LPN editing capabilities, including input debouncing and component filtering for better SKU handling. Enhanced print label utility to support changes in LPN properties. Adjusted layout and removed unused code for improved readability and performance.">
+      <option name="closed" value="true" />
+      <created>1753724796791</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1753724796791</updated>
+    </task>
+    <task id="LOCAL-00075" summary="Add LPN edit functionality with enhanced component filtering&#10;&#10;Implemented LPN editing capabilities, including input debouncing and component filtering for better SKU handling. Enhanced print label utility to support changes in LPN properties. Adjusted layout and removed unused code for improved readability and performance.">
+      <option name="closed" value="true" />
+      <created>1753725523398</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1753725523398</updated>
+    </task>
+    <task id="LOCAL-00076" summary="Add LPN edit functionality with enhanced component filtering&#10;&#10;Implemented LPN editing capabilities, including input debouncing and component filtering for better SKU handling. Enhanced print label utility to support changes in LPN properties. Adjusted layout and removed unused code for improved readability and performance.">
+      <option name="closed" value="true" />
+      <created>1753728011172</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1753728011172</updated>
+    </task>
+    <task id="LOCAL-00077" summary="Add pricing fields and columns for product sheet&#10;&#10;Introduced new fields `ewfdirectPrice`, `ewfdirectManualPrice`, and `promotion` to support additional pricing details. Updated the ProductSheet table to include corresponding columns and enhanced mapping functions to handle these new fields.">
+      <option name="closed" value="true" />
+      <created>1754497862823</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1754497862824</updated>
+    </task>
+    <option name="localTasksCounter" value="78" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -546,10 +555,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Remove package-lock.json from .gitignore&#10;&#10;The exclusion of package-lock.json ensures it is tracked in the repository. This change aligns with the use of npm as the package manager, improving dependency consistency." />
-    <MESSAGE value="Add lint scripts, improve CI setup, and fix test environment&#10;&#10;Added lint and lint:fix npm scripts for better code quality management. Enhanced CI workflow to handle multiple lock files and conditionally run linting. Fixed test environment by adding global TextEncoder and TextDecoder to setupTests.ts." />
-    <MESSAGE value="Refactor CI/CD workflow to modular job structure&#10;&#10;Split the build pipeline into modular jobs for better readability and maintainability. Introduced caching for `node_modules` and cleaned up redundant steps. Added artifact uploads and cleanups to optimize deploy and post-deploy processes." />
-    <MESSAGE value="Update workflow to trigger only on pull requests and upgrade action&#10;&#10;The workflow no longer triggers on direct pushes to the main branch, reducing unnecessary runs. Additionally, the upload-artifact action was upgraded to version 4 for improved performance and compatibility." />
     <MESSAGE value="Update GitHub Actions to use v4 of artifact actions&#10;&#10;Upgraded `actions/download-artifact` and `actions/upload-artifact` from v3 to v4 in the workflow file. This ensures compatibility with the latest features and improvements in these actions." />
     <MESSAGE value="Update artifact paths in GitHub Actions workflow&#10;&#10;Modified the upload and download artifact paths to explicitly handle the `.env` file. This change ensures the correct environment file is transferred during the CI/CD process. No other workflow steps were affected." />
     <MESSAGE value="Update CI workflow to streamline .env management and dependencies&#10;&#10;Reorganized .env generation by integrating it directly into relevant steps and added directory content verification for debugging. Adjusted build dependencies to include linting and tests, ensuring pre-build checks are complete. Enhanced artifact handling for better workflow clarity and reliability." />
@@ -571,6 +576,10 @@
     <MESSAGE value="Refactor types and update SSH key reference in workflows&#10;&#10;Improved type safety by replacing `any` with specific types and cleaning up unused states in multiple components. Simplified import paths and optimized error handling logic for better maintainability. Updated GitHub Actions workflow to use `SSH_PRIVATE_KEY` for deployment." />
     <MESSAGE value="Refactor types and update GitHub Actions for SSH deployment&#10;&#10;Replaced `any` with specific types and cleaned up unused states to enhance type safety and maintainability. Updated GitHub Actions workflow to use `SSH_PRIVATE_KEY` for secure VPS deployment and simplified related scripts. Added a task for testing SSH connectivity and optimized PM2 setup for smoother deployments" />
     <MESSAGE value="Add &quot;Count by Location&quot; option to AppSidebar menu&#10;&#10;This update introduces a new sub-item &quot;Count by Location&quot; under the &quot;Count &amp; Search&quot; menu in the sidebar. It follows the same path as &quot;Count by SKU&quot; and is non-pro and active by default." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add &quot;Count by Location&quot; option to AppSidebar menu&#10;&#10;This update introduces a new sub-item &quot;Count by Location&quot; under the &quot;Count &amp; Search&quot; menu in the sidebar. It follows the same path as &quot;Count by SKU&quot; and is non-pro and active by default." />
+    <MESSAGE value="Update script configuration in build workflow&#10;&#10;Replaced 'npx serve' with 'serve' to streamline execution and avoid dependency on npx. This ensures better reliability and alignment with the deployment environment." />
+    <MESSAGE value="Refactor LPN module imports and add EditLPN functionality&#10;&#10;Updated import paths for cleaner structure and added a new EditLPN modal to enable inline LPN editing. Improved UI interaction by enabling double-click to edit and adjusted button positions for better usability." />
+    <MESSAGE value="Add LPN edit functionality with enhanced component filtering&#10;&#10;Implemented LPN editing capabilities, including input debouncing and component filtering for better SKU handling. Enhanced print label utility to support changes in LPN properties. Adjusted layout and removed unused code for improved readability and performance." />
+    <MESSAGE value="Add pricing fields and columns for product sheet&#10;&#10;Introduced new fields `ewfdirectPrice`, `ewfdirectManualPrice`, and `promotion` to support additional pricing details. Updated the ProductSheet table to include corresponding columns and enhanced mapping functions to handle these new fields." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add pricing fields and columns for product sheet&#10;&#10;Introduced new fields `ewfdirectPrice`, `ewfdirectManualPrice`, and `promotion` to support additional pricing details. Updated the ProductSheet table to include corresponding columns and enhanced mapping functions to handle these new fields." />
   </component>
 </project>

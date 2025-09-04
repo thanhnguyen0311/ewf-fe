@@ -458,6 +458,14 @@ export default function ProductSheet() {
         },
 
         {
+            headerName: "Dimension",
+            field: "dimension",
+            sortable: true,
+            width: 150,
+            editable: true,
+            filter: "agTextColumnFilter",
+        },
+        {
             headerName: "DIS",
             field: "discontinued",
             sortable: true,
