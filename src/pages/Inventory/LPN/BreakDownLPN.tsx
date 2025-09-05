@@ -36,7 +36,7 @@ const BreakDownLPN: React.FC<PutAwayModalProps> = ({onCancel, lpnProp, setLoadin
         };
 
         fetchLooseInventory();
-    }, [handleError, lpnProp.tagID, setLoading]);
+    }, [handleError, lpnProp.tagID]);
 
     const handleSubmit = async () => {
         setLoading(true);
