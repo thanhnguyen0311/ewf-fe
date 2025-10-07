@@ -36,7 +36,7 @@ const BreakDownLPN: React.FC<PutAwayModalProps> = ({onCancel, lpnProp, setLoadin
 
 
 
-    }, [handleError, lpnProp.tagID]);
+    }, [handleError, lpnProp.tagID, setLoading]);
 
     const handleSubmit = async () => {
         setLoading(true);
