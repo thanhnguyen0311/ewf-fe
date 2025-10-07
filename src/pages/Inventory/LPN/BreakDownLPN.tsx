@@ -19,24 +19,22 @@ const BreakDownLPN: React.FC<PutAwayModalProps> = ({onCancel, lpnProp, setLoadin
 
     const {sendNotification} = useNotification();
     const handleError = useErrorHandler();
-
+    const fetchLooseInventory = async () => {
+        setLoading(true);
+        try {
+            const getLoose = await getLooseInventory(lpnProp.tagID);
+            setLooseQty(getLoose);
+            setLoading(false)
+        } catch (error) {
+            handleError(error);
+        }
+    };
     useEffect(() => {
-        const fetchLooseInventory = async () => {
-            setLoading(true);
-            try {
-                const getLoose = await getLooseInventory(lpnProp.tagID);
-                setLooseQty(getLoose);
-                setLoading(false)
-            } catch (error) {
-                handleError(error);
-            }
-        };
+
 
         fetchLooseInventory();
 
-
-
-    }, [handleError, lpnProp.tagID, setLoading]);
+    }, [lpnProp.tagID, setLoading]);
 
     const handleSubmit = async () => {
         setLoading(true);
