@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import Button from "../../../components/ui/button/Button";
-import {LPNEditRequestProp } from "../../../interfaces/LPN";
+import {LPNEditRequestProp} from "../../../interfaces/LPN";
 import {breakDownLpn} from "../../../api/LpnApiService";
 import {useNotification} from "../../../context/NotificationContext";
 import {useErrorHandler} from "../../../hooks/useErrorHandler";
@@ -23,13 +23,10 @@ const BreakDownLPN: React.FC<PutAwayModalProps> = ({onCancel, lpnProp, setLoadin
     useEffect(() => {
         const fetchLooseInventory = async () => {
             setLoading(true);
-            try {
-                const getLoose = await getLooseInventory(lpnProp.tagID);
-                setLooseQty(getLoose);
-                setLoading(false)
-            } catch (error) {
-                handleError(error);
-            }
+            const getLoose = await getLooseInventory(lpnProp.tagID);
+            setLooseQty(getLoose);
+            setLoading(false)
+
         };
         fetchLooseInventory();
 
