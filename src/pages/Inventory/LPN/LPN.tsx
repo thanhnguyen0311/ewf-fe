@@ -12,7 +12,7 @@ import {LPNProp} from "../../../interfaces/LPN";
 import {getAllLpn} from "../../../api/LpnApiService";
 
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faSearch, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {faPlus, faSearch} from "@fortawesome/free-solid-svg-icons";
 
 
 import "./LPN.css"
@@ -29,25 +29,28 @@ export default function LPN() {
     const {sendNotification} = useNotification();
     const [mode, setMode] = useState<"" | "find" | "putaway" | "edit" | "breakdown">("");
 
-
     const columnDefs: (ColDef | ColGroupDef)[] = [
         {
             headerName: "Tag ID",
             field: "tagID",
             sortable: false,
-            width: 85,
+            width: isMobile ? 85 : 250,
             editable: true,
             filter: "agTextColumnFilter",
             valueFormatter: (params) => {
-                const tagId = params.value || ""; // Ensure the value exists
-                return "...." + tagId.slice(-6);
+                if (isMobile) {
+                    const tagId = params.value || ""; // Ensure the value exists
+                    return "...." + tagId.slice(-6);
+                }
+                 // Ensure the value exists
+                return params.value || "";
             },
         },
         {
             headerName: "SKU",
             field: "sku",
             sortable: false,
-            width: 130,
+            width: isMobile ? 130 : 150,
             editable: false,
             filter: "agTextColumnFilter",
         },
@@ -55,7 +58,7 @@ export default function LPN() {
             headerName: "QTY",
             field: "quantity",
             sortable: false,
-            width: 60,
+            width: isMobile ? 60 : 100,
             editable: false,
         },
         {
@@ -70,7 +73,7 @@ export default function LPN() {
             headerName: "STATUS",
             field: "status",
             sortable: true,
-            width: 100,
+            width: isMobile ? 100 : 100,
             editable: false,
             filter: "agTextColumnFilter",
             cellStyle: (params: CellClassParams) => {
@@ -87,7 +90,7 @@ export default function LPN() {
             headerName: "#Container",
             field: "containerNumber",
             sortable: true,
-            width: 150,
+            width: isMobile ? 150 : 150,
             editable: false,
             filter: "agTextColumnFilter",
         },
@@ -96,7 +99,7 @@ export default function LPN() {
             headerName: "Zone",
             field: "zone",
             sortable: true,
-            width: 150,
+            width: isMobile ? 150 : 200,
             editable: false,
             filter: "agTextColumnFilter",
         },
@@ -104,7 +107,7 @@ export default function LPN() {
             headerName: "Date",
             field: "date",
             sortable: true,
-            width: 150,
+            width: isMobile ? 150 : 200,
             editable: false,
             filter: "agTextColumnFilter",
         },
@@ -123,7 +126,6 @@ export default function LPN() {
         }
     };
 
-    
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);

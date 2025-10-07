@@ -7,7 +7,7 @@ import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../icons";
 import Checkbox from "../../components/form/input/Checkbox";
 import Button from "../../components/ui/button/Button";
 import PageMeta from "../../components/common/PageMeta";
-import {login} from "../../services/authService";
+import {login} from "../../api/authService";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);

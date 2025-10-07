@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import {getUserInfo} from "../services/authService";
+import {getUserInfo} from "../api/authService";
 
 // Define the shape of the context data
 interface AuthContextType {
