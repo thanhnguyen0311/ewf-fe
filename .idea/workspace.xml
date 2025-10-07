@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Add pricing fields and columns for product sheet&#10;&#10;Introduced new fields `ewfdirectPrice`, `ewfdirectManualPrice`, and `promotion` to support additional pricing details. Updated the ProductSheet table to include corresponding columns and enhanced mapping functions to handle these new fields." />
+    <list default="true" id="99a9e2c6-4c5c-4429-bc31-62536a99db62" name="Changes" comment="Remove setLoading from dependency array in BreakDownLPN&#10;&#10;The `setLoading` function does not need to be in the dependency array as it is guaranteed to remain stable. This change prevents unnecessary re-renders and ensures better performance.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/context/AuthContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/AuthContext.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/AuthPages/Logout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/AuthPages/Logout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/AuthPages/SignIn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/AuthPages/SignIn.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Inventory/LPN/LPN.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Inventory/LPN/LPN.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/authService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/authService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/axiosInstance.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/axiosInstance.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -76,11 +84,11 @@
       <recent name="D:\ewf-app\ewf-fe\src\pages\Inventory\Components" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\ewf-app\ewf-fe\src\api" />
       <recent name="D:\ewf-app\ewf-fe\src\pages\Inventory\LPN\New" />
       <recent name="D:\ewf-app\ewf-fe\src\pages\Inventory\LPN\PutAway" />
       <recent name="D:\ewf-app\ewf-fe\src\pages\UiElements\VirtualKeyBoard" />
       <recent name="D:\ewf-app\ewf-fe\src\pages\UiElements\Modal\Image" />
-      <recent name="D:\ewf-app\ewf-fe\src\pages\User" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -138,23 +146,10 @@
       <workItem from="1753717728680" duration="29922000" />
       <workItem from="1755202110861" duration="9784000" />
       <workItem from="1756827596430" duration="324000" />
-      <workItem from="1757009707330" duration="1937000" />
-    </task>
-    <task id="LOCAL-00031" summary="Add dependency verification and fallback installation steps&#10;&#10;This update ensures `react-scripts` is verified before the build process and logs available npm scripts for debugging purposes. It also adds a fallback mechanism to install dependencies if `node_modules` is missing or incomplete, improving the workflow's reliability.">
-      <option name="closed" value="true" />
-      <created>1752173689855</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1752173689855</updated>
-    </task>
-    <task id="LOCAL-00032" summary="Add dependency verification and fallback installation steps&#10;&#10;This update ensures `react-scripts` is verified before the build process and logs available npm scripts for debugging purposes. It also adds a fallback mechanism to install dependencies if `node_modules` is missing or incomplete, improving the workflow's reliability.">
-      <option name="closed" value="true" />
-      <created>1752174299103</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1752174299103</updated>
+      <workItem from="1757009707330" duration="13443000" />
+      <workItem from="1757690920109" duration="12940000" />
+      <workItem from="1758649832668" duration="34647000" />
+      <workItem from="1759852141119" duration="592000" />
     </task>
     <task id="LOCAL-00033" summary="Add dependency verification and fallback installation steps&#10;&#10;This update ensures `react-scripts` is verified before the build process and logs available npm scripts for debugging purposes. It also adds a fallback mechanism to install dependencies if `node_modules` is missing or incomplete, improving the workflow's reliability.">
       <option name="closed" value="true" />
@@ -532,7 +527,23 @@
       <option name="project" value="LOCAL" />
       <updated>1757011111883</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="Add pricing fields and columns for product sheet&#10;&#10;Introduced new fields `ewfdirectPrice`, `ewfdirectManualPrice`, and `promotion` to support additional pricing details. Updated the ProductSheet table to include corresponding columns and enhanced mapping functions to handle these new fields.">
+      <option name="closed" value="true" />
+      <created>1757011823802</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1757011823802</updated>
+    </task>
+    <task id="LOCAL-00081" summary="Remove setLoading from dependency array in BreakDownLPN&#10;&#10;The `setLoading` function does not need to be in the dependency array as it is guaranteed to remain stable. This change prevents unnecessary re-renders and ensures better performance.">
+      <option name="closed" value="true" />
+      <created>1757087208806</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1757087208807</updated>
+    </task>
+    <option name="localTasksCounter" value="82" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -550,7 +561,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update GitHub Actions to use v4 of artifact actions&#10;&#10;Upgraded `actions/download-artifact` and `actions/upload-artifact` from v3 to v4 in the workflow file. This ensures compatibility with the latest features and improvements in these actions." />
     <MESSAGE value="Update artifact paths in GitHub Actions workflow&#10;&#10;Modified the upload and download artifact paths to explicitly handle the `.env` file. This change ensures the correct environment file is transferred during the CI/CD process. No other workflow steps were affected." />
     <MESSAGE value="Update CI workflow to streamline .env management and dependencies&#10;&#10;Reorganized .env generation by integrating it directly into relevant steps and added directory content verification for debugging. Adjusted build dependencies to include linting and tests, ensuring pre-build checks are complete. Enhanced artifact handling for better workflow clarity and reliability." />
     <MESSAGE value="Add dependency verification and fallback installation steps&#10;&#10;This update ensures `react-scripts` is verified before the build process and logs available npm scripts for debugging purposes. It also adds a fallback mechanism to install dependencies if `node_modules` is missing or incomplete, improving the workflow's reliability." />
@@ -575,6 +585,7 @@
     <MESSAGE value="Refactor LPN module imports and add EditLPN functionality&#10;&#10;Updated import paths for cleaner structure and added a new EditLPN modal to enable inline LPN editing. Improved UI interaction by enabling double-click to edit and adjusted button positions for better usability." />
     <MESSAGE value="Add LPN edit functionality with enhanced component filtering&#10;&#10;Implemented LPN editing capabilities, including input debouncing and component filtering for better SKU handling. Enhanced print label utility to support changes in LPN properties. Adjusted layout and removed unused code for improved readability and performance." />
     <MESSAGE value="Add pricing fields and columns for product sheet&#10;&#10;Introduced new fields `ewfdirectPrice`, `ewfdirectManualPrice`, and `promotion` to support additional pricing details. Updated the ProductSheet table to include corresponding columns and enhanced mapping functions to handle these new fields." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add pricing fields and columns for product sheet&#10;&#10;Introduced new fields `ewfdirectPrice`, `ewfdirectManualPrice`, and `promotion` to support additional pricing details. Updated the ProductSheet table to include corresponding columns and enhanced mapping functions to handle these new fields." />
+    <MESSAGE value="Remove setLoading from dependency array in BreakDownLPN&#10;&#10;The `setLoading` function does not need to be in the dependency array as it is guaranteed to remain stable. This change prevents unnecessary re-renders and ensures better performance." />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove setLoading from dependency array in BreakDownLPN&#10;&#10;The `setLoading` function does not need to be in the dependency array as it is guaranteed to remain stable. This change prevents unnecessary re-renders and ensures better performance." />
   </component>
 </project>
