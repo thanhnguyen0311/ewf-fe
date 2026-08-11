@@ -26,7 +26,7 @@ const defaultLpnRequest: LPNRequestProp = {
     tagID: "",
     sku: "",
     containerNumber: "",
-    quantity: 12, // Quantity should remain as a number
+    quantity: 12,
     bayCode: "",
     date: new Date().toISOString(),
 };

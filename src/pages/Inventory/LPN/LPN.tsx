@@ -82,7 +82,7 @@ export default function LPN() {
                     fontWeight: "700",
                     padding: "2px",
                     marginLeft: "15px",
-                    color: params.value === "active" ? "#009900" : "#ff0000",
+                    color: params.value === "Active" ? "#009900" : "#ff0000",
                 };
             }
         },
